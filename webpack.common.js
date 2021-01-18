@@ -8,8 +8,12 @@ module.exports = {
     rules: [
       {
         test: /\.py$/,
-        loader: "transcrypt-loader",
-        options: {},
+        use: [
+          {
+            loader: "transcrypt-loader",
+            options: {},
+          },
+        ],
       },
     ],
   },
