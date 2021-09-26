@@ -1,0 +1,109 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 10
+  reviewers:
+  - ne-sachirou
+  assignees:
+  - ne-sachirou
+  ignore:
+  - dependency-name: black
+    versions:
+    - 21.4b0
+    - 21.4b1
+  - dependency-name: flake8
+    versions:
+    - 3.9.0
+  - dependency-name: yamllint
+    versions:
+    - 1.26.0
+  - dependency-name: coverage
+    versions:
+    - "5.4"
+  - dependency-name: mypy
+    versions:
+    - "0.800"
+  - dependency-name: pytz
+    versions:
+    - "2020.5"
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: webpack
+    versions:
+    - 5.18.0
+    - 5.19.0
+    - 5.20.0
+    - 5.20.1
+    - 5.20.2
+    - 5.21.2
+    - 5.22.0
+    - 5.23.0
+    - 5.24.0
+    - 5.24.1
+    - 5.24.2
+    - 5.24.3
+    - 5.24.4
+    - 5.25.1
+    - 5.26.0
+    - 5.26.2
+    - 5.26.3
+    - 5.27.1
+    - 5.27.2
+    - 5.28.0
+    - 5.30.0
+    - 5.31.0
+    - 5.31.2
+    - 5.32.0
+    - 5.33.2
+    - 5.34.0
+    - 5.35.0
+    - 5.35.1
+    - 5.36.0
+  - dependency-name: npm-check-updates
+    versions:
+    - 11.1.1
+    - 11.1.10
+    - 11.1.4
+    - 11.1.8
+    - 11.1.9
+    - 11.2.0
+    - 11.2.1
+    - 11.2.2
+    - 11.3.0
+    - 11.4.1
+    - 11.5.1
+    - 11.5.3
+  - dependency-name: react-hook-form
+    versions:
+    - 6.14.2
+    - 6.15.1
+    - 6.15.3
+    - 6.15.4
+    - 6.15.5
+    - 7.0.0
+    - 7.0.1
+    - 7.0.3
+    - 7.0.4
+    - 7.0.5
+    - 7.0.7
+    - 7.1.0
+    - 7.2.1
+    - 7.2.2
+    - 7.2.3
+    - 7.3.3
+    - 7.3.4
+  - dependency-name: webpack-cli
+    versions:
+    - 4.4.0
+    - 4.5.0
