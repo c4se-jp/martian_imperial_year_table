@@ -22,7 +22,7 @@ flake8-docstrings = "^1.5.0"
 mypy = "^0.790"
 transcrypt = "^3.7.16"
 yamllint = "^1.22.1"
-coverage = "^5.1"
+coverage = "^5.5"
 
 [build-system]
 requires = ["poetry>=1.0"]
