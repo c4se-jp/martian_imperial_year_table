@@ -25,7 +25,7 @@ COPY package.json \
      Pipfile \
      Pipfile.lock \
      ./
-RUN pipenv sync --pre \
+RUN pipenv sync -d --pre \
  && npm ci --no-audit
 
 COPY ui_main.py webpack.common.js webpack.production.js ./
