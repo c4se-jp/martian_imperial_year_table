@@ -1,34 +1,32 @@
-FROM python:3.9-alpine AS builder
+FROM python:3.9-slim AS builder
 
-SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 WORKDIR /mnt
 
 ENV PATH=/root/.local/bin:$PATH
 
-RUN apk add --no-cache -t .build-deps \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    build-essential \
     curl \
+ && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
+ && apt-get install -y --no-install-recommends \
+    nodejs \
  && pip install --no-cache-dir --user pipenv \
- && apk del --purge .build-deps \
- && rm -rf /var/cache/apk/*
+ && apt-get purge -y \
+    curl \
+ && apt-get autoremove -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY package.json \
      package-lock.json \
      Pipfile \
      Pipfile.lock \
      ./
-RUN apk add --no-cache -t .build-deps \
-    build-base \
-    linux-headers \
-    pcre-dev \
-    python3-dev \
- && apk add --no-cache -t .runtime-deps \
-    nodejs \
-    npm \
- && pipenv sync --pre \
- && npm ci \
- && apk del --purge .build-deps \
- && rm -rf /var/cache/apk/*
+RUN pipenv sync --pre \
+ && npm ci --no-audit
 
 COPY ui_main.py webpack.common.js webpack.production.js ./
 COPY imperial_calendar/ imperial_calendar/
@@ -40,38 +38,36 @@ RUN mkdir -p static/css static/js \
  && mv dist/* static/js/
 
 
-FROM python:3.9-alpine
+FROM python:3.9-slim
 
-SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 WORKDIR /mnt
 
 ENV FLASK_ENV=production \
     PATH=/root/.pipenv/bin:$PATH
 
-RUN apk add --no-cache -t .build-deps \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    build-essential \
     curl \
-    shadow \
- && apk add --no-cache -t .runtime-deps \
-    pcre \
+ && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
+ && apt-get install -y --no-install-recommends \
+    nodejs \
  && pip install --no-cache-dir --user pipenv \
- && useradd uwsgi --no-create-home --user-group \
- && apk del --purge .build-deps \
- && rm -rf /var/cache/apk/*
+ && apt-get purge -y \
+    curl \
+ && apt-get autoremove -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY package.json \
      package-lock.json \
      Pipfile \
      Pipfile.lock \
      ./
-RUN apk add --no-cache -t .build-deps \
-    build-base \
-    linux-headers \
-    pcre-dev \
-    python3-dev \
- && pipenv sync --pre \
- && apk del --purge .build-deps \
- && rm -rf /var/cache/apk/*
+RUN pipenv sync --pre \
+ && npm ci --no-audit
 
 COPY --from=builder /mnt/static/ static/
 COPY web_main.py web.yml ./

@@ -1,6 +1,6 @@
-FROM python:3.9-alpine
+FROM python:3.9-slim
 
-SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 WORKDIR /mnt
 VOLUME /mnt
@@ -9,24 +9,22 @@ EXPOSE 5000
 
 ENV PATH=/root/.local/bin:$PATH
 
-RUN apk add --no-cache -t .build-deps \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    build-essential \
     curl \
- && apk add --no-cache -t .runtime-deps \
-    build-base \
-    git \
     inotify-tools \
-    libffi-dev \
-    linux-headers \
-    nodejs \
-    npm \
-    openssl-dev \
-    pcre-dev \
-    python3-dev \
     rsync \
-    the_silver_searcher \
+    silversearcher-ag \
+ && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
+ && apt-get install -y --no-install-recommends \
+    nodejs \
  && pip install --no-cache-dir --user pipenv \
- && apk del --purge .build-deps \
- && rm -rf /var/cache/apk/*
+ && apt-get purge -y \
+    curl \
+ && apt-get autoremove -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY package.json \
      package-lock.json \

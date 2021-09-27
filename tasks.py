@@ -151,10 +151,10 @@ def build():
         )
     with docker() as _run:
         _run(
-            "sh -eux -c {:s}".format(quote(r"cp node_modules/bulma/css/* static/css/"))
+            "bash -eux -c {:s}".format(quote(r"cp node_modules/bulma/css/* static/css/"))
         )
         _run("pipenv run npx webpack --config webpack.development.js")
-        _run("sh -eux -c {:s}".format(quote(r"mv dist/* static/js/")))
+        _run("bash -eux -c {:s}".format(quote(r"mv dist/* static/js/")))
 
 
 @task
@@ -244,7 +244,7 @@ def format():
         _run("npx prettier --write README.md templates/*.md")
         _run("npx prettier --write *.js")
         _run(
-            "sh -eux -c {:s}".format(
+            "bash -eux -c {:s}".format(
                 quote(
                     r"ag --hidden -g \.ya?ml$ | xargs -t npx prettier --parser yaml --write"
                 )
@@ -269,7 +269,7 @@ def resync():
 def sh():
     """Run shell in a Docker container."""
     with docker() as _run:
-        _run("sh")
+        _run("bash")
 
 
 @task
@@ -298,7 +298,7 @@ def test():
         _run("pipenv check")
         _run("npm audit")
         # _run(
-        #     "sh -eux -c {}".format(
+        #     "bash -eux -c {}".format(
         #         quote(r"ag --hidden -g \.ya?ml$ | xargs -t pipenv run yamllint")
         #     )
         # )
