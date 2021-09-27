@@ -31,6 +31,14 @@ INITIAL_DATETIME: t.Dict[str, t.Any] = {
 }
 
 
+def merge_dict(first: dict, second: dict) -> dict:
+    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually tream kwargs."""
+    result = {}
+    result.update(first)
+    result.update(second)
+    return result
+
+
 async def draw(form, ref) -> None:
     """Draw the calendar SVG."""
     grdt = current_grdt()
@@ -97,7 +105,19 @@ async def turn_to_previous(form, ref) -> None:
 
 def Calendar(props: dict):
     """Render a Calendar component."""
-    form = ReactHookForm.useForm()
+    form = ReactHookForm.useForm(
+        {
+            "defaultValues": {
+                "grdt": {
+                    "timezone": INITIAL_DATETIME["grdt"].timezone,
+                },
+                "imdt": {
+                    "year": INITIAL_DATETIME["imdt"].year,
+                    "month": INITIAL_DATETIME["imdt"].month,
+                },
+            },
+        },
+    )
     ref = React.useRef()
     React.useEffect(lambda: set_to_current(form, ref) and js_undefined, [form, ref])
     return React.createElement(
@@ -122,15 +142,15 @@ def Calendar(props: dict):
                     ),
                     React.createElement(
                         "input",
-                        {
-                            "className": "input",
-                            "defaultValue": INITIAL_DATETIME["grdt"].timezone,
-                            "disabled": True,
-                            "name": "grdt.timezone",
-                            "ref": form.register,
-                            "style": {"width": "6em"},
-                            "type": "text",
-                        },
+                        merge_dict(
+                            form.register("grdt.timezone"),
+                            {
+                                "className": "input",
+                                "disabled": True,
+                                "style": {"width": "6em"},
+                                "type": "text",
+                            },
+                        ),
                     ),
                 ),
                 React.createElement(
@@ -141,28 +161,28 @@ def Calendar(props: dict):
                     ),
                     React.createElement(
                         "input",
-                        {
-                            "className": "input",
-                            "defaultValue": INITIAL_DATETIME["imdt"].year,
-                            "name": "imdt.year",
-                            "ref": form.register,
-                            "style": {"width": "6em"},
-                            "type": "number",
-                        },
+                        merge_dict(
+                            form.register("imdt.year"),
+                            {
+                                "className": "input",
+                                "style": {"width": "6em"},
+                                "type": "number",
+                            },
+                        ),
                     ),
                     "-",
                     React.createElement(
                         "input",
-                        {
-                            "className": "input",
-                            "defaultValue": INITIAL_DATETIME["imdt"].month,
-                            "max": 24,
-                            "min": 1,
-                            "name": "imdt.month",
-                            "ref": form.register,
-                            "style": {"width": "3.5em"},
-                            "type": "number",
-                        },
+                        merge_dict(
+                            form.register("imdt.month"),
+                            {
+                                "className": "input",
+                                "max": 24,
+                                "min": 1,
+                                "style": {"width": "3.5em"},
+                                "type": "number",
+                            },
+                        ),
                     ),
                     React.createElement(
                         "button",

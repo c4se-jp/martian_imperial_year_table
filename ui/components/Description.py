@@ -51,5 +51,7 @@ def Description(props: dict):
             {},
             React.createElement("title", {}, "解説 | 帝國火星曆"),
         ),
-        React.createElement("div", {"className": "content section", "ref": ref}),
+        React.createElement(
+            "div", {"className": "content section", "ref": ref}, "讀み込み中"
+        ),
     )

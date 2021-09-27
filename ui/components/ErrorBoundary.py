@@ -20,7 +20,7 @@ def renderErrorBoundary():
     """Render a component."""
     this: t.Any = 0  # __:skip
     if this.state.has_error:
-        return React.createElement("a", {"href": "/"}, "Reload")
+        return React.createElement("a", {"href": "/"}, "再讀み込み")
     return this.props.children
 
 
