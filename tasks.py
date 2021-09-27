@@ -2,6 +2,7 @@
 """Tasks."""
 from contextlib import contextmanager
 from shlex import quote
+import json
 import os
 import os.path
 import platform
@@ -178,18 +179,17 @@ def deploy_staging():
     run("git push -f origin staging")
     with powershell() as _run:
         time.sleep(30)
-        builds_filter = """
-        source.repoSource.repoName = github_c4se-jp_martian_imperial_year_table AND
-        source.repoSource.tagName = staging
-        """.strip().replace(
-            "\n", " "
-        )
         process = _run(
-            f"gcloud builds list --filter {quote(builds_filter)} --limit 1",
+            r"""
+            gcloud builds list \
+              --filter substitutions.TRIGGER_NAME=martian-imperial-year-table-deploy-staging \
+              --format json \
+              --limit 1
+            """,
             capture_output=True,
             text=True,
         )
-        build = process.stdout.split("\n")[1].split(" ")[0]
+        build = json.loads(process.stdout)[0]["id"]
         _run(f"gcloud builds log --stream {quote(build)}")
     run(
         f"""
@@ -211,18 +211,17 @@ def deploy_production():
     run("git push -f origin production")
     with powershell() as _run:
         time.sleep(30)
-        builds_filter = """
-        source.repoSource.repoName = github_c4se-jp_martian_imperial_year_table AND
-        source.repoSource.tagName = production
-        """.strip().replace(
-            "\n", " "
-        )
         process = _run(
-            f"gcloud builds list --filter {quote(builds_filter)} --limit 1",
+            r"""
+            gcloud builds list \
+              --filter substitutions.TRIGGER_NAME=martian-imperial-year-table-deploy-production \
+              --format json \
+              --limit 1
+            """,
             capture_output=True,
             text=True,
         )
-        build = process.stdout.split("\n")[1].split(" ")[0]
+        build = json.loads(process.stdout)[0]["id"]
         _run(f"gcloud builds log --stream {quote(build)}")
     run(
         f"""
