@@ -31,14 +31,6 @@ def docker():
         yield run_in_docker
 
 
-def docker_compose_exe() -> str:
-    """Get a DockerCompose executable name."""
-    if within_wsl():
-        return "docker-compose.exe"
-    else:
-        return "docker-compose"
-
-
 def docker_exe() -> str:
     """Get a Docker executable name."""
     if within_wsl():
@@ -90,7 +82,7 @@ def run_in_docker(
     env = os.environ.copy()
     env["PWD"] = cwd_for_docker_volume()
     return subprocess.run(
-        f"{docker_compose_exe()} {docker_options} run --rm web {command}",
+        f"{docker_exe()} compose {docker_options} run --rm web {command}",
         env=env,
         capture_output=capture_output,
         check=True,
@@ -145,17 +137,17 @@ def build():
     os.makedirs("static/css", exist_ok=True)
     os.makedirs("static/js", exist_ok=True)
     if not within_docker():
-        run(f"{docker_compose_exe()} pull web-src")
+        run(f"{docker_exe()} compose pull web-src")
         run(
             rf"""
-            {docker_compose_exe()} build \
+            {docker_exe()} compose build \
               --build-arg BUILDKIT_INLINE_CACHE=1 \
               --force-rm \
               --pull
             """
         )
         run(
-            f"{docker_compose_exe()} run --rm web-src /docker-entrypoint.d/precopy_appsync.sh"
+            f"{docker_exe()} compose run --rm web-src /docker-entrypoint.d/precopy_appsync.sh"
         )
     with docker() as _run:
         _run(
@@ -169,7 +161,7 @@ def build():
 def clean():
     """Clean built files."""
     if not within_docker():
-        run(f"{docker_compose_exe()} down -v")
+        run(f"{docker_exe()} compose down -v")
         shutil.rmtree("node_modules", ignore_errors=True)
         run("find . -name '.unison.*' -exec rm -vrf {} +;")
     shutil.rmtree("__target__", ignore_errors=True)
@@ -265,12 +257,12 @@ def resync():
     """Re-sync the Docker volume."""
     if within_docker():
         return
-    run(f"{docker_compose_exe()} stop web-src")
+    run(f"{docker_exe()} compose stop web-src")
     run("find . -name '.unison.*' -exec rm -vrf {} +;")
     run(
-        f"{docker_compose_exe()} run --rm web-src /docker-entrypoint.d/precopy_appsync.sh"
+        f"{docker_exe()} compose run --rm web-src /docker-entrypoint.d/precopy_appsync.sh"
     )
-    run(f"{docker_compose_exe()} up -d web-src")
+    run(f"{docker_exe()} compose up -d web-src")
 
 
 @task
@@ -283,7 +275,7 @@ def sh():
 @task
 def start():
     """Start a development server."""
-    run(f"{docker_compose_exe()} up")
+    run(f"{docker_exe()} compose up")
 
 
 @task

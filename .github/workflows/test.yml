@@ -13,11 +13,12 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u c4se-jp --password-stdin
-          docker-compose pull web || true
+          docker compose pull web || true
           ./tasks.py build test
-          docker cp .git "$(docker-compose ps web-src | grep web-src | awk '{print$1}'):/app_sync/"
-          docker-compose run --rm web sh -eux -c 'pip install coveralls && coveralls'
-          docker-compose push web
+          docker cp .git "$(docker compose ps web-src | grep web-src | awk '{print$1}'):/app_sync/"
+          docker compose run --rm web sh -eux -c 'pip install coveralls && coveralls'
+          docker compose push web
         env:
+          COMPOSE_DOCKER_CLI_BUILD: "1"
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          DOCKER_BUILDKIT: 1
+          DOCKER_BUILDKIT: "1"
