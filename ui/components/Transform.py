@@ -38,7 +38,7 @@ INITIAL_DATETIME: t.Dict[str, t.Any] = {
 
 
 def merge_dict(first: dict, second: dict) -> dict:
-    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually tream kwargs."""
+    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually treat kwargs."""
     result = {}
     result.update(first)
     result.update(second)
