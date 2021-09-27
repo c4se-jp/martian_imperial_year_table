@@ -4,15 +4,19 @@ SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
 
 WORKDIR /mnt
 
-ENV PATH=/root/.poetry/bin:$PATH
+ENV PATH=/root/.local/bin:$PATH
 
 RUN apk add --no-cache -t .build-deps \
     curl \
- && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
+ && pip install --no-cache-dir --user pipenv \
  && apk del --purge .build-deps \
  && rm -rf /var/cache/apk/*
 
-COPY package.json package-lock.json poetry.lock poetry.toml pyproject.toml ./
+COPY package.json \
+     package-lock.json \
+     Pipfile \
+     Pipfile.lock \
+     ./
 RUN apk add --no-cache -t .build-deps \
     build-base \
     linux-headers \
@@ -21,7 +25,7 @@ RUN apk add --no-cache -t .build-deps \
  && apk add --no-cache -t .runtime-deps \
     nodejs \
     npm \
- && poetry install \
+ && pipenv sync --pre \
  && npm ci \
  && apk del --purge .build-deps \
  && rm -rf /var/cache/apk/*
@@ -32,7 +36,7 @@ COPY static/ static/
 COPY ui/ ui/
 RUN mkdir -p static/css static/js \
  && cp node_modules/bulma/css/* static/css/ \
- && poetry run npx webpack --config webpack.production.js \
+ && pipenv run npx webpack --config webpack.production.js \
  && mv dist/* static/js/
 
 
@@ -43,25 +47,29 @@ SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
 WORKDIR /mnt
 
 ENV FLASK_ENV=production \
-    PATH=/root/.poetry/bin:$PATH
+    PATH=/root/.pipenv/bin:$PATH
 
 RUN apk add --no-cache -t .build-deps \
     curl \
     shadow \
  && apk add --no-cache -t .runtime-deps \
     pcre \
- && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
+ && pip install --no-cache-dir --user pipenv \
  && useradd uwsgi --no-create-home --user-group \
  && apk del --purge .build-deps \
  && rm -rf /var/cache/apk/*
 
-COPY poetry.lock poetry.toml pyproject.toml ./
+COPY package.json \
+     package-lock.json \
+     Pipfile \
+     Pipfile.lock \
+     ./
 RUN apk add --no-cache -t .build-deps \
     build-base \
     linux-headers \
     pcre-dev \
     python3-dev \
- && poetry install --no-dev \
+ && pipenv sync --pre \
  && apk del --purge .build-deps \
  && rm -rf /var/cache/apk/*
 
@@ -72,7 +80,7 @@ COPY templates/ templates/
 COPY web/ web/
 
 EXPOSE 5000 9191
-ENTRYPOINT ["poetry", "run", "uwsgi", \
+ENTRYPOINT ["pipenv", "run", "uwsgi", \
             "--die-on-term", \
             "--master", \
             "--uid", "uwsgi"]

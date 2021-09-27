@@ -153,7 +153,7 @@ def build():
         _run(
             "sh -eux -c {:s}".format(quote(r"cp node_modules/bulma/css/* static/css/"))
         )
-        _run("poetry run npx webpack --config webpack.development.js")
+        _run("pipenv run npx webpack --config webpack.development.js")
         _run("sh -eux -c {:s}".format(quote(r"mv dist/* static/js/")))
 
 
@@ -240,7 +240,7 @@ def format():
     """Format code."""
     run(r"ag -l '\r' | xargs -t -I{} sed -i -e 's/\r//' {}")
     with docker() as _run:
-        _run("poetry run black *.py imperial_calendar stubs tests ui web")
+        _run("pipenv run black *.py imperial_calendar stubs tests ui web")
         _run("npx prettier --write README.md templates/*.md")
         _run("npx prettier --write *.js")
         _run(
@@ -295,20 +295,20 @@ def test():
                """
             )
     with docker() as _run:
-        _run("poetry check")
+        _run("pipenv check")
         _run("npm audit")
         # _run(
         #     "sh -eux -c {}".format(
-        #         quote(r"ag --hidden -g \.ya?ml$ | xargs -t poetry run yamllint")
+        #         quote(r"ag --hidden -g \.ya?ml$ | xargs -t pipenv run yamllint")
         #     )
         # )
-        _run("poetry run black --check *.py imperial_calendar stubs tests ui web")
-        _run("poetry run flake8 .")
-        _run("poetry run mypy *.py")
-        _run("poetry run coverage erase")
-        _run("poetry run coverage run -m unittest discover -s tests/imperial_calendar")
-        _run("poetry run coverage run -m unittest discover -s tests/web")
-        _run("poetry run coverage report -m")
+        _run("pipenv run black --check *.py imperial_calendar stubs tests ui web")
+        _run("pipenv run flake8 .")
+        _run("pipenv run mypy *.py")
+        _run("pipenv run coverage erase")
+        _run("pipenv run coverage run -m unittest discover -s tests/imperial_calendar")
+        _run("pipenv run coverage run -m unittest discover -s tests/web")
+        _run("pipenv run coverage report -m")
 
 
 @task
@@ -319,7 +319,7 @@ def upgrade():
         _run("npm install")
         _run("npm audit fix")
         _run("npm fund")
-        _run("poetry update")
+        _run("pipenv update -d --pre")
 
 
 if __name__ == "__main__":

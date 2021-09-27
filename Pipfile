@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Flask = "*"
+Markdown = "*"
+flasgger = "*"
+holiday-jp = "*"
+jsonschema = "*"  # TODO: Remove this after upgrading Python.
+pytz = "*"
+uwsgi = "*"
+
+[dev-packages]
+black = "*"
+coverage = "*"
+flake8 = "*"
+flake8-docstrings = "*"
+mypy = "*"
+transcrypt = "*"
+yamllint = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
