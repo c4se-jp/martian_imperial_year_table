@@ -185,7 +185,7 @@ def deploy_staging():
     with powershell() as _run:
         time.sleep(30)
         builds_filter = """
-        source.repoSource.repoName = github_ne-sachirou_martian_imperial_year_table AND
+        source.repoSource.repoName = github_c4se-jp_martian_imperial_year_table AND
         source.repoSource.tagName = staging
         """.strip().replace(
             "\n", " "
@@ -218,7 +218,7 @@ def deploy_production():
     with powershell() as _run:
         time.sleep(30)
         builds_filter = """
-        source.repoSource.repoName = github_ne-sachirou_martian_imperial_year_table AND
+        source.repoSource.repoName = github_c4se-jp_martian_imperial_year_table AND
         source.repoSource.tagName = production
         """.strip().replace(
             "\n", " "

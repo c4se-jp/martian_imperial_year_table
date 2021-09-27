@@ -89,7 +89,7 @@ def GlobalNavigation(props: dict):
                     "a",
                     {
                         "className": "navbar-item",
-                        "href": "https://github.com/ne-sachirou/martian_imperial_year_table",
+                        "href": "https://github.com/c4se-jp/martian_imperial_year_table",
                         "title": "GitHub",
                     },
                     React.createElement(
