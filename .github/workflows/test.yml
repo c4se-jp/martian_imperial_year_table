@@ -12,7 +12,7 @@ jobs:
           python-version: "3.8"
       - uses: actions/checkout@v2
       - run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ne-sachirou --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ne-sachirou --password-stdin
           docker-compose pull web || true
           ./tasks.py build test
           docker cp .git "$(docker-compose ps web-src | grep web-src | awk '{print$1}'):/app_sync/"

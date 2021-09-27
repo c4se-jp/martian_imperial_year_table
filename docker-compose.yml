@@ -5,7 +5,7 @@ services:
   web:
     build:
       cache_from:
-        - docker.pkg.github.com/ne-sachirou/martian_imperial_year_table/martian_imperial_year_table-web:latest
+        - ghcr.io/ne-sachirou/martian_imperial_year_table/martian_imperial_year_table-web:latest
       context: .
       dockerfile: deployments/development/Dockerfile
     environment:
@@ -13,7 +13,7 @@ services:
       FLASK_APP: web_main.py
       FLASK_ENV: development
     depends_on: [web-src]
-    image: docker.pkg.github.com/ne-sachirou/martian_imperial_year_table/martian_imperial_year_table-web:latest
+    image: ghcr.io/ne-sachirou/martian_imperial_year_table/martian_imperial_year_table-web:latest
     logging:
       options:
         max-size: "10m"
