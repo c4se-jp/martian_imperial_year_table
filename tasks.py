@@ -191,6 +191,7 @@ def deploy_staging():
         )
         build = json.loads(process.stdout)[0]["id"]
         _run(f"gcloud builds log --stream {quote(build)}")
+    time.sleep(10)
     run(
         f"""
         {kubectl_exe()} -n martian-imperial-year-table-staging \
@@ -223,6 +224,7 @@ def deploy_production():
         )
         build = json.loads(process.stdout)[0]["id"]
         _run(f"gcloud builds log --stream {quote(build)}")
+    time.sleep(10)
     run(
         f"""
         {kubectl_exe()} -n martian-imperial-year-table-production \
