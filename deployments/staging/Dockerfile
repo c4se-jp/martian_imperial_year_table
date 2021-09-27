@@ -53,6 +53,7 @@ RUN apt-get update \
     build-essential \
     libpcre3-dev \
  && pip install --no-cache-dir --user pipenv \
+ && useradd uwsgi --no-create-home --user-group \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -68,6 +69,7 @@ COPY templates/ templates/
 COPY web/ web/
 
 EXPOSE 5000 9191
+USER uwsgi:uwsgi
 ENTRYPOINT ["pipenv", "run", "uwsgi", \
             "--die-on-term", \
             "--master", \
