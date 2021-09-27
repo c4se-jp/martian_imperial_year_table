@@ -50,24 +50,14 @@ ENV FLASK_ENV=production \
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
-    curl \
- && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
- && apt-get install -y --no-install-recommends \
-    nodejs \
  && pip install --no-cache-dir --user pipenv \
- && apt-get purge -y \
-    curl \
- && apt-get autoremove -y \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-COPY package.json \
-     package-lock.json \
-     Pipfile \
+COPY Pipfile \
      Pipfile.lock \
      ./
-RUN pipenv sync --pre \
- && npm ci --no-audit
+RUN pipenv sync --pre
 
 COPY --from=builder /mnt/static/ static/
 COPY web_main.py web.yml ./
