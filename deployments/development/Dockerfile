@@ -14,6 +14,7 @@ RUN apt-get update \
     build-essential \
     curl \
     inotify-tools \
+    libpcre3-dev \
     rsync \
     silversearcher-ag \
  && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \

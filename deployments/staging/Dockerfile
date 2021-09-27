@@ -10,6 +10,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
+    libpcre3-dev \
  && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
  && apt-get install -y --no-install-recommends \
     nodejs \
@@ -50,6 +51,7 @@ ENV FLASK_ENV=production \
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
+    libpcre3-dev \
  && pip install --no-cache-dir --user pipenv \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
