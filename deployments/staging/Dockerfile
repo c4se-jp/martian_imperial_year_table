@@ -1,4 +1,4 @@
-FROM python:3.7-alpine AS builder
+FROM python:3.9-alpine AS builder
 
 SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
 
@@ -40,7 +40,7 @@ RUN mkdir -p static/css static/js \
  && mv dist/* static/js/
 
 
-FROM python:3-alpine
+FROM python:3.9-alpine
 
 SHELL ["/bin/ash", "-ex", "-o", "pipefail", "-c"]
 
