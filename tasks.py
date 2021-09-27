@@ -151,7 +151,9 @@ def build():
         )
     with docker() as _run:
         _run(
-            "bash -eux -c {:s}".format(quote(r"cp node_modules/bulma/css/* static/css/"))
+            "bash -eux -c {:s}".format(
+                quote(r"cp node_modules/bulma/css/* static/css/")
+            )
         )
         _run("pipenv run npx webpack --config webpack.development.js")
         _run("bash -eux -c {:s}".format(quote(r"mv dist/* static/js/")))

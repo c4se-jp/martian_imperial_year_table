@@ -10,6 +10,7 @@ flasgger = "*"
 holiday-jp = "*"
 jsonschema = "*"  # TODO: Remove this after upgrading Python.
 pytz = "*"
+types-pytz = "*"
 uwsgi = "*"
 
 [dev-packages]
@@ -19,6 +20,7 @@ flake8 = "*"
 flake8-docstrings = "*"
 mypy = "*"
 transcrypt = "*"
+typing-extensions = "*"
 yamllint = "*"
 
 [requires]
