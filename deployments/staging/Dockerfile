@@ -35,6 +35,7 @@ COPY static/ static/
 COPY ui/ ui/
 RUN mkdir -p static/css static/js \
  && cp node_modules/bulma/css/* static/css/ \
+ && chmod 0644 static/css/* \
  && pipenv run npx webpack --config webpack.production.js \
  && mv dist/* static/js/
 
