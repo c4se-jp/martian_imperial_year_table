@@ -69,4 +69,4 @@ steps:
       - SHORT_SHA=$SHORT_SHA
 substitutions:
   _NAMESPACE_NAME: martian-imperial-year-table-staging
-timeout: 600s
+timeout: 900s
