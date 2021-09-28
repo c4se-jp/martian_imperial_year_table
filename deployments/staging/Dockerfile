@@ -69,7 +69,6 @@ COPY templates/ templates/
 COPY web/ web/
 
 EXPOSE 5000 9191
-USER uwsgi:uwsgi
 ENTRYPOINT ["pipenv", "run", "uwsgi", \
             "--die-on-term", \
             "--master", \
