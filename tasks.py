@@ -282,6 +282,34 @@ def start():
 
 
 @task
+def start_as_production():
+    """Start a production build development server."""
+    run(
+        fr"""
+        {docker_exe()} build \
+          -f deployments/staging/Dockerfile \
+          -t "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
+          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
+          --target builder \
+          .
+        """
+    )
+    run(
+        fr"""
+        {docker_exe()} build \
+          -f deployments/staging/Dockerfile \
+          -t "gcr.io/c4se-197915/martian_imperial_year_table:latest" \
+          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
+          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:latest" \
+          .
+        """
+    )
+    run(
+        f"{docker_exe()} run -p 5000:5000 --rm gcr.io/c4se-197915/martian_imperial_year_table:latest"
+    )
+
+
+@task
 def test():
     """Test."""
     if not within_docker():
