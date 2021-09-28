@@ -53,7 +53,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
     libpcre3-dev \
- && pip install --no-cache-dir --user pipenv \
+ && pip install --no-cache-dir pipenv \
  && useradd uwsgi --no-create-home --user-group \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
@@ -61,7 +61,7 @@ RUN apt-get update \
 COPY Pipfile \
      Pipfile.lock \
      ./
-RUN pipenv sync --pre
+RUN pipenv sync --pre --system
 
 COPY --from=builder /mnt/static/ static/
 COPY web_main.py web.yml ./
