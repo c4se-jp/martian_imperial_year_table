@@ -15,6 +15,10 @@ class ImperialYearMonth(object):
         """Eq."""
         return isinstance(other, ImperialYearMonth) and self.__dict__ == other.__dict__
 
+    def __repr__(self) -> str:
+        """Repr."""
+        return "ImperialYearMonth({}, {})".format(self.year, self.month)
+
     def days(self) -> int:
         """Return the days of the month."""
         days = ImperialMonth(self.month).days()

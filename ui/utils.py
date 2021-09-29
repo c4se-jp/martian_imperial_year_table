@@ -28,3 +28,11 @@ def current_grdt() -> GregorianDateTime:
         now.getSeconds(),
         grdt_timezone,
     )
+
+
+def merge_dict(first: dict, second: dict) -> dict:
+    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually treat kwargs."""
+    result = {}
+    result.update(first)
+    result.update(second)
+    return result

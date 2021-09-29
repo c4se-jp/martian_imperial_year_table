@@ -6,7 +6,7 @@ from imperial_calendar.JulianDay import JulianDay
 from imperial_calendar.MarsSolDate import MarsSolDate
 from imperial_calendar.TerrestrialTime import TerrestrialTime
 from ui.Api import Api
-from ui.utils import current_grdt
+from ui.utils import current_grdt, merge_dict
 import typing as t
 
 __pragma__: t.Any = 0  # __:skip
@@ -35,14 +35,6 @@ INITIAL_DATETIME: t.Dict[str, t.Any] = {
     "imsn": ImperialSolNumber(935321, 79532.61734358966),
     "imdt": ImperialDateTime(1398, 23, 12, 22, 5, 33, "+00:00"),
 }
-
-
-def merge_dict(first: dict, second: dict) -> dict:
-    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually treat kwargs."""
-    result = {}
-    result.update(first)
-    result.update(second)
-    return result
 
 
 def set_grdt(form, grdt: GregorianDateTime):

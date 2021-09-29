@@ -1,9 +1,7 @@
 """Calendar component."""
-from imperial_calendar.GregorianDateTime import GregorianDateTime
-from imperial_calendar.ImperialDateTime import ImperialDateTime
 from imperial_calendar.ImperialYearMonth import ImperialYearMonth
 from ui.Api import Api
-from ui.utils import current_grdt
+from ui.utils import current_grdt, merge_dict
 import typing as t
 
 __pragma__: t.Any = 0  # __:skip
@@ -25,29 +23,38 @@ __pragma__(  # noqa: F821
     """,
 )
 
-INITIAL_DATETIME: t.Dict[str, t.Any] = {
-    "grdt": GregorianDateTime(1970, 1, 1, 0, 0, 0, "+00:00"),
-    "imdt": ImperialDateTime(1398, 23, 12, 22, 5, 33, "+00:00"),
-}
+
+class CalendarState:
+    """<Calendar />'s state."""
+
+    def __init__(
+        self,
+        grdt_timezone: t.Union[str, None],
+        imperial_year_month: t.Union[ImperialYearMonth, None],
+    ):
+        """Init."""
+        self.grdt_timezone = grdt_timezone or "+00:00"  # type: str
+        self.imperial_year_month = imperial_year_month or ImperialYearMonth(
+            1398, 23
+        )  # type: ImperialYearMonth
+
+    def __repr__(self) -> str:
+        """Repr."""
+        return "CalendarState({}, {})".format(
+            self.grdt_timezone, self.imperial_year_month
+        )
 
 
-def merge_dict(first: dict, second: dict) -> dict:
-    """Merge 2 dict like `{**first, **second}`. This is because Transcrypt cannot actually treat kwargs."""
-    result = {}
-    result.update(first)
-    result.update(second)
-    return result
+SetCalendarState = t.Callable[[CalendarState], None]  # __:skip
 
 
-async def draw(form, ref) -> None:
+async def draw(state: CalendarState, ref) -> None:
     """Draw the calendar SVG."""
-    grdt = current_grdt()
-    values = form.getValues()
     params = {
-        "grdt_timezone": grdt.timezone,
+        "grdt_timezone": state.grdt_timezone,
         "imdt": {
-            "year": int(values["imdt"]["year"]),
-            "month": int(values["imdt"]["month"]),
+            "year": state.imperial_year_month.year,
+            "month": state.imperial_year_month.month,
         },
     }
     svg = await Api().get_calendar_svg(params)
@@ -58,10 +65,24 @@ async def draw(form, ref) -> None:
     ref.current.innerHTML = html
 
 
-async def set_to_current(form, ref) -> None:
+async def set_by_form(
+    state: CalendarState, set_state: SetCalendarState, form, ref
+) -> None:
+    """Draw a calendar at the form values."""
+    values = form.getValues()
+    new_state = CalendarState(
+        values["grdt"]["timezone"],
+        ImperialYearMonth(int(values["imdt"]["year"]), int(values["imdt"]["month"])),
+    )
+    set_state(new_state)
+    await draw(new_state, ref)
+
+
+async def set_to_current(
+    state: CalendarState, set_state: SetCalendarState, ref
+) -> None:
     """Draw a calendar at now."""
     grdt = current_grdt()
-    form.setValue("grdt.timezone", grdt.timezone)
     response = await Api().get_datetimes(
         {
             "grdt_timezone": grdt.timezone,
@@ -76,50 +97,45 @@ async def set_to_current(form, ref) -> None:
             },
         },
     )
-    form.setValue("imdt.year", response["imdt"].year)
-    form.setValue("imdt.month", response["imdt"].month)
-    await draw(form, ref)
+    new_state = CalendarState(
+        grdt.timezone, ImperialYearMonth(response.imdt.year, response.imdt.month)
+    )
+    set_state(new_state)
+    await draw(new_state, ref)
 
 
-async def turn_to_next(form, ref) -> None:
+async def turn_to_next(state: CalendarState, set_state: SetCalendarState, ref) -> None:
     """Turn the calendar to the next month."""
-    values = form.getValues()
-    next_month = ImperialYearMonth(
-        int(values["imdt"]["year"]), int(values["imdt"]["month"])
-    ).next_month()
-    form.setValue("imdt.year", next_month.year)
-    form.setValue("imdt.month", next_month.month)
-    await draw(form, ref)
+    next_month = state.imperial_year_month.next_month()
+    new_state = CalendarState(state.grdt_timezone, next_month)
+    set_state(new_state)
+    await draw(new_state, ref)
 
 
-async def turn_to_previous(form, ref) -> None:
+async def turn_to_previous(
+    state: CalendarState, set_state: SetCalendarState, ref
+) -> None:
     """Turn the calendar to the previous month."""
-    values = form.getValues()
-    prev_month = ImperialYearMonth(
-        int(values["imdt"]["year"]), int(values["imdt"]["month"])
-    ).prev_month()
-    form.setValue("imdt.year", prev_month.year)
-    form.setValue("imdt.month", prev_month.month)
-    await draw(form, ref)
+    prev_month = state.imperial_year_month.prev_month()
+    new_state = CalendarState(state.grdt_timezone, prev_month)
+    set_state(new_state)
+    await draw(new_state, ref)
 
 
 def Calendar(props: dict):
     """Render a Calendar component."""
-    form = ReactHookForm.useForm(
-        {
-            "defaultValues": {
-                "grdt": {
-                    "timezone": INITIAL_DATETIME["grdt"].timezone,
-                },
-                "imdt": {
-                    "year": INITIAL_DATETIME["imdt"].year,
-                    "month": INITIAL_DATETIME["imdt"].month,
-                },
-            },
-        },
-    )
+    state: CalendarState
+    set_state: SetCalendarState
+    [state, set_state] = React.useState(CalendarState(None, None))
+    form = ReactHookForm.useForm()
+    # NOTE: <Transform /> の form と構造を揃へてある
+    form.setValue("grdt.timezone", state.grdt_timezone)
+    form.setValue("imdt.year", state.imperial_year_month.year)
+    form.setValue("imdt.month", state.imperial_year_month.month)
     ref = React.useRef()
-    React.useEffect(lambda: set_to_current(form, ref) and js_undefined, [form, ref])
+    React.useEffect(
+        lambda: set_to_current(state, set_state, ref) and js_undefined, [form, ref]
+    )
     return React.createElement(
         React.Fragment,
         {},
@@ -188,7 +204,9 @@ def Calendar(props: dict):
                         "button",
                         {
                             "className": "button is-dark",
-                            "onClick": lambda event: draw(form, ref),
+                            "onClick": lambda event: set_by_form(
+                                state, set_state, form, ref
+                            ),
                         },
                         "Draw",
                     ),
@@ -200,7 +218,9 @@ def Calendar(props: dict):
                         "button",
                         {
                             "className": "button is-dark",
-                            "onClick": lambda event: turn_to_previous(form, ref),
+                            "onClick": lambda event: turn_to_previous(
+                                state, set_state, ref
+                            ),
                         },
                         "◀",
                     ),
@@ -208,7 +228,9 @@ def Calendar(props: dict):
                         "button",
                         {
                             "className": "button is-dark",
-                            "onClick": lambda event: turn_to_next(form, ref),
+                            "onClick": lambda event: turn_to_next(
+                                state, set_state, ref
+                            ),
                         },
                         "▶",
                     ),
