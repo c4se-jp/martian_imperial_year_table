@@ -1,7 +1,7 @@
 """Calendar component."""
 from imperial_calendar.ImperialYearMonth import ImperialYearMonth
 from ui.Api import Api
-from ui.utils import current_grdt, merge_dict
+from ui.utils import RhfForm, current_grdt, merge_dict
 import typing as t
 
 __pragma__: t.Any = 0  # __:skip
@@ -29,8 +29,8 @@ class CalendarState:
 
     def __init__(
         self,
-        grdt_timezone: t.Union[str, None],
-        imperial_year_month: t.Union[ImperialYearMonth, None],
+        grdt_timezone: t.Optional[str],
+        imperial_year_month: t.Optional[ImperialYearMonth],
     ):
         """Init."""
         self.grdt_timezone = grdt_timezone or "+00:00"  # type: str
@@ -66,7 +66,7 @@ async def draw(state: CalendarState, ref) -> None:
 
 
 async def set_by_form(
-    state: CalendarState, set_state: SetCalendarState, form, ref
+    state: CalendarState, set_state: SetCalendarState, form: RhfForm, ref
 ) -> None:
     """Draw a calendar at the form values."""
     values = form.getValues()
@@ -127,7 +127,7 @@ def Calendar(props: dict):
     state: CalendarState
     set_state: SetCalendarState
     [state, set_state] = React.useState(CalendarState(None, None))
-    form = ReactHookForm.useForm()
+    form: RhfForm = ReactHookForm.useForm()
     # NOTE: <Transform /> の form と構造を揃へてある
     form.setValue("grdt.timezone", state.grdt_timezone)
     form.setValue("imdt.year", state.imperial_year_month.year)
