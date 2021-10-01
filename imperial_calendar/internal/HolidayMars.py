@@ -72,7 +72,8 @@ HOLIDAYS: THolidays = {
         24: {
             25: Internal(name="大祓前々日"),
             26: Internal(name="大祓前日"),
-            27: Internal(name="年越大祓")},
+            27: Internal(name="年越大祓"),
+        },
     },
     1427: {
         1: {
@@ -96,7 +97,8 @@ HOLIDAYS: THolidays = {
         24: {
             26: Internal(name="大祓前々日"),
             27: Internal(name="大祓前日"),
-            28: Internal(name="年越大祓")},
+            28: Internal(name="年越大祓"),
+        },
     },
 }
 
