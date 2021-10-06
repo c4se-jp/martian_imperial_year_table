@@ -275,6 +275,13 @@ def Grdt(props: dict):
         )
         sync_by_grdt(new_state, set_state)
 
+    form.setValue("grdt.year", state.grdt.year)
+    form.setValue("grdt.month", state.grdt.month)
+    form.setValue("grdt.day", state.grdt.day)
+    form.setValue("grdt.hour", state.grdt.hour)
+    form.setValue("grdt.minute", state.grdt.minute)
+    form.setValue("grdt.second", state.grdt.second)
+    form.setValue("grdt.timezone", state.grdt.timezone)
     return React.createElement(
         "div",
         {"className": "field is-grouped is-grouped-multiline"},
@@ -403,6 +410,7 @@ def Juld(props: dict):
         )
         sync_by_juld(new_state, set_state)
 
+    form.setValue("juld.julian_day", round(state.juld.julian_day, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -432,6 +440,8 @@ def Juld(props: dict):
 def DeltaT(props: dict):
     """Render a DeltaT component."""
     form: RhfForm = props["form"]
+    state: TransformState = props["state"]
+    form.setValue("delta_t", round(state.delta_t, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -472,6 +482,7 @@ def Tert(props: dict):
         )
         sync_by_tert(new_state, set_state)
 
+    form.setValue("tert.terrestrial_time", round(state.tert.terrestrial_time, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -501,6 +512,8 @@ def Tert(props: dict):
 def Mrls(props: dict):
     """Render a Mrls component."""
     form: RhfForm = props["form"]
+    state: TransformState = props["state"]
+    form.setValue("mrls", round(state.mrls, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -543,6 +556,7 @@ def Mrsd(props: dict):
         )
         sync_by_mrsd(new_state, set_state)
 
+    form.setValue("mrsd.mars_sol_date", round(state.mrsd.mars_sol_date, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -590,6 +604,7 @@ def Imsn(props: dict):
         )
         sync_by_imsn(new_state, set_state)
 
+    form.setValue("imsn.imperial_sol_number", round(state.imsn.imperial_sol_number, 5))
     return React.createElement(
         "div",
         {"className": "field is-grouped"},
@@ -645,6 +660,13 @@ def Imdt(props: dict):
         )
         sync_by_imdt(new_state, set_state)
 
+    form.setValue("imdt.year", state.imdt.year)
+    form.setValue("imdt.month", state.imdt.month)
+    form.setValue("imdt.day", state.imdt.day)
+    form.setValue("imdt.hour", state.imdt.hour)
+    form.setValue("imdt.minute", state.imdt.minute)
+    form.setValue("imdt.second", state.imdt.second)
+    form.setValue("imdt.timezone", state.imdt.timezone)
     return React.createElement(
         "div",
         {"className": "field is-grouped is-grouped-multiline"},
@@ -761,26 +783,6 @@ def Transform(props: dict):
     )
     form: RhfForm
     form = ReactHookForm.useForm()
-    form.setValue("grdt.year", state.grdt.year)
-    form.setValue("grdt.month", state.grdt.month)
-    form.setValue("grdt.day", state.grdt.day)
-    form.setValue("grdt.hour", state.grdt.hour)
-    form.setValue("grdt.minute", state.grdt.minute)
-    form.setValue("grdt.second", state.grdt.second)
-    form.setValue("grdt.timezone", state.grdt.timezone)
-    form.setValue("juld.julian_day", round(state.juld.julian_day, 5))
-    form.setValue("delta_t", round(state.delta_t, 5))
-    form.setValue("tert.terrestrial_time", round(state.tert.terrestrial_time, 5))
-    form.setValue("mrls", round(state.mrls, 5))
-    form.setValue("mrsd.mars_sol_date", round(state.mrsd.mars_sol_date, 5))
-    form.setValue("imsn.imperial_sol_number", round(state.imsn.imperial_sol_number, 5))
-    form.setValue("imdt.year", state.imdt.year)
-    form.setValue("imdt.month", state.imdt.month)
-    form.setValue("imdt.day", state.imdt.day)
-    form.setValue("imdt.hour", state.imdt.hour)
-    form.setValue("imdt.minute", state.imdt.minute)
-    form.setValue("imdt.second", state.imdt.second)
-    form.setValue("imdt.timezone", state.imdt.timezone)
     React.useEffect(lambda: set_to_current(state, set_state), [])
     return React.createElement(
         React.Fragment,
@@ -800,11 +802,11 @@ def Transform(props: dict):
             React.createElement(
                 Juld, {"form": form, "state": state, "set_state": set_state}
             ),
-            React.createElement(DeltaT, {"form": form}),
+            React.createElement(DeltaT, {"form": form, "state": state}),
             React.createElement(
                 Tert, {"form": form, "state": state, "set_state": set_state}
             ),
-            React.createElement(Mrls, {"form": form}),
+            React.createElement(Mrls, {"form": form, "state": state}),
             React.createElement(
                 Mrsd, {"form": form, "state": state, "set_state": set_state}
             ),
