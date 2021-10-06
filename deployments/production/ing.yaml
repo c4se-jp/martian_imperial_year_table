@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: martian-imperial-year-table
@@ -9,9 +9,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: martian-imperial-year-table
-              servicePort: 80
+              service:
+                name: martian-imperial-year-table
+                port:
+                  number: 80
   tls:
     - hosts: [martian-imperial-year-table.c4se.jp]
       secretName: letsencrypt-tls
