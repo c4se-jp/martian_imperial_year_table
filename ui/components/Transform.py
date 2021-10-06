@@ -284,107 +284,115 @@ def Grdt(props: dict):
     form.setValue("grdt.timezone", state.grdt.timezone)
     return React.createElement(
         "div",
-        {"className": "field is-grouped is-grouped-multiline"},
-        React.createElement("label", {"className": "label"}, "Gregorian Date Time"),
+        {"className": "columns field"},
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.year"),
-                {
-                    "className": "input",
-                    "style": {"width": "6em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "-",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.month"),
-                {
-                    "className": "input",
-                    "max": 12,
-                    "min": 1,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "-",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.day"),
-                {
-                    "className": "input",
-                    "max": 31,
-                    "min": 1,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "T",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.hour"),
-                {
-                    "className": "input",
-                    "max": 23,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        ":",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.minute"),
-                {
-                    "className": "input",
-                    "max": 59,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        ":",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.second"),
-                {
-                    "className": "input",
-                    "max": 59,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
+            "label",
+            {"className": "column is-2 label"},
+            "Gregorian Date Time",
         ),
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("grdt.timezone"),
-                {
-                    "className": "input",
-                    "style": {"width": "6em"},
-                    "type": "text",
-                },
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.year"),
+                    {
+                        "className": "input",
+                        "style": {"width": "6em"},
+                        "type": "number",
+                    },
+                ),
             ),
-        ),
-        React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            "-",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.month"),
+                    {
+                        "className": "input",
+                        "max": 12,
+                        "min": 1,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            "-",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.day"),
+                    {
+                        "className": "input",
+                        "max": 31,
+                        "min": 1,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            "T",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.hour"),
+                    {
+                        "className": "input",
+                        "max": 23,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            ":",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.minute"),
+                    {
+                        "className": "input",
+                        "max": 59,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            ":",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.second"),
+                    {
+                        "className": "input",
+                        "max": 59,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("grdt.timezone"),
+                    {
+                        "className": "input",
+                        "style": {"width": "6em"},
+                        "type": "text",
+                    },
+                ),
+            ),
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
@@ -413,26 +421,31 @@ def Juld(props: dict):
     form.setValue("juld.julian_day", round(state.juld.julian_day, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
-        React.createElement("label", {"className": "label"}, "Julian Day"),
+        {"className": "columns field"},
+        React.createElement("label", {"className": "column is-2 label"}, "Julian Day"),
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("juld.julian_day"),
-                {
-                    "className": "input",
-                    "step": 0.00001,
-                    "type": "number",
-                },
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("juld.julian_day"),
+                    {
+                        "className": "input",
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
             ),
-        ),
-        React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
@@ -444,18 +457,23 @@ def DeltaT(props: dict):
     form.setValue("delta_t", round(state.delta_t, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
-        React.createElement("div", {"className": "label"}, "⊿t"),
+        {"className": "columns field"},
+        React.createElement("label", {"className": "column is-2 label"}, "⊿t"),
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("delta_t"),
-                {
-                    "className": "input",
-                    "disabled": True,
-                    "step": 0.00001,
-                    "type": "number",
-                },
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("delta_t"),
+                    {
+                        "className": "input",
+                        "disabled": True,
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
             ),
         ),
     )
@@ -485,26 +503,33 @@ def Tert(props: dict):
     form.setValue("tert.terrestrial_time", round(state.tert.terrestrial_time, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
-        React.createElement("div", {"className": "label"}, "Terrestrial Time"),
+        {"className": "columns field"},
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("tert.terrestrial_time"),
-                {
-                    "className": "input",
-                    "step": 0.00001,
-                    "type": "number",
-                },
-            ),
+            "label", {"className": "column is-2 label"}, "Terrestrial Time"
         ),
         React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("tert.terrestrial_time"),
+                    {
+                        "className": "input",
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
@@ -516,20 +541,27 @@ def Mrls(props: dict):
     form.setValue("mrls", round(state.mrls, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
+        {"className": "columns field"},
         React.createElement(
-            "div", {"className": "label"}, "Areocentric Solar Longitude (Mars Ls)"
+            "label",
+            {"className": "column is-2 label"},
+            "Areocentric Solar Longitude (Mars Ls)",
         ),
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("mrls"),
-                {
-                    "className": "input",
-                    "disabled": True,
-                    "step": 0.00001,
-                    "type": "number",
-                },
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("mrls"),
+                    {
+                        "className": "input",
+                        "disabled": True,
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
             ),
         ),
     )
@@ -559,26 +591,33 @@ def Mrsd(props: dict):
     form.setValue("mrsd.mars_sol_date", round(state.mrsd.mars_sol_date, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
-        React.createElement("div", {"className": "label"}, "Mars Sol Date"),
+        {"className": "columns field"},
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("mrsd.mars_sol_date"),
-                {
-                    "className": "input",
-                    "step": 0.00001,
-                    "type": "number",
-                },
-            ),
+            "label", {"className": "column is-2 label"}, "Mars Sol Date"
         ),
         React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("mrsd.mars_sol_date"),
+                    {
+                        "className": "input",
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
@@ -607,26 +646,33 @@ def Imsn(props: dict):
     form.setValue("imsn.imperial_sol_number", round(state.imsn.imperial_sol_number, 5))
     return React.createElement(
         "div",
-        {"className": "field is-grouped"},
-        React.createElement("div", {"className": "label"}, "Imperial Sol Number"),
+        {"className": "columns field"},
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("imsn.imperial_sol_number"),
-                {
-                    "className": "input",
-                    "step": 0.00001,
-                    "type": "number",
-                },
-            ),
+            "label", {"className": "column is-2 label"}, "Imperial Sol Number"
         ),
         React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imsn.imperial_sol_number"),
+                    {
+                        "className": "input",
+                        "step": 0.00001,
+                        "style": {"width": "12em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
@@ -669,107 +715,115 @@ def Imdt(props: dict):
     form.setValue("imdt.timezone", state.imdt.timezone)
     return React.createElement(
         "div",
-        {"className": "field is-grouped is-grouped-multiline"},
-        React.createElement("label", {"className": "label"}, "Imperial Date Time"),
+        {"className": "columns field"},
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.year"),
-                {
-                    "className": "input",
-                    "style": {"width": "6em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "-",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.month"),
-                {
-                    "className": "input",
-                    "max": 24,
-                    "min": 1,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "-",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.day"),
-                {
-                    "className": "input",
-                    "max": 28,
-                    "min": 1,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        "T",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.hour"),
-                {
-                    "className": "input",
-                    "max": 23,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        ":",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.minute"),
-                {
-                    "className": "input",
-                    "max": 59,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
-        ),
-        ":",
-        React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.second"),
-                {
-                    "className": "input",
-                    "max": 59,
-                    "min": 0,
-                    "style": {"width": "3.5em"},
-                    "type": "number",
-                },
-            ),
+            "label",
+            {"className": "column is-2 label"},
+            "Imperial Date Time",
         ),
         React.createElement(
-            "input",
-            merge_dict(
-                form.register("imdt.timezone"),
-                {
-                    "className": "input",
-                    "style": {"width": "6em"},
-                    "type": "text",
-                },
+            "div",
+            {"className": "column control"},
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.year"),
+                    {
+                        "className": "input",
+                        "style": {"width": "6em"},
+                        "type": "number",
+                    },
+                ),
             ),
-        ),
-        React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": on_click,
-            },
-            "Sync",
+            "-",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.month"),
+                    {
+                        "className": "input",
+                        "max": 24,
+                        "min": 1,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            "-",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.day"),
+                    {
+                        "className": "input",
+                        "max": 28,
+                        "min": 1,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            "T",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.hour"),
+                    {
+                        "className": "input",
+                        "max": 23,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            ":",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.minute"),
+                    {
+                        "className": "input",
+                        "max": 59,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            ":",
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.second"),
+                    {
+                        "className": "input",
+                        "max": 59,
+                        "min": 0,
+                        "style": {"width": "3.5em"},
+                        "type": "number",
+                    },
+                ),
+            ),
+            React.createElement(
+                "input",
+                merge_dict(
+                    form.register("imdt.timezone"),
+                    {
+                        "className": "input",
+                        "style": {"width": "6em"},
+                        "type": "text",
+                    },
+                ),
+            ),
+            React.createElement(
+                "button",
+                {
+                    "className": "button is-dark",
+                    "onClick": on_click,
+                },
+                "Sync",
+            ),
         ),
     )
 
