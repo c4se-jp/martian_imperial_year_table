@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
