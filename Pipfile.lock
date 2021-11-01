@@ -261,11 +261,11 @@
         },
         "types-pytz": {
             "hashes": [
-                "sha256:28fb1c0f77f59aebe9b792d073ebfbbbf7b329f9d4af6a6079713a618a1c0f31",
-                "sha256:448828a06f2aaa840e57364d866c661645a045e532f817e4f10c8c3ab2b66651"
+                "sha256:86a61967834dceeaaf98b6902ed8357efdd262bb8afcaf4bc8ccecf748592778",
+                "sha256:b5027e5de50a4c978cd60ca16849d934d44c44ebd7d29cf13ada009efaa9feef"
             ],
             "index": "pypi",
-            "version": "==2021.1.2"
+            "version": "==2021.3.0"
         },
         "uwsgi": {
             "hashes": [
