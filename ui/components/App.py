@@ -29,22 +29,28 @@ def App(props):
             supervise(React.createElement(GlobalNavigation, {})),
             supervise(
                 React.createElement(
-                    ReactRouterDOM.Switch,
+                    ReactRouterDOM.Routes,
                     {},
                     React.createElement(
                         ReactRouterDOM.Route,
-                        {"path": "/", "exact": None},
-                        React.createElement(Transform, {}),
+                        {
+                            "path": "/",
+                            "element": React.createElement(Transform, {}),
+                        },
                     ),
                     React.createElement(
                         ReactRouterDOM.Route,
-                        {"path": "/description"},
-                        React.createElement(Description, {}),
+                        {
+                            "path": "/description",
+                            "element": React.createElement(Description, {}),
+                        },
                     ),
                     React.createElement(
                         ReactRouterDOM.Route,
-                        {"path": "/calendar"},
-                        React.createElement(Calendar, {}),
+                        {
+                            "path": "/calendar",
+                            "element": React.createElement(Calendar, {}),
+                        },
                     ),
                 ),
             ),
