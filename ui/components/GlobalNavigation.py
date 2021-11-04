@@ -56,9 +56,10 @@ def GlobalNavigation(props: dict):
                 React.createElement(
                     ReactRouterDOM.NavLink,
                     {
-                        "activeClassName": "is-active",
-                        "className": "is-tab navbar-item",
-                        "exact": None,
+                        "className": lambda props: "is-active is-tab navbar-item"
+                        if props["isActive"]
+                        else "is-tab navbar-item",
+                        "end": None,
                         "to": "/",
                     },
                     "變換",
@@ -66,8 +67,9 @@ def GlobalNavigation(props: dict):
                 React.createElement(
                     ReactRouterDOM.NavLink,
                     {
-                        "activeClassName": "is-active",
-                        "className": "is-tab navbar-item",
+                        "className": lambda props: "is-active is-tab navbar-item"
+                        if props["isActive"]
+                        else "is-tab navbar-item",
                         "to": "/description",
                     },
                     "解説",
@@ -75,8 +77,9 @@ def GlobalNavigation(props: dict):
                 React.createElement(
                     ReactRouterDOM.NavLink,
                     {
-                        "activeClassName": "is-active",
-                        "className": "is-tab navbar-item",
+                        "className": lambda props: "is-active is-tab navbar-item"
+                        if props["isActive"]
+                        else "is-tab navbar-item",
                         "to": "/calendar",
                     },
                     "七曜表",
