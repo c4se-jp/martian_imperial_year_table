@@ -173,57 +173,31 @@ def clean():
 
 
 @task
-def deploy_staging():
-    """Deploy to staging."""
-    run("git tag -f staging")
-    run("git push -f origin staging")
-    with powershell() as _run:
-        time.sleep(30)
-        process = _run(
-            r"""
-            gcloud builds list \
-              --filter substitutions.TRIGGER_NAME=martian-imperial-year-table-deploy-staging \
-              --format json \
-              --limit 1
-            """,
-            capture_output=True,
-            text=True,
-        )
-        build = json.loads(process.stdout)[0]["id"]
-        _run(f"gcloud builds log --stream {quote(build)}")
-    time.sleep(10)
-    run(
-        f"""
-        {kubectl_exe()} -n martian-imperial-year-table-staging \
-          wait \
-          po \
-          -l app=martian-imperial-year-table \
-          -l role=web \
-          --for=condition=ready \
-          --timeout=10m
-        """
-    )
-
-
-@task
 def deploy_production():
     """Deploy to production."""
     run("git tag -f production")
     run("git push -f origin production")
+    commit_sha = run("git rev-parse production", capture_output=True, text=True).stdout.strip()
     with powershell() as _run:
-        time.sleep(30)
-        process = _run(
-            r"""
-            gcloud builds list \
-              --filter substitutions.TRIGGER_NAME=martian-imperial-year-table-deploy-production \
-              --format json \
-              --limit 1
-            """,
-            capture_output=True,
-            text=True,
-        )
-        build = json.loads(process.stdout)[0]["id"]
-        _run(f"gcloud builds log --stream {quote(build)}")
+        for i in range(3):
+            time.sleep(10)
+            process = _run(
+                r"""
+                gcloud builds list \
+                  --filter substitutions.TRIGGER_NAME=martian-imperial-year-table-deploy-production \
+                  --format json \
+                  --limit 1
+                """,
+                capture_output=True,
+                text=True,
+            )
+            build = json.loads(process.stdout)[0]
+            if build["substitutions"]["COMMIT_SHA"] == commit_sha:
+                break
+            if i == 2:
+                raise Exception("Retry count exceeded")
+        build_id = build["id"]
+        _run(f"gcloud builds log --stream {quote(build_id)}")
     time.sleep(10)
     run(
         f"""
