@@ -177,7 +177,9 @@ def deploy_production():
     """Deploy to production."""
     run("git tag -f production")
     run("git push -f origin production")
-    commit_sha = run("git rev-parse production", capture_output=True, text=True).stdout.strip()
+    commit_sha = run(
+        "git rev-parse production", capture_output=True, text=True
+    ).stdout.strip()
     with powershell() as _run:
         for i in range(3):
             time.sleep(10)
