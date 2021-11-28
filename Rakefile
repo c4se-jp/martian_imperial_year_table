@@ -84,15 +84,6 @@ end
 desc 'Format me'
 task(:format) { sh 'rubocop -a Rakefile || true' }
 
-desc 'Recreate all nodes'
-task :renodes do
-  nodes = `#{KUBECTL_EXE} get no --no-headers`.each_line.map { |l| l.split(/\s+/).first }
-  nodes.each { |node| sh "#{KUBECTL_EXE} cordon #{node}" }
-  nodes.each { |node| sh "#{KUBECTL_EXE} drain --force --ignore-daemonsets --delete-local-data --grace-period=300 #{node}" }
-  sleep 300
-  nodes.each { |node| sh "#{KUBECTL_EXE} delete no #{node}" }
-end
-
 namespace :production do
   desc 'Inspect about staging'
   task(:top) { top_k8s('martian-imperial-year-table-production') }

@@ -7,7 +7,6 @@ commonLabels:
 bases:
   - ../base/
 patchesStrategicMerge:
-  - deploy.yaml
   - hpa.yaml
   - ing.yaml
   - issuer.yaml
