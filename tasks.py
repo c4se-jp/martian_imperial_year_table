@@ -138,7 +138,7 @@ def build():
     os.makedirs("static/css", exist_ok=True)
     os.makedirs("static/js", exist_ok=True)
     if not within_docker():
-        run(f"{docker_exe()} compose pull web-src")
+        run(f"{docker_exe()} compose pull --ignore-pull-failures web-src")
         run(
             rf"""
             {docker_exe()} compose build \
