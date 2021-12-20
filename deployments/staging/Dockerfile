@@ -11,7 +11,7 @@ RUN apt-get update \
     build-essential \
     curl \
     libpcre3-dev \
- && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
+ && curl -fsL https://deb.nodesource.com/setup_16.x | bash -ex \
  && apt-get install -y --no-install-recommends \
     nodejs \
  && pip install --no-cache-dir --user pipenv \

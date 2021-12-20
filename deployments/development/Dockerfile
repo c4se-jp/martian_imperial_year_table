@@ -17,7 +17,7 @@ RUN apt-get update \
     libpcre3-dev \
     rsync \
     silversearcher-ag \
- && curl -sL https://deb.nodesource.com/setup_16.x | bash -ex \
+ && curl -fsL https://deb.nodesource.com/setup_16.x | bash -ex \
  && apt-get install -y --no-install-recommends \
     nodejs \
  && pip install --no-cache-dir --user pipenv \
