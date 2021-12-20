@@ -301,6 +301,14 @@ def test():
                    /mnt/deployments/{env}/Dockerfile
                """
             )
+        for env in ["staging", "production"]:
+            run(
+                "bash -eux -c {:s}".format(
+                    quote(
+                        f"(cd deployments/{env} && kustomize build) | kubeval --ignore-missing-schemas --strict"
+                    )
+                )
+            )
     with docker() as _run:
         _run("pipenv check")
         _run("npm audit")
