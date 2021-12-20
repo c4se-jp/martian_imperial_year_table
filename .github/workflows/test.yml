@@ -32,6 +32,9 @@ jobs:
           pip install --user pipenv
           pipenv sync -d --pre
           npm ci
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          dockerfile: deployments/production/Dockerfile
       - name: Test
         run: |
           pipenv check
