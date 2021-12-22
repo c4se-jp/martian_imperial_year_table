@@ -52,6 +52,8 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
+            - name: MACKEREL_AGENT_CONFIG
+              value: /etc/mackerel/mackerel.yaml
             - name: MACKEREL_CONTAINER_PLATFORM
               value: kubernetes
             - name: MACKEREL_KUBERNETES_KUBELET_HOST
