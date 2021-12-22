@@ -7,6 +7,10 @@ data:
   mackerel.yaml: |
     roles:
       - martian-imperial-year-table:web
+    plugin:
+      metrics:
+        uwsgi-vassal:
+          command: /usr/bin/mackerel-plugin-uwsgi-vassal --socket http://127.0.0.1:9191
     readinessProbe:
       http:
         path: /ops/heartbeat
