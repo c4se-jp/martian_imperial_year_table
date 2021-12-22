@@ -9,7 +9,6 @@ services:
       context: .
       dockerfile: deployments/development/Dockerfile
     environment:
-      COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
       FLASK_APP: web_main.py
       FLASK_ENV: development
     depends_on: [web-src]

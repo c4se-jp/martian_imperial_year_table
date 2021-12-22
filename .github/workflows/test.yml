@@ -2,7 +2,7 @@
 name: test
 
 "on":
-  pull_request: { }
+  pull_request: {}
   push:
     branches: [main]
 
@@ -28,7 +28,6 @@ jobs:
             ${{ runner.os }}-python-
       - name: Setup
         run: |
-          # pip install --user coveralls
           pip install --user pipenv
           pipenv sync -d --pre
           npm ci
@@ -47,6 +46,3 @@ jobs:
           pipenv run coverage run -m unittest discover -s tests/imperial_calendar
           pipenv run coverage run -m unittest discover -s tests/web
           pipenv run coverage report -m
-          # coveralls
-        # env:
-        #   COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
