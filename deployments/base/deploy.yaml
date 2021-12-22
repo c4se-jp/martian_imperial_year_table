@@ -68,8 +68,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: MACKEREL_ROLES
-              value: martian-imperial-year-table:web
           envFrom:
             - secretRef:
                 name: martian-imperial-year-table

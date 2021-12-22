@@ -5,6 +5,8 @@ metadata:
   name: mackerel-agent-config
 data:
   mackerel.yaml: |
+    roles:
+      - martian-imperial-year-table:web
     readinessProbe:
       http:
         path: /ops/heartbeat
