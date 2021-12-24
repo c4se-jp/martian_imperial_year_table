@@ -2,7 +2,7 @@
 name: test
 
 "on":
-  pull_request: {}
+  pull_request:
   push:
     branches: [main]
 
@@ -24,8 +24,8 @@ jobs:
           path: |
             ~/.local/share/virtualenvs
           key: ${{ runner.os }}-python-${{ hashFiles('Pipfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-python-
+          # restore-keys: |
+          #   ${{ runner.os }}-python-
       - name: Setup
         run: |
           pip install --user pipenv
@@ -33,7 +33,10 @@ jobs:
           npm ci
       - uses: hadolint/hadolint-action@v1.6.0
         with:
-          dockerfile: deployments/production/Dockerfile
+          dockerfile: deployments/development/Dockerfile
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          dockerfile: deployments/staging/Dockerfile
       - name: Test
         run: |
           pipenv check
