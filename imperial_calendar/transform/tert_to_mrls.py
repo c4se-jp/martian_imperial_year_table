@@ -46,7 +46,7 @@ def offset_t_j2000_to_equation_of_center(offset_t_j2000):
     angle_m = math.radians(m_m_a)
     pbs = offset_t_j2000_to_perturbers(offset_t_j2000)
     return (
-        (10.691 + (3.0 * 10 ** -7) * offset_t_j2000) * math.sin(angle_m)
+        (10.691 + (3.0 * 10**-7) * offset_t_j2000) * math.sin(angle_m)
         + 0.623 * math.sin(2 * angle_m)
         + 0.050 * math.sin(3 * angle_m)
         + 0.005 * math.sin(4 * angle_m)

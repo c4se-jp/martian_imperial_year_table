@@ -261,7 +261,7 @@ def start():
 def start_as_production():
     """Start a production build development server."""
     run(
-        fr"""
+        rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
           -t "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
@@ -271,7 +271,7 @@ def start_as_production():
         """
     )
     run(
-        fr"""
+        rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
           -t "gcr.io/c4se-197915/martian_imperial_year_table:latest" \
@@ -291,7 +291,7 @@ def test():
     if not within_docker():
         for env in ["development", "staging"]:
             run(
-                fr"""
+                rf"""
                {docker_exe()} run -i \
                  -v {cwd_for_docker_volume()}:/mnt \
                  --rm \

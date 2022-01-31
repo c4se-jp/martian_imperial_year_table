@@ -99,99 +99,99 @@ class JulianDay(object):
             year_number = julian_day_to_gregorian_year(self)
         if year_number < -500:
             delta_u = (year_number - 1820) / 100
-            return -20 + 32 * delta_u ** 2
+            return -20 + 32 * delta_u**2
         elif year_number < 500:
             delta_u = year_number / 100
             return (
                 10583.6
                 - 1014.41 * delta_u
-                + 33.78311 * delta_u ** 2
-                - 5.952053 * delta_u ** 3
-                - 0.1798452 * delta_u ** 4
-                + 0.022174192 * delta_u ** 5
-                + 0.0090316521 * delta_u ** 6
+                + 33.78311 * delta_u**2
+                - 5.952053 * delta_u**3
+                - 0.1798452 * delta_u**4
+                + 0.022174192 * delta_u**5
+                + 0.0090316521 * delta_u**6
             )
         elif year_number < 1600:
             delta_u = (year_number - 1000) / 100
             return (
                 1574.2
                 - 556.01 * delta_u
-                + 71.23472 * delta_u ** 2
-                + 0.319781 * delta_u ** 3
-                - 0.8503463 * delta_u ** 4
-                - 0.005050998 * delta_u ** 5
-                + 0.0083572073 * delta_u ** 6
+                + 71.23472 * delta_u**2
+                + 0.319781 * delta_u**3
+                - 0.8503463 * delta_u**4
+                - 0.005050998 * delta_u**5
+                + 0.0083572073 * delta_u**6
             )
         elif year_number < 1700:
             delta_u = year_number - 1600
-            return 120 - 0.9808 * delta_u - 0.01532 * delta_u ** 2 + delta_u ** 3 / 7129
+            return 120 - 0.9808 * delta_u - 0.01532 * delta_u**2 + delta_u**3 / 7129
         elif year_number < 1800:
             delta_u = year_number - 1700
             return (
                 8.83
                 + 0.1603 * delta_u
-                - 0.0059285 * delta_u ** 2
-                + 0.00013336 * delta_u ** 3
-                - delta_u ** 4 / 1174000
+                - 0.0059285 * delta_u**2
+                + 0.00013336 * delta_u**3
+                - delta_u**4 / 1174000
             )
         elif year_number < 1860:
             delta_u = year_number - 1800
             return (
                 13.72
                 - 0.332447 * delta_u
-                + 0.0068612 * delta_u ** 2
-                + 0.0041116 * delta_u ** 3
-                - 0.00037436 * delta_u ** 4
-                + 0.0000121272 * delta_u ** 5
-                - 0.0000001699 * delta_u ** 6
-                + 0.000000000875 * delta_u ** 7
+                + 0.0068612 * delta_u**2
+                + 0.0041116 * delta_u**3
+                - 0.00037436 * delta_u**4
+                + 0.0000121272 * delta_u**5
+                - 0.0000001699 * delta_u**6
+                + 0.000000000875 * delta_u**7
             )
         elif year_number < 1900:
             delta_u = year_number - 1860
             return (
                 7.62
                 + 0.5737 * delta_u
-                - 0.251754 * delta_u ** 2
-                + 0.01680668 * delta_u ** 3
-                - 0.0004473624 * delta_u ** 4
-                + delta_u ** 5 / 233174
+                - 0.251754 * delta_u**2
+                + 0.01680668 * delta_u**3
+                - 0.0004473624 * delta_u**4
+                + delta_u**5 / 233174
             )
         elif year_number < 1920:
             delta_u = year_number - 1900
             return (
                 -2.79
                 + 1.494119 * delta_u
-                - 0.0598939 * delta_u ** 2
-                + 0.0061966 * delta_u ** 3
-                - 0.000197 * delta_u ** 4
+                - 0.0598939 * delta_u**2
+                + 0.0061966 * delta_u**3
+                - 0.000197 * delta_u**4
             )
         elif year_number < 1941:
             delta_u = year_number - 1920
             return (
                 21.20
                 + 0.84493 * delta_u
-                - 0.076100 * delta_u ** 2
-                + 0.0020936 * delta_u ** 3
+                - 0.076100 * delta_u**2
+                + 0.0020936 * delta_u**3
             )
         elif year_number < 1961:
             delta_u = year_number - 1950
-            return 29.07 + 0.407 * delta_u - delta_u ** 2 / 233 + delta_u ** 3 / 2547
+            return 29.07 + 0.407 * delta_u - delta_u**2 / 233 + delta_u**3 / 2547
         elif year_number < 1986:
             delta_u = year_number - 1975
-            return 45.45 + 1.067 * delta_u - delta_u ** 2 / 260 - delta_u ** 3 / 718
+            return 45.45 + 1.067 * delta_u - delta_u**2 / 260 - delta_u**3 / 718
         elif year_number < 2005:
             delta_u = year_number - 2000
             return (
                 63.86
                 + 0.3345 * delta_u
-                - 0.060734 * delta_u ** 2
-                + 0.0017275 * delta_u ** 3
-                + 0.000651814 * delta_u ** 4
-                + 0.00002373599 * delta_u ** 5
+                - 0.060734 * delta_u**2
+                + 0.0017275 * delta_u**3
+                + 0.000651814 * delta_u**4
+                + 0.00002373599 * delta_u**5
             )
         elif year_number < 2050:
             delta_u = year_number - 2000
-            return 63.795 + 0.1287 * delta_u + 0.0091 * delta_u ** 2
+            return 63.795 + 0.1287 * delta_u + 0.0091 * delta_u**2
             # 2005-2050の近似式は自作。參考文獻に準拠した式をコメントアウトして置く。
             # 參考文獻: https://eclipse.gsfc.nasa.gov/SEhelp/deltatpoly2004.html
             # return 62.92 + \
@@ -205,7 +205,7 @@ class JulianDay(object):
             )
         else:
             delta_u = (year_number - 1820) / 100
-            return -20 + 32 * delta_u ** 2
+            return -20 + 32 * delta_u**2
 
     # __pragma__("noskip")
 
