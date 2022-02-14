@@ -305,7 +305,7 @@ def test():
             run(
                 "bash -eux -c {:s}".format(
                     quote(
-                        f"(cd deployments/{env} && kustomize build) | kubeval --ignore-missing-schemas --strict"
+                        f"(cd deployments/{env} && kustomize build) | kubeconform -ignore-missing-schemas -strict"
                     )
                 )
             )
