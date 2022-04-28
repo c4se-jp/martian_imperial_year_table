@@ -232,11 +232,11 @@
         },
         "types-pytz": {
             "hashes": [
-                "sha256:6805c72d51118923c5bf98633c39593d5b464d2ab49a803440e2d7ab6b8920df",
-                "sha256:74547fd90d8d8ab4f1eedf3a344a7d186d97486973895f81221a712e1e2cd993"
+                "sha256:0f67528c1df2017b61a45f2f9cfa2d45b16ce1dc135f09c7d2fd258998aade58",
+                "sha256:11d5ba06268167953ccc4a3eee192c24b42d00d2aef456c160a8798893cb2081"
             ],
             "index": "pypi",
-            "version": "==2021.3.6"
+            "version": "==2021.3.7"
         },
         "uwsgi": {
             "hashes": [
@@ -407,11 +407,11 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:7535e70dfa32e84d4b34996ea99c5e432fa29a708d0f4e394bbcb2a8faa4f16d",
-                "sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227"
+                "sha256:027d8e83a2d7de06bbac4e5ef7e023c02b863d7ea5d079477e722bb41ab25788",
+                "sha256:58c8abb07dcb441e6ee4b11d8df0ac856038f944ab98b7be6b27b2a3c7feef19"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.5.1"
+            "version": "==2.5.2"
         },
         "pycodestyle": {
             "hashes": [
@@ -496,7 +496,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "transcrypt": {
