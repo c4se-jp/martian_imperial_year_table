@@ -28,7 +28,9 @@ async def fetch_description(html: str, set_html) -> None:
 def use_description() -> str:
     """Provide a hook to fetch thr description."""
     [html, set_html] = React.useState(None)
-    React.useEffect(lambda: fetch_description(html, set_html) and js_undefined)
+    React.useEffect(
+        lambda: fetch_description(html, set_html) and js_undefined, [html, set_html]
+    )
     return html
 
 
@@ -42,7 +44,7 @@ def Description(props: dict):
     """Render a Description component."""
     html = use_description()
     ref = React.useRef()
-    React.useEffect(lambda: draw_description(html, ref), [html, ref])
+    React.useEffect(lambda: draw_description(html, ref), [html])
     return React.createElement(
         React.Fragment,
         {},

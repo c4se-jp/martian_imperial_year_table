@@ -13,6 +13,7 @@ __pragma__: t.Any = 0  # __:skip
 React: t.Any = 0  # __:skip
 ReactHelmet: t.Any = 0  # __:skip
 ReactHookForm: t.Any = 0  # __:skip
+js_undefined: t.Any = 0  # __:skip
 
 __pragma__(  # noqa: F821
     "js",
@@ -213,7 +214,7 @@ async def sync_by_imdt(state: TransformState, set_state: SetTransformState):
     set_state(new_state)
 
 
-def set_to_current(state: TransformState, set_state: SetTransformState):
+async def set_to_current(state: TransformState, set_state: SetTransformState):
     """Sync a datetime by the current grdt."""
     new_state = TransformState(
         current_grdt(),
@@ -225,7 +226,7 @@ def set_to_current(state: TransformState, set_state: SetTransformState):
         state.imsn,
         state.imdt,
     )
-    sync_by_grdt(new_state, set_state)
+    await sync_by_grdt(new_state, set_state)
 
 
 def SetToCurrent(props: dict):
@@ -837,7 +838,7 @@ def Transform(props: dict):
     )
     form: RhfForm
     form = ReactHookForm.useForm()
-    React.useEffect(lambda: set_to_current(state, set_state), [])
+    React.useEffect(lambda: set_to_current(state, set_state) and js_undefined, [])
     return React.createElement(
         React.Fragment,
         {},
