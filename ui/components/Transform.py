@@ -9,17 +9,20 @@ from ui.Api import Api
 from ui.utils import RhfForm, current_grdt, merge_dict
 import typing as t
 
-__pragma__: t.Any = 0  # __:skip
 React: t.Any = 0  # __:skip
 ReactHelmet: t.Any = 0  # __:skip
 ReactHookForm: t.Any = 0  # __:skip
+__pragma__: t.Any = 0  # __:skip
 js_undefined: t.Any = 0  # __:skip
+jsx: t.Any = 0  # __:skip
+jsxs: t.Any = 0  # __:skip
 
 __pragma__(  # noqa: F821
     "js",
     "{}",
     """
     const React = require("react");
+    const { jsx, jsxs } = require("react/jsx-runtime");
     const ReactHelmet = require("react-helmet");
     const ReactHookForm = require("react-hook-form");
     window.process = {"env": {"NODE_ENV": "production"}}
@@ -233,17 +236,20 @@ def SetToCurrent(props: dict):
     """Render a SetToCurrent component."""
     state: TransformState = props["state"]
     set_state: SetTransformState = props["set_state"]
-    return React.createElement(
+    return jsxs(
         "div",
-        {},
-        React.createElement(
-            "button",
-            {
-                "className": "button is-dark",
-                "onClick": lambda event: set_to_current(state, set_state),
-            },
-            "現在日時",
-        ),
+        {
+            "children": [
+                jsxs(
+                    "button",
+                    {
+                        "children": ["現在日時"],
+                        "className": "button is-dark",
+                        "onClick": lambda event: set_to_current(state, set_state),
+                    },
+                ),
+            ]
+        },
     )
 
 
@@ -283,118 +289,128 @@ def Grdt(props: dict):
     form.setValue("grdt.minute", state.grdt.minute)
     form.setValue("grdt.second", state.grdt.second)
     form.setValue("grdt.timezone", state.grdt.timezone)
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label",
-            {"className": "column is-2 label"},
-            "Gregorian Date Time",
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.year"),
+        {
+            "children": [
+                jsxs(
+                    "label",
                     {
-                        "className": "input",
-                        "style": {"width": "6em"},
-                        "type": "number",
+                        "children": ["Gregorian Date Time"],
+                        "className": "column is-2 label",
                     },
                 ),
-            ),
-            "-",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.month"),
+                jsxs(
+                    "div",
                     {
-                        "className": "input",
-                        "max": 12,
-                        "min": 1,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.year"),
+                                    {
+                                        "className": "input",
+                                        "style": {"width": "6em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "-",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.month"),
+                                    {
+                                        "className": "input",
+                                        "max": 12,
+                                        "min": 1,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "-",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.day"),
+                                    {
+                                        "className": "input",
+                                        "max": 31,
+                                        "min": 1,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "T",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.hour"),
+                                    {
+                                        "className": "input",
+                                        "max": 23,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            ":",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.minute"),
+                                    {
+                                        "className": "input",
+                                        "max": 59,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            ":",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.second"),
+                                    {
+                                        "className": "input",
+                                        "max": 59,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("grdt.timezone"),
+                                    {
+                                        "className": "input",
+                                        "style": {"width": "6em"},
+                                        "type": "text",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": ["Sync"],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
                     },
                 ),
-            ),
-            "-",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.day"),
-                    {
-                        "className": "input",
-                        "max": 31,
-                        "min": 1,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            "T",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.hour"),
-                    {
-                        "className": "input",
-                        "max": 23,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            ":",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.minute"),
-                    {
-                        "className": "input",
-                        "max": 59,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            ":",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.second"),
-                    {
-                        "className": "input",
-                        "max": 59,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("grdt.timezone"),
-                    {
-                        "className": "input",
-                        "style": {"width": "6em"},
-                        "type": "text",
-                    },
-                ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -420,34 +436,45 @@ def Juld(props: dict):
         sync_by_juld(new_state, set_state)
 
     form.setValue("juld.julian_day", round(state.juld.julian_day, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement("label", {"className": "column is-2 label"}, "Julian Day"),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("juld.julian_day"),
+        {
+            "children": [
+                jsxs(
+                    "label",
+                    {"children": ["Julian Day"], "className": "column is-2 label"},
+                ),
+                jsxs(
+                    "div",
                     {
-                        "className": "input",
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("juld.julian_day"),
+                                    {
+                                        "className": "input",
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": ["Sync"],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
                     },
                 ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -456,27 +483,35 @@ def DeltaT(props: dict):
     form: RhfForm = props["form"]
     state: TransformState = props["state"]
     form.setValue("delta_t", round(state.delta_t, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement("label", {"className": "column is-2 label"}, "⊿t"),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("delta_t"),
+        {
+            "children": [
+                jsxs("label", {"children": ["⊿t"], "className": "column is-2 label"}),
+                jsxs(
+                    "div",
                     {
-                        "className": "input",
-                        "disabled": True,
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("delta_t"),
+                                    {
+                                        "className": "input",
+                                        "disabled": True,
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                        ],
+                        "className": "column control",
                     },
                 ),
-            ),
-        ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -502,36 +537,48 @@ def Tert(props: dict):
         sync_by_tert(new_state, set_state)
 
     form.setValue("tert.terrestrial_time", round(state.tert.terrestrial_time, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label", {"className": "column is-2 label"}, "Terrestrial Time"
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("tert.terrestrial_time"),
+        {
+            "children": [
+                jsxs(
+                    "label",
                     {
-                        "className": "input",
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": ["Terrestrial Time"],
+                        "className": "column is-2 label",
                     },
                 ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+                jsxs(
+                    "div",
+                    {
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("tert.terrestrial_time"),
+                                    {
+                                        "className": "input",
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": ["Sync"],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
+                    },
+                ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -540,31 +587,41 @@ def Mrls(props: dict):
     form: RhfForm = props["form"]
     state: TransformState = props["state"]
     form.setValue("mrls", round(state.mrls, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label",
-            {"className": "column is-2 label"},
-            "Areocentric Solar Longitude (Mars Ls)",
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("mrls"),
+        {
+            "children": [
+                jsxs(
+                    "label",
                     {
-                        "className": "input",
-                        "disabled": True,
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": ["Areocentric Solar Longitude (Mars Ls)"],
+                        "className": "column is-2 label",
                     },
                 ),
-            ),
-        ),
+                jsxs(
+                    "div",
+                    {
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("mrls"),
+                                    {
+                                        "className": "input",
+                                        "disabled": True,
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                        ],
+                        "className": "column control",
+                    },
+                ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -590,36 +647,45 @@ def Mrsd(props: dict):
         sync_by_mrsd(new_state, set_state)
 
     form.setValue("mrsd.mars_sol_date", round(state.mrsd.mars_sol_date, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label", {"className": "column is-2 label"}, "Mars Sol Date"
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("mrsd.mars_sol_date"),
+        {
+            "children": [
+                jsxs(
+                    "label",
+                    {"children": ["Mars Sol Date"], "className": "column is-2 label"},
+                ),
+                jsxs(
+                    "div",
                     {
-                        "className": "input",
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("mrsd.mars_sol_date"),
+                                    {
+                                        "className": "input",
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": ["Sync"],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
                     },
                 ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -645,36 +711,50 @@ def Imsn(props: dict):
         sync_by_imsn(new_state, set_state)
 
     form.setValue("imsn.imperial_sol_number", round(state.imsn.imperial_sol_number, 5))
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label", {"className": "column is-2 label"}, "Imperial Sol Number"
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imsn.imperial_sol_number"),
+        {
+            "children": [
+                jsxs(
+                    "label",
                     {
-                        "className": "input",
-                        "step": 0.00001,
-                        "style": {"width": "12em"},
-                        "type": "number",
+                        "children": ["Imperial Sol Number"],
+                        "className": "column is-2 label",
                     },
                 ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+                jsxs(
+                    "div",
+                    {
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imsn.imperial_sol_number"),
+                                    {
+                                        "className": "input",
+                                        "step": 0.00001,
+                                        "style": {"width": "12em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": [
+                                        "Sync",
+                                    ],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
+                    },
+                ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -714,118 +794,130 @@ def Imdt(props: dict):
     form.setValue("imdt.minute", state.imdt.minute)
     form.setValue("imdt.second", state.imdt.second)
     form.setValue("imdt.timezone", state.imdt.timezone)
-    return React.createElement(
+    return jsxs(
         "div",
-        {"className": "columns field"},
-        React.createElement(
-            "label",
-            {"className": "column is-2 label"},
-            "Imperial Date Time",
-        ),
-        React.createElement(
-            "div",
-            {"className": "column control"},
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.year"),
+        {
+            "children": [
+                jsxs(
+                    "label",
                     {
-                        "className": "input",
-                        "style": {"width": "6em"},
-                        "type": "number",
+                        "children": [
+                            "Imperial Date Time",
+                        ],
+                        "className": "column is-2 label",
                     },
                 ),
-            ),
-            "-",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.month"),
+                jsxs(
+                    "div",
                     {
-                        "className": "input",
-                        "max": 24,
-                        "min": 1,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
+                        "children": [
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.year"),
+                                    {
+                                        "className": "input",
+                                        "style": {"width": "6em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "-",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.month"),
+                                    {
+                                        "className": "input",
+                                        "max": 24,
+                                        "min": 1,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "-",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.day"),
+                                    {
+                                        "className": "input",
+                                        "max": 28,
+                                        "min": 1,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            "T",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.hour"),
+                                    {
+                                        "className": "input",
+                                        "max": 23,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            ":",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.minute"),
+                                    {
+                                        "className": "input",
+                                        "max": 59,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            ":",
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.second"),
+                                    {
+                                        "className": "input",
+                                        "max": 59,
+                                        "min": 0,
+                                        "style": {"width": "3.5em"},
+                                        "type": "number",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "input",
+                                merge_dict(
+                                    form.register("imdt.timezone"),
+                                    {
+                                        "className": "input",
+                                        "style": {"width": "6em"},
+                                        "type": "text",
+                                    },
+                                ),
+                            ),
+                            jsxs(
+                                "button",
+                                {
+                                    "children": ["Sync"],
+                                    "className": "button is-dark",
+                                    "onClick": on_click,
+                                },
+                            ),
+                        ],
+                        "className": "column control",
                     },
                 ),
-            ),
-            "-",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.day"),
-                    {
-                        "className": "input",
-                        "max": 28,
-                        "min": 1,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            "T",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.hour"),
-                    {
-                        "className": "input",
-                        "max": 23,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            ":",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.minute"),
-                    {
-                        "className": "input",
-                        "max": 59,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            ":",
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.second"),
-                    {
-                        "className": "input",
-                        "max": 59,
-                        "min": 0,
-                        "style": {"width": "3.5em"},
-                        "type": "number",
-                    },
-                ),
-            ),
-            React.createElement(
-                "input",
-                merge_dict(
-                    form.register("imdt.timezone"),
-                    {
-                        "className": "input",
-                        "style": {"width": "6em"},
-                        "type": "text",
-                    },
-                ),
-            ),
-            React.createElement(
-                "button",
-                {
-                    "className": "button is-dark",
-                    "onClick": on_click,
-                },
-                "Sync",
-            ),
-        ),
+            ],
+            "className": "columns field",
+        },
     )
 
 
@@ -839,37 +931,51 @@ def Transform(props: dict):
     form: RhfForm
     form = ReactHookForm.useForm()
     React.useEffect(lambda: set_to_current(state, set_state) and js_undefined, [])
-    return React.createElement(
+    return jsxs(
         React.Fragment,
-        {},
-        React.createElement(
-            ReactHelmet.Helmet,
-            {},
-            React.createElement("title", {}, "變換 | 帝國火星曆"),
-        ),
-        React.createElement(
-            "form",
-            {"onSubmit": lambda event: event.preventDefault()},
-            React.createElement(SetToCurrent, {"state": state, "set_state": set_state}),
-            React.createElement(
-                Grdt, {"form": form, "state": state, "set_state": set_state}
-            ),
-            React.createElement(
-                Juld, {"form": form, "state": state, "set_state": set_state}
-            ),
-            React.createElement(DeltaT, {"form": form, "state": state}),
-            React.createElement(
-                Tert, {"form": form, "state": state, "set_state": set_state}
-            ),
-            React.createElement(Mrls, {"form": form, "state": state}),
-            React.createElement(
-                Mrsd, {"form": form, "state": state, "set_state": set_state}
-            ),
-            React.createElement(
-                Imsn, {"form": form, "state": state, "set_state": set_state}
-            ),
-            React.createElement(
-                Imdt, {"form": form, "state": state, "set_state": set_state}
-            ),
-        ),
+        {
+            "children": [
+                jsxs(
+                    ReactHelmet.Helmet,
+                    {"children": [jsxs("title", {"children": ["變換 | 帝國火星曆"]})]},
+                ),
+                jsxs(
+                    "form",
+                    {
+                        "children": [
+                            jsxs(
+                                SetToCurrent, {"state": state, "set_state": set_state}
+                            ),
+                            jsxs(
+                                Grdt,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                            jsxs(
+                                Juld,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                            jsxs(DeltaT, {"form": form, "state": state}),
+                            jsxs(
+                                Tert,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                            jsxs(Mrls, {"form": form, "state": state}),
+                            jsxs(
+                                Mrsd,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                            jsxs(
+                                Imsn,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                            jsxs(
+                                Imdt,
+                                {"form": form, "state": state, "set_state": set_state},
+                            ),
+                        ],
+                        "onSubmit": lambda event: event.preventDefault(),
+                    },
+                ),
+            ]
+        },
     )
