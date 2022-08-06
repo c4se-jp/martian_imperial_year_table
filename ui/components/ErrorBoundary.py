@@ -4,13 +4,14 @@ import typing as t
 __pragma__: t.Any = 0  # __:skip
 console: t.Any = 0  # __:skip
 createReactClass: t.Any = 0  # __:skip
-React: t.Any = 0  # __:skip
+jsx: t.Any = 0  # __:skip
+jsxs: t.Any = 0  # __:skip
 
 __pragma__(  # noqa: F821
     "js",
     "{}",
     """
-    const React = require("react");
+    const { jsx, jsxs } = require("react/jsx-runtime");
     const createReactClass = require("create-react-class");
     """,
 )
@@ -20,7 +21,7 @@ def renderErrorBoundary():
     """Render a component."""
     this: t.Any = 0  # __:skip
     if this.state.has_error:
-        return React.createElement("a", {"href": "/"}, "再讀み込み")
+        return jsxs("a", {"children": ["再讀み込み"], "href": "/"})
     return this.props.children
 
 
@@ -37,4 +38,4 @@ ErrorBoundary = createReactClass(
 
 def supervise(*children):
     """Supervise children components & give a fallback UI."""
-    return React.createElement(ErrorBoundary, {}, *children)
+    return jsx(ErrorBoundary, {"children": [*children]})

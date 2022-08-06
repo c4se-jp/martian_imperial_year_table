@@ -2,16 +2,19 @@
 from ui.Api import Api
 import typing as t
 
-__pragma__: t.Any = 0  # __:skip
-js_undefined: t.Any = 0  # __:skip
 React: t.Any = 0  # __:skip
 ReactHelmet: t.Any = 0  # __:skip
+__pragma__: t.Any = 0  # __:skip
+js_undefined: t.Any = 0  # __:skip
+jsx: t.Any = 0  # __:skip
+jsxs: t.Any = 0  # __:skip
 
 __pragma__(  # noqa: F821
     "js",
     "{}",
     """
     const React = require("react");
+    const { jsx, jsxs } = require("react/jsx-runtime");
     const ReactHelmet = require("react-helmet");
     """,
 )
@@ -45,15 +48,18 @@ def Description(props: dict):
     html = use_description()
     ref = React.useRef()
     React.useEffect(lambda: draw_description(html, ref), [html])
-    return React.createElement(
+    return jsxs(
         React.Fragment,
-        {},
-        React.createElement(
-            ReactHelmet.Helmet,
-            {},
-            React.createElement("title", {}, "解説 | 帝國火星曆"),
-        ),
-        React.createElement(
-            "div", {"className": "content section", "ref": ref}, "讀み込み中"
-        ),
+        {
+            "children": [
+                jsxs(
+                    ReactHelmet.Helmet,
+                    {"children": [jsxs("title", {"children": ["解説 | 帝國火星曆"]})]},
+                ),
+                jsxs(
+                    "div",
+                    {"children": ["讀み込み中"], "className": "content section", "ref": ref},
+                ),
+            ],
+        },
     )

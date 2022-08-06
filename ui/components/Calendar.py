@@ -4,19 +4,22 @@ from ui.Api import Api
 from ui.utils import RhfForm, current_grdt, merge_dict
 import typing as t
 
-__pragma__: t.Any = 0  # __:skip
-encodeURIComponent: t.Any = 0  # __:skip
-js_undefined: t.Any = 0  # __:skip
 JSON: t.Any = 0  # __:skip
 React: t.Any = 0  # __:skip
 ReactHelmet: t.Any = 0  # __:skip
 ReactHookForm: t.Any = 0  # __:skip
+__pragma__: t.Any = 0  # __:skip
+encodeURIComponent: t.Any = 0  # __:skip
+js_undefined: t.Any = 0  # __:skip
+jsx: t.Any = 0  # __:skip
+jsxs: t.Any = 0  # __:skip
 
 __pragma__(  # noqa: F821
     "js",
     "{}",
     """
     const React = require("react");
+    const { jsx, jsxs } = require("react/jsx-runtime");
     const ReactHelmet = require("react-helmet");
     const ReactHookForm = require("react-hook-form");
     window.process = {"env": {"NODE_ENV": "production"}}
@@ -136,106 +139,150 @@ def Calendar(props: dict):
     React.useEffect(
         lambda: set_to_current(state, set_state, ref) and js_undefined, [form, ref]
     )
-    return React.createElement(
+    return jsxs(
         React.Fragment,
-        {},
-        React.createElement(
-            ReactHelmet.Helmet,
-            {},
-            React.createElement("title", {}, "七曜表 | 帝國火星曆"),
-        ),
-        React.createElement(
-            "div",
-            {"onSubmit": lambda event: event.preventDefault()},
-            React.createElement(
-                "form",
-                {},
-                React.createElement(
-                    "div",
-                    {"className": "field is-grouped"},
-                    React.createElement(
-                        "label", {"className": "label"}, "Gregorian Date Time"
-                    ),
-                    React.createElement(
-                        "input",
-                        merge_dict(
-                            form.register("grdt.timezone"),
-                            {
-                                "className": "input",
-                                "disabled": True,
-                                "style": {"width": "6em"},
-                                "type": "text",
-                            },
-                        ),
-                    ),
+        {
+            "children": [
+                jsxs(
+                    ReactHelmet.Helmet,
+                    {"children": [jsxs("title", {}, "七曜表 | 帝國火星曆")]},
                 ),
-                React.createElement(
+                jsxs(
                     "div",
-                    {"className": "field is-grouped"},
-                    React.createElement(
-                        "label", {"className": "label"}, "Imperial Date Time"
-                    ),
-                    React.createElement(
-                        "input",
-                        merge_dict(
-                            form.register("imdt.year"),
-                            {
-                                "className": "input",
-                                "style": {"width": "6em"},
-                                "type": "number",
-                            },
-                        ),
-                    ),
-                    "-",
-                    React.createElement(
-                        "input",
-                        merge_dict(
-                            form.register("imdt.month"),
-                            {
-                                "className": "input",
-                                "max": 24,
-                                "min": 1,
-                                "style": {"width": "3.5em"},
-                                "type": "number",
-                            },
-                        ),
-                    ),
-                    React.createElement(
-                        "button",
-                        {
-                            "className": "button is-dark",
-                            "onClick": lambda event: set_by_form(
-                                state, set_state, form, ref
+                    {
+                        "children": [
+                            jsxs(
+                                "form",
+                                {
+                                    "children": [
+                                        jsxs(
+                                            "div",
+                                            {
+                                                "children": [
+                                                    jsxs(
+                                                        "label",
+                                                        {
+                                                            "children": [
+                                                                "Gregorian Date Time"
+                                                            ],
+                                                            "className": "label",
+                                                        },
+                                                    ),
+                                                    jsxs(
+                                                        "input",
+                                                        merge_dict(
+                                                            form.register(
+                                                                "grdt.timezone"
+                                                            ),
+                                                            {
+                                                                "className": "input",
+                                                                "disabled": True,
+                                                                "style": {
+                                                                    "width": "6em"
+                                                                },
+                                                                "type": "text",
+                                                            },
+                                                        ),
+                                                    ),
+                                                ],
+                                                "className": "field is-grouped",
+                                            },
+                                        ),
+                                        jsxs(
+                                            "div",
+                                            {
+                                                "children": [
+                                                    jsxs(
+                                                        "label",
+                                                        {
+                                                            "children": [
+                                                                "Imperial Date Time"
+                                                            ],
+                                                            "className": "label",
+                                                        },
+                                                    ),
+                                                    jsxs(
+                                                        "input",
+                                                        merge_dict(
+                                                            form.register("imdt.year"),
+                                                            {
+                                                                "className": "input",
+                                                                "style": {
+                                                                    "width": "6em"
+                                                                },
+                                                                "type": "number",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    "-",
+                                                    jsxs(
+                                                        "input",
+                                                        merge_dict(
+                                                            form.register("imdt.month"),
+                                                            {
+                                                                "className": "input",
+                                                                "max": 24,
+                                                                "min": 1,
+                                                                "style": {
+                                                                    "width": "3.5em"
+                                                                },
+                                                                "type": "number",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    jsxs(
+                                                        "button",
+                                                        {
+                                                            "children": ["Draw"],
+                                                            "className": "button is-dark",
+                                                            "onClick": lambda event: set_by_form(
+                                                                state,
+                                                                set_state,
+                                                                form,
+                                                                ref,
+                                                            ),
+                                                        },
+                                                    ),
+                                                ],
+                                                "className": "field is-grouped",
+                                            },
+                                        ),
+                                        jsxs(
+                                            "div",
+                                            {
+                                                "children": [
+                                                    jsxs(
+                                                        "button",
+                                                        {
+                                                            "children": ["◀"],
+                                                            "className": "button is-dark",
+                                                            "onClick": lambda event: turn_to_previous(
+                                                                state, set_state, ref
+                                                            ),
+                                                        },
+                                                    ),
+                                                    jsxs(
+                                                        "button",
+                                                        {
+                                                            "children": ["▶"],
+                                                            "className": "button is-dark",
+                                                            "onClick": lambda event: turn_to_next(
+                                                                state, set_state, ref
+                                                            ),
+                                                        },
+                                                    ),
+                                                ],
+                                                "className": "field is-grouped",
+                                            },
+                                        ),
+                                    ],
+                                },
                             ),
-                        },
-                        "Draw",
-                    ),
+                            jsxs("div", {"ref": ref}),
+                        ],
+                        "onSubmit": lambda event: event.preventDefault(),
+                    },
                 ),
-                React.createElement(
-                    "div",
-                    {"className": "field is-grouped"},
-                    React.createElement(
-                        "button",
-                        {
-                            "className": "button is-dark",
-                            "onClick": lambda event: turn_to_previous(
-                                state, set_state, ref
-                            ),
-                        },
-                        "◀",
-                    ),
-                    React.createElement(
-                        "button",
-                        {
-                            "className": "button is-dark",
-                            "onClick": lambda event: turn_to_next(
-                                state, set_state, ref
-                            ),
-                        },
-                        "▶",
-                    ),
-                ),
-            ),
-            React.createElement("div", {"ref": ref}),
-        ),
+            ],
+        },
     )
