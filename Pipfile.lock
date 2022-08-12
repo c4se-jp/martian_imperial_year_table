@@ -177,11 +177,11 @@
         },
         "pytz": {
             "hashes": [
-                "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7",
-                "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"
+                "sha256:bc824559e43e8ab983426a49525079d186b25372ff63aa3430ccd527d95edc3a",
+                "sha256:d9b245e63af49c4e51afdec5402f56b99c0cb483a84a12bb8b7db980386baade"
             ],
             "index": "pypi",
-            "version": "==2022.1"
+            "version": "==2022.2"
         },
         "pyyaml": {
             "hashes": [
@@ -247,11 +247,11 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:4d7013ef96fd197d1cdeb03e066c6c5a491ccb44758a5b2b91137319383e5a5a",
-                "sha256:7e1db6a5ba6b9a8be061e47e900456355b8714c0f238b0313f53afce1a55a79a"
+                "sha256:7ea2d48322cc7c0f8b3a215ed73eabd7b5d75d0b50e31ab006286ccff9e00b8f",
+                "sha256:f979ab81f58d7318e064e99c4506445d60135ac5cd2e177a2de0089bfd4c9bd5"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         }
     },
     "develop": {
@@ -479,11 +479,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:7c7854ee1429a240090297628dc9f75b35318d193537968e2dc14010ee2f5bca",
-                "sha256:dc2662692f47d99cb8ae15a784529adeed535bcd7c277fee0beccf961522baf6"
+                "sha256:378dcbfcc78b81432934fbd684ece21a82cd4b135315698732f7c8a4b97f81a9",
+                "sha256:7d9ae33bf128569f460a0745e87072a1996f33c9180316c20cc08b130ce816a6"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==63.4.1"
+            "version": "==64.0.1"
         },
         "snowballstemmer": {
             "hashes": [
@@ -497,7 +497,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_full_version < '3.11.0a7'",
             "version": "==2.0.1"
         },
         "transcrypt": {
