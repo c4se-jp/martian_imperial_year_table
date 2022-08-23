@@ -13,9 +13,8 @@ echo -n "$MACKEREL_APIKEY" > secret/MACKEREL_APIKEY
 set -x
 
 kustomize edit set image "gcr.io/${PROJECT_ID}/martian_imperial_year_table=gcr.io/${PROJECT_ID}/martian_imperial_year_table:${SHORT_SHA}"
-kustomize build | \
 /builder/kubectl.bash apply \
-  -n martian-imperial-year-table-staging \
+  -k \
   -l app=martian-imperial-year-table \
-  --prune \
-  -f -
+  -n martian-imperial-year-table-staging \
+  --prune
