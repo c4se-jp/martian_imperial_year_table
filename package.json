@@ -27,7 +27,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.35.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.4.2"
   },
   "devDependencies": {
     "npm-check-updates": "^16.1.2",
