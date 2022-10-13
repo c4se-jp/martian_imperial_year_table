@@ -15,7 +15,7 @@ set -x
 kustomize edit set image "gcr.io/${PROJECT_ID}/martian_imperial_year_table=gcr.io/${PROJECT_ID}/martian_imperial_year_table:${SHORT_SHA}"
 kustomize build | \
 /builder/kubectl.bash apply \
-  -n martian-imperial-year-table-production \
   -l app=martian-imperial-year-table \
+  -n martian-imperial-year-table-production \
   --prune \
   -f -
