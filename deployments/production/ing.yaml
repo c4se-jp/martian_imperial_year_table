@@ -3,9 +3,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: martian-imperial-year-table
-  annotations:
-    cert-manager.io/issuer: letsencrypt
-    kubernetes.io/ingress.class: nginx
 spec:
   rules:
     - host: martian-imperial-year-table.c4se.jp
