@@ -8,9 +8,6 @@ services:
         - ghcr.io/c4se-jp/martian_imperial_year_table/martian_imperial_year_table-web:latest
       context: .
       dockerfile: deployments/development/Dockerfile
-    environment:
-      FLASK_APP: web_main.py
-      FLASK_ENV: development
     depends_on: [web-src]
     image: ghcr.io/c4se-jp/martian_imperial_year_table/martian_imperial_year_table-web:latest
     logging:

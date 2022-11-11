@@ -46,8 +46,7 @@ SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
 WORKDIR /mnt
 
-ENV FLASK_ENV=production \
-    PATH=/root/.local/bin:$PATH
+ENV PATH=/root/.local/bin:$PATH
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
