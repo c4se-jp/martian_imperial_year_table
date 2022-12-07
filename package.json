@@ -30,7 +30,7 @@
     "react-router-dom": "^6.4.3"
   },
   "devDependencies": {
-    "npm-check-updates": "^16.3.20",
+    "npm-check-updates": "^16.5.0",
     "prettier": "^2.7.1",
     "transcrypt-loader": "^1.0.2",
     "webpack": "^5.75.0",
