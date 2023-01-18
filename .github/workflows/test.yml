@@ -25,10 +25,10 @@ jobs:
         run: |
           pipenv sync -d --pre
           npm ci
-      - uses: hadolint/hadolint-action@v2.1.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: deployments/development/Dockerfile
-      - uses: hadolint/hadolint-action@v2.1.0
+      - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: deployments/staging/Dockerfile
       - name: Test
