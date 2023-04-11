@@ -11,8 +11,8 @@ spec:
   ports:
     - name: martian-imperial-year-table
       port: 80
-      targetPort: 5000
       protocol: TCP
+      targetPort: 5000
   selector:
     app: martian-imperial-year-table
     role: web

@@ -4,8 +4,8 @@ steps:
     entrypoint: bash
     args: [./deployments/production/kubectl.sh]
     env:
-      - CLOUDSDK_COMPUTE_REGION=asia-northeast1-a
-      - CLOUDSDK_CONTAINER_CLUSTER=c4se-2
+      - CLOUDSDK_COMPUTE_REGION=asia-northeast1
+      - CLOUDSDK_CONTAINER_CLUSTER=c4se-3
       - MACKEREL_APIKEY=$_MACKEREL_APIKEY
       - PROJECT_ID=$PROJECT_ID
       - SHORT_SHA=$SHORT_SHA
