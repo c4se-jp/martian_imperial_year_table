@@ -9,7 +9,7 @@ class Test_imsn_to_imdt(unittest.TestCase):
 
     def test_imsn_to_imdt(self):
         """Test conversions ImperialSolNumber to ImperialDateTime."""
-        for (imdt, imsn) in [
+        for imdt, imsn in [
             (ImperialDateTime(0, 1, 1, 0, 0, 0, None), ImperialSolNumber(0.0)),
             (ImperialDateTime(1000, 1, 1, 0, 0, 0, None), ImperialSolNumber(668596.0)),
             (ImperialDateTime(1, 1, 1, 6, 14, 25, None), ImperialSolNumber(668.26001)),

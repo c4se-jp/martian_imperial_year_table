@@ -13,7 +13,7 @@ class Test_grdt_to_mrls(unittest.TestCase):
 
         cf.  天文年鑑編集委員会 (2018) "天文年鑑 2019年版" ISBN:978-4-416-71802-5 p.133
         """
-        for ((year, month, day), mrls) in [
+        for (year, month, day), mrls in [
             ((2018, 12, 28), 314.1),
             ((2019, 1, 7), 319.8),
             ((2019, 1, 17), 325.4),

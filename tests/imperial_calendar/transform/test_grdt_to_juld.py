@@ -13,7 +13,7 @@ class test_grdt_to_juld(unittest.TestCase):
 
         cf. https://ja.wikipedia.org/wiki/%E3%83%A6%E3%83%AA%E3%82%A6%E3%82%B9%E9%80%9A%E6%97%A5
         """
-        for (juld, grdt) in [
+        for juld, grdt in [
             (JulianDay(2299161.0), GregorianDateTime(1582, 10, 15, 12, 0, 0, None)),
             (JulianDay(2345678.0), GregorianDateTime(1710, 2, 23, 12, 0, 0, None)),
             (JulianDay(2400000.5), GregorianDateTime(1858, 11, 17, 0, 0, 0, None)),
@@ -29,7 +29,7 @@ class test_grdt_to_juld(unittest.TestCase):
 
     def test_transform_time(self):
         """時刻を變換する."""
-        for (juld, grdt) in [
+        for juld, grdt in [
             (JulianDay(2440588.37873), GregorianDateTime(1970, 1, 1, 21, 5, 22, None)),
             (JulianDay(2440588.37874), GregorianDateTime(1970, 1, 1, 21, 5, 23, None)),
         ]:

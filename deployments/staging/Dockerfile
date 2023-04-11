@@ -1,4 +1,4 @@
-FROM python:3.10-slim AS builder
+FROM python:3.11-slim AS builder
 
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 
@@ -40,7 +40,7 @@ RUN mkdir -p static/css static/js \
  && mv dist/* static/js/
 
 
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 SHELL ["/bin/bash", "-ex", "-o", "pipefail", "-c"]
 

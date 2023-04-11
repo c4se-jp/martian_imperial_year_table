@@ -9,7 +9,7 @@ class TestImperialMonth(unittest.TestCase):
 
     def test_days(self):
         """この月の日數."""
-        for (month, days) in [
+        for month, days in [
             (1, 28),
             (2, 28),
             (3, 28),

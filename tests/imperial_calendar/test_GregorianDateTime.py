@@ -8,7 +8,7 @@ class TestGregorianDateTime(unittest.TestCase):
 
     def test_from_utc_naive(self):
         """From UTC naive GregorianDateTime."""
-        for (naive_grdt, grdt) in [
+        for naive_grdt, grdt in [
             (
                 GregorianDateTime(1970, 1, 1, 0, 0, 0, None),
                 GregorianDateTime(1970, 1, 1, 9, 0, 0, "+09:00"),
@@ -26,7 +26,7 @@ class TestGregorianDateTime(unittest.TestCase):
                 self.assertEqual(
                     grdt, GregorianDateTime.from_utc_naive(naive_grdt, grdt.timezone)
                 )
-        for (second, timezone) in [
+        for second, timezone in [
             (second, timezone)
             for second in range(0, 60)
             for timezone in ["+00:00", "-00:00", "UTC"]
@@ -59,7 +59,7 @@ class TestGregorianDateTime(unittest.TestCase):
 
     def test_to_utc_naive(self):
         """Convert to naive GregorianDateTime as UTC."""
-        for (naive_grdt, grdt) in [
+        for naive_grdt, grdt in [
             (
                 GregorianDateTime(1970, 1, 1, 0, 0, 0, None),
                 GregorianDateTime(1970, 1, 1, 9, 0, 0, "+09:00"),
@@ -75,7 +75,7 @@ class TestGregorianDateTime(unittest.TestCase):
         ]:
             with self.subTest(grdt=grdt):
                 self.assertEqual(naive_grdt, grdt.to_utc_naive())
-        for (second, timezone) in [
+        for second, timezone in [
             (second, timezone)
             for second in range(0, 60)
             for timezone in ["+00:00", "-00:00", "UTC"]

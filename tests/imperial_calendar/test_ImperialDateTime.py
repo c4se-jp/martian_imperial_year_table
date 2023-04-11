@@ -94,7 +94,7 @@ class TestImperialDateTime(unittest.TestCase):
 
     def test_from_standard_naive(self):
         """From standard timezone naive ImperialDateTime."""
-        for (hour, minute) in [
+        for hour, minute in [
             (hour, minute) for hour in range(0, 23) for minute in [0, 15, 30, 45]
         ]:
             timezone = "-{:0>2}:{:0>2}".format(hour, minute)
@@ -133,7 +133,7 @@ class TestImperialDateTime(unittest.TestCase):
 
     def test_offset(self):
         """Timezoneの文字列表現を内部表現にする."""
-        for (expected, timezone) in [
+        for expected, timezone in [
             (0.0, "+00:00"),
             (0.0, "-00:00"),
             (0.25, "+00:15"),
@@ -156,7 +156,7 @@ class TestImperialDateTime(unittest.TestCase):
 
     def test_to_standard_naive(self):
         """Convert to naive ImperialDateTime as standard timezone."""
-        for (hour, minute) in [
+        for hour, minute in [
             (hour, minute) for hour in range(0, 23) for minute in [0, 15, 30, 45]
         ]:
             timezone = "-{:0>2}:{:0>2}".format(hour, minute)
