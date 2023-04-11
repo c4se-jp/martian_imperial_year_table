@@ -2,16 +2,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: martian-imperial-year-table-production
-commonLabels:
-  app: martian-imperial-year-table
-bases:
+labels:
+  - includeSelectors: true
+    pairs:
+      app: martian-imperial-year-table
+resources:
   - ../base/
-patchesStrategicMerge:
-  - hpa.yaml
-  - ing.yaml
-  - issuer.yaml
+patches:
+  - path: hpa.yaml
+  - path: ing.yaml
+  - path: issuer.yaml
 secretGenerator:
-  - name: martian-imperial-year-table
-    files:
+  - files:
       - MACKEREL_APIKEY=secret/MACKEREL_APIKEY
+    name: martian-imperial-year-table
     type: Opaque
