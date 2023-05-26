@@ -17,4 +17,4 @@ spec:
                   number: 80
   tls:
     - hosts: [martian-imperial-year-table.c4se.jp]
-      secretName: letsencrypt-tls
+      secretName: martian-imperial-year-table-tls

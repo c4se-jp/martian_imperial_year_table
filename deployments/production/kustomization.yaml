@@ -11,7 +11,7 @@ resources:
 patches:
   - path: hpa.yaml
   - path: ing.yaml
-  - path: issuer.yaml
+  #- path: issuer.yaml
 secretGenerator:
   - files:
       - MACKEREL_APIKEY=secret/MACKEREL_APIKEY
