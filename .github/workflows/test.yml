@@ -14,13 +14,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: npm
-          node-version: "18"
+          node-version: "20"
       - name: Install pipenv
         run: pip install --user pipenv
       - uses: actions/setup-python@v4
         with:
           cache: pipenv
-          python-version: "3.11"
+          python-version: "3.12"
       - name: Install dependencies
         run: |
           pipenv sync -d --pre
