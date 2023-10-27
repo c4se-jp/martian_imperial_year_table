@@ -8,10 +8,8 @@ Flask = "*"
 Markdown = "*"
 flasgger = "*"
 holiday-jp = "*"
-jsonschema = "*"  # TODO: Remove this after upgrading Python.
 pytz = "*"
 types-pytz = "*"
-uwsgi = "*"
 
 [dev-packages]
 black = "*"

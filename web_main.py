@@ -1,6 +1,7 @@
 """App."""
 from datetime import timedelta
-from flasgger import swag_from, Swagger
+from flasgger import Swagger
+from flasgger.utils import swag_from
 from flask import Flask, Response, jsonify, render_template, request
 from imperial_calendar import (
     GregorianDateTime,
@@ -23,6 +24,7 @@ from imperial_calendar.transform import (
     tert_to_mrls,
     tert_to_mrsd,
 )
+import os
 from web.CalendarImage import CalendarImage
 import json
 import markdown
@@ -55,11 +57,12 @@ class TestingConfig(Config):
 
 
 app = Flask(__name__)
-if app.env == "development":
+env = os.getenv("ENV", "production")
+if env == "development":
     app.config.from_object(DevelopmentConfig)
-elif app.env == "production":
+elif env == "production":
     app.config.from_object(ProductionConfig)
-elif app.env == "testing":
+elif app.testing:
     app.config.from_object(TestingConfig)
 else:
     raise Exception(f"Unknown FLASK_ENV: {app.env}")

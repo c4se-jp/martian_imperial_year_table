@@ -14,6 +14,7 @@ RUN apt-get update \
     curl \
     gnupg \
     libpcre3-dev \
+    python3-dev \
  && mkdir -p /etc/apt/keyrings \
  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
@@ -58,6 +59,8 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
     libpcre3-dev \
+    uwsgi \
+    uwsgi-plugin-python3 \
  && pip install --no-cache-dir pipenv \
  && useradd uwsgi --no-create-home --user-group \
  && apt-get clean \
@@ -78,9 +81,10 @@ EXPOSE 5000 9191
 ENTRYPOINT ["pipenv", "run", "uwsgi", \
             "--die-on-term", \
             "--master", \
+            "--plugin", "python3", \
             "--uid", "uwsgi"]
 CMD ["--callable", "app", \
-     "--http", ":5000", \
+     "--http-socket", ":5000", \
      "--processes", "2", \
      "--stats", ":9191", \
      "--stats-http", \
