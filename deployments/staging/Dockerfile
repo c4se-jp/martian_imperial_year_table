@@ -21,6 +21,7 @@ RUN apt-get update \
  && apt-get update \
  && apt-get install -y --no-install-recommends \
     nodejs \
+ && pip install --upgrade pip \
  && pip install --no-cache-dir --user pipenv \
  && apt-get purge -y \
     curl \
@@ -59,8 +60,7 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
     libpcre3-dev \
-    uwsgi \
-    uwsgi-plugin-python3 \
+ && pip install --upgrade pip \
  && pip install --no-cache-dir pipenv \
  && useradd uwsgi --no-create-home --user-group \
  && apt-get clean \
@@ -72,21 +72,11 @@ COPY Pipfile \
 RUN pipenv sync --pre --system
 
 COPY --from=builder /mnt/static/ static/
-COPY web_main.py web.yml ./
+COPY uwsgi.yaml web_main.py web.yml ./
 COPY imperial_calendar/ imperial_calendar/
 COPY templates/ templates/
 COPY web/ web/
+RUN pipenv run python -c 'print("")'
 
 EXPOSE 5000 9191
-ENTRYPOINT ["pipenv", "run", "uwsgi", \
-            "--die-on-term", \
-            "--master", \
-            "--plugin", "python3", \
-            "--uid", "uwsgi"]
-CMD ["--callable", "app", \
-     "--http-socket", ":5000", \
-     "--processes", "2", \
-     "--stats", ":9191", \
-     "--stats-http", \
-     "--threads", "2", \
-     "--wsgi-file", "web_main.py"]
+ENTRYPOINT ["pipenv", "run", "uwsgi", "--plugin", "python3", "--yaml", "uwsgi.yaml"]
