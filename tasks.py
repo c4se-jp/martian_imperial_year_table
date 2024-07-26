@@ -264,8 +264,8 @@ def start_as_production():
         rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
-          -t "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
-          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
+          -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
+          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
           --target builder \
           .
         """
@@ -274,14 +274,14 @@ def start_as_production():
         rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
-          -t "gcr.io/c4se-197915/martian_imperial_year_table:latest" \
-          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:builder" \
-          --cache-from "gcr.io/c4se-197915/martian_imperial_year_table:latest" \
+          -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
+          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
+          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
           .
         """
     )
     run(
-        f"{docker_exe()} run -p 5000:5000 --rm gcr.io/c4se-197915/martian_imperial_year_table:latest"
+        f"{docker_exe()} run -p 5000:5000 --rm asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest"
     )
 
 

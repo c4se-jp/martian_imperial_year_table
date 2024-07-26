@@ -12,7 +12,7 @@ mkdir -p secret
 echo -n "$MACKEREL_APIKEY" > secret/MACKEREL_APIKEY
 set -x
 
-kustomize edit set image "gcr.io/${PROJECT_ID}/martian_imperial_year_table=gcr.io/${PROJECT_ID}/martian_imperial_year_table:${SHORT_SHA}"
+kustomize edit set image "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table=asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:${SHORT_SHA}"
 kustomize build | \
 /builder/kubectl.bash apply \
   -l app=martian-imperial-year-table \

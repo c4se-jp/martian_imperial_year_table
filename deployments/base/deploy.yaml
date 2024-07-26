@@ -25,7 +25,7 @@ spec:
             name: mackerel-agent-config
       containers:
         - name: web
-          image: gcr.io/c4se-197915/martian_imperial_year_table:latest
+          image: asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
