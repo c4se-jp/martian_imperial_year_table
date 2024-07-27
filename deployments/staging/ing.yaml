@@ -3,8 +3,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: martian-imperial-year-table
-  annotations:
-    ingress.gcp.kubernetes.io/pre-shared-cert: martian-imperial-year-table-staging
+  # annotations:
+  #   ingress.gcp.kubernetes.io/pre-shared-cert: martian-imperial-year-table-staging
 spec:
   rules:
     - host: martian-imperial-year-table.staging.c4se.jp
@@ -17,6 +17,6 @@ spec:
                 name: martian-imperial-year-table
                 port:
                   number: 80
-  tls:
-    - hosts: [martian-imperial-year-table.staging.c4se.jp]
-      secretName: martian-imperial-year-table-staging-tls
+  # tls:
+  #   - hosts: [martian-imperial-year-table.staging.c4se.jp]
+  #     secretName: martian-imperial-year-table-staging-tls
