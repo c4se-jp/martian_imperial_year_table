@@ -7,4 +7,3 @@ metadata:
     kubernetes.io/ingress.class: gce
 spec:
   rules: []
-  # tls: []
