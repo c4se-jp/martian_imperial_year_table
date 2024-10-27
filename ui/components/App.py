@@ -1,4 +1,5 @@
 """Root React component."""
+
 from ui.components.Calendar import Calendar
 from ui.components.Description import Description
 from ui.components.ErrorBoundary import supervise

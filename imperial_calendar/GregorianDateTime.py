@@ -1,4 +1,5 @@
 """グレゴリオ曆の日時."""
+
 import typing as t
 
 # __pragma__("skip")

@@ -1,4 +1,5 @@
 """ユリウス通日."""
+
 import math
 import typing as t
 

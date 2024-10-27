@@ -1,4 +1,5 @@
 """Calendar component."""
+
 from imperial_calendar.ImperialYearMonth import ImperialYearMonth
 from ui.Api import Api
 from ui.utils import RhfForm, current_grdt, merge_dict
@@ -234,7 +235,9 @@ def Calendar(props: dict):
                                                         "button",
                                                         {
                                                             "children": ["Draw"],
-                                                            "className": "button is-dark",
+                                                            "className": (
+                                                                "button is-dark"
+                                                            ),
                                                             "onClick": lambda event: set_by_form(
                                                                 state,
                                                                 set_state,
@@ -255,7 +258,9 @@ def Calendar(props: dict):
                                                         "button",
                                                         {
                                                             "children": ["◀"],
-                                                            "className": "button is-dark",
+                                                            "className": (
+                                                                "button is-dark"
+                                                            ),
                                                             "onClick": lambda event: turn_to_previous(
                                                                 state, set_state, ref
                                                             ),
@@ -265,7 +270,9 @@ def Calendar(props: dict):
                                                         "button",
                                                         {
                                                             "children": ["▶"],
-                                                            "className": "button is-dark",
+                                                            "className": (
+                                                                "button is-dark"
+                                                            ),
                                                             "onClick": lambda event: turn_to_next(
                                                                 state, set_state, ref
                                                             ),

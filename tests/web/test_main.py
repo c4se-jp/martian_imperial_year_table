@@ -1,4 +1,5 @@
 """Test main."""
+
 import json
 from web_main import app
 import unittest

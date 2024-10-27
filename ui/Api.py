@@ -1,4 +1,5 @@
 """Client of Web API."""
+
 from imperial_calendar.GregorianDateTime import GregorianDateTime
 from imperial_calendar.ImperialDateTime import ImperialDateTime
 from imperial_calendar.ImperialSolNumber import ImperialSolNumber

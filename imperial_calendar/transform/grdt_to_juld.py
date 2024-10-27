@@ -1,4 +1,5 @@
 """グレゴリオ曆の日時をユリウス通日に變換する."""
+
 from imperial_calendar.GregorianDateTime import GregorianDateTime
 from imperial_calendar.JulianDay import JulianDay
 import math

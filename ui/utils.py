@@ -1,4 +1,5 @@
 """Utils for UI."""
+
 from imperial_calendar.GregorianDateTime import GregorianDateTime
 import typing as t
 

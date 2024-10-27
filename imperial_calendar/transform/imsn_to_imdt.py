@@ -1,4 +1,5 @@
 """帝國火星曆の通算日を日時に變換する."""
+
 from imperial_calendar.ImperialDateTime import ImperialDateTime
 from imperial_calendar.ImperialSolNumber import ImperialSolNumber
 from imperial_calendar.internal.consts import (

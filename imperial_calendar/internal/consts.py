@@ -1,4 +1,5 @@
 """定數."""
+
 from imperial_calendar.internal.ImperialMonth import ImperialMonth
 from imperial_calendar.internal.ImperialYear import ImperialYear
 

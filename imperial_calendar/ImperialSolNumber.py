@@ -1,4 +1,5 @@
 """帝國火星曆の通算日."""
+
 import math
 import typing as t
 

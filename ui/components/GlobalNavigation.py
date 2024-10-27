@@ -1,4 +1,5 @@
 """GlobalNavigation component."""
+
 import typing as t
 
 React: t.Any = 0  # __:skip
@@ -80,9 +81,11 @@ def GlobalNavigation(props: dict):
                                             ReactRouterDOM.NavLink,
                                             {
                                                 "children": ["變換"],
-                                                "className": lambda props: "is-active is-tab navbar-item"
-                                                if props["isActive"]
-                                                else "is-tab navbar-item",
+                                                "className": lambda props: (
+                                                    "is-active is-tab navbar-item"
+                                                    if props["isActive"]
+                                                    else "is-tab navbar-item"
+                                                ),
                                                 "end": None,
                                                 "to": "/",
                                             },
@@ -91,9 +94,11 @@ def GlobalNavigation(props: dict):
                                             ReactRouterDOM.NavLink,
                                             {
                                                 "children": ["解説"],
-                                                "className": lambda props: "is-active is-tab navbar-item"
-                                                if props["isActive"]
-                                                else "is-tab navbar-item",
+                                                "className": lambda props: (
+                                                    "is-active is-tab navbar-item"
+                                                    if props["isActive"]
+                                                    else "is-tab navbar-item"
+                                                ),
                                                 "to": "/description",
                                             },
                                         ),
@@ -101,9 +106,11 @@ def GlobalNavigation(props: dict):
                                             ReactRouterDOM.NavLink,
                                             {
                                                 "children": ["七曜表"],
-                                                "className": lambda props: "is-active is-tab navbar-item"
-                                                if props["isActive"]
-                                                else "is-tab navbar-item",
+                                                "className": lambda props: (
+                                                    "is-active is-tab navbar-item"
+                                                    if props["isActive"]
+                                                    else "is-tab navbar-item"
+                                                ),
                                                 "to": "/calendar",
                                             },
                                         ),

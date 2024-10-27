@@ -1,4 +1,5 @@
 """火星帝國の祝日."""
+
 from functools import total_ordering
 from imperial_calendar.ImperialYearMonth import ImperialYearMonth
 import typing as t

@@ -1,4 +1,5 @@
 """Description component."""
+
 from ui.Api import Api
 import typing as t
 
@@ -58,7 +59,11 @@ def Description(props: dict):
                 ),
                 jsxs(
                     "div",
-                    {"children": ["讀み込み中"], "className": "content section", "ref": ref},
+                    {
+                        "children": ["讀み込み中"],
+                        "className": "content section",
+                        "ref": ref,
+                    },
                 ),
             ],
         },

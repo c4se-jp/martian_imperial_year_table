@@ -1,4 +1,5 @@
 """帝國火星曆の日時."""
+
 from imperial_calendar.internal.HolidayMars import HolidayMars  # __:skip
 import re  # __:skip
 import typing as t

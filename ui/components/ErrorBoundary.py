@@ -1,4 +1,5 @@
 """ErrorBoundary component."""
+
 import typing as t
 
 __pragma__: t.Any = 0  # __:skip

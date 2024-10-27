@@ -1,4 +1,5 @@
 """Draw a imdt calendar image."""
+
 from contextlib import contextmanager
 from functools import partial
 from imperial_calendar import GregorianDateTime, ImperialDateTime, ImperialYearMonth
@@ -89,8 +90,12 @@ class CalendarImage(object):
 
     BLACK: str = "#000000"  # "#3b3b3b"
     BLUE: str = "#008dcc"  # "#40a1cc"
-    FONT_FAMILY_BOLD: str = """fot-tsukubrdgothic-std, "FOT-TsukuBRdGothic Std B", "FOT-筑紫B丸ゴシック Std B", TsukuBRdGothic-Bold, "筑紫B丸ゴシック ボールド", sans-serif"""  # noqa: E501
-    FONT_FAMILY_REGULAR: str = """fot-tsukubrdgothic-std, "FOT-TsukuBRdGothic Std B", "FOT-筑紫B丸ゴシック Std B", TsukuBRdGothic-Bold, "筑紫B丸ゴシック ボールド", sans-serif"""  # noqa: E501
+    FONT_FAMILY_BOLD: str = (
+        """fot-tsukubrdgothic-std, "FOT-TsukuBRdGothic Std B", "FOT-筑紫B丸ゴシック Std B", TsukuBRdGothic-Bold, "筑紫B丸ゴシック ボールド", sans-serif"""  # noqa: E501
+    )
+    FONT_FAMILY_REGULAR: str = (
+        """fot-tsukubrdgothic-std, "FOT-TsukuBRdGothic Std B", "FOT-筑紫B丸ゴシック Std B", TsukuBRdGothic-Bold, "筑紫B丸ゴシック ボールド", sans-serif"""  # noqa: E501
+    )
     FONT_SIZE_ANNOTATION: float = 8.0
     FONT_SIZE_BOLD_LARGE: float = 32.0
     FONT_SIZE_LARGE: float = 20.0
@@ -133,7 +138,9 @@ class CalendarImage(object):
                 "xmlns": "http://www.w3.org/2000/svg",
             },
         )
-        with e("title", {}, f"帝國火星曆{self.imdt.year}年{self.imdt.month}月", parent=svg):
+        with e(
+            "title", {}, f"帝國火星曆{self.imdt.year}年{self.imdt.month}月", parent=svg
+        ):
             pass
         with e(
             "g",
@@ -242,15 +249,17 @@ class CalendarImage(object):
                         "fill": color,
                         "font-size": CalendarImage.FONT_SIZE_SMALL,
                         "x": f"{CalendarImage.WIDTH_LEFT_SPACE + 1}mm",
-                        "y": CalendarImage.HEIGHT_TOP_SPACE
-                        + CalendarImage.SIZE_DAY_SQUARE
-                        + 0.5
-                        + (
-                            CalendarImage.HEIGHT_GRDT_BELT
-                            + CalendarImage.HEIGHT_DAYS_GAP
+                        "y": (
+                            CalendarImage.HEIGHT_TOP_SPACE
                             + CalendarImage.SIZE_DAY_SQUARE
-                        )
-                        * (imdt.day // 7),
+                            + 0.5
+                            + (
+                                CalendarImage.HEIGHT_GRDT_BELT
+                                + CalendarImage.HEIGHT_DAYS_GAP
+                                + CalendarImage.SIZE_DAY_SQUARE
+                            )
+                            * (imdt.day // 7)
+                        ),
                     },
                     text,
                 )
@@ -267,15 +276,17 @@ class CalendarImage(object):
                         "fill": color,
                         "font-size": CalendarImage.FONT_SIZE_SMALL,
                         "x": f"{x}mm",
-                        "y": CalendarImage.HEIGHT_TOP_SPACE
-                        + CalendarImage.SIZE_DAY_SQUARE
-                        + 0.5
-                        + (
-                            CalendarImage.HEIGHT_GRDT_BELT
-                            + CalendarImage.HEIGHT_DAYS_GAP
+                        "y": (
+                            CalendarImage.HEIGHT_TOP_SPACE
                             + CalendarImage.SIZE_DAY_SQUARE
-                        )
-                        * ((imdt.day - 1) // 7),
+                            + 0.5
+                            + (
+                                CalendarImage.HEIGHT_GRDT_BELT
+                                + CalendarImage.HEIGHT_DAYS_GAP
+                                + CalendarImage.SIZE_DAY_SQUARE
+                            )
+                            * ((imdt.day - 1) // 7)
+                        ),
                     },
                     text,
                 )
@@ -287,9 +298,11 @@ class CalendarImage(object):
                         "fill": color,
                         "font-size": CalendarImage.FONT_SIZE_SMALL,
                         "x": f"{CalendarImage.WIDTH_LEFT_SPACE + 1}mm",
-                        "y": CalendarImage.HEIGHT_TOP_SPACE
-                        + CalendarImage.SIZE_DAY_SQUARE
-                        + 0.5,
+                        "y": (
+                            CalendarImage.HEIGHT_TOP_SPACE
+                            + CalendarImage.SIZE_DAY_SQUARE
+                            + 0.5
+                        ),
                     },
                     f"{grdt.month}/{grdt.day}",
                 )

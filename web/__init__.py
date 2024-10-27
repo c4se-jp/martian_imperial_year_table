@@ -1,4 +1,5 @@
 """Web."""
+
 from web.CalendarImage import CalendarImage
 
 __all__ = [

@@ -1,4 +1,5 @@
 """Test ImperialSolNumber."""
+
 from imperial_calendar import ImperialSolNumber
 import unittest
 

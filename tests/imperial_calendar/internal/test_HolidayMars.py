@@ -1,4 +1,5 @@
 """Test HolidayMars."""
+
 from imperial_calendar.internal.HolidayMars import HolidayMars, Holidays, Internal
 import unittest
 
@@ -58,7 +59,10 @@ class TestHolidayMars(unittest.TestCase):
         with self.subTest(start=start, end=end):
             self.assertEqual(expected, HolidayMars.between(start, end))
         Holidays.setUpForTest(
-            {1425: {24: {26: Internal(name="僞1")}}, 1426: {1: {1: Internal(name="僞2")}}}
+            {
+                1425: {24: {26: Internal(name="僞1")}},
+                1426: {1: {1: Internal(name="僞2")}},
+            }
         )
         expected, start, end = (
             [HolidayMars(1425, 24, 26), HolidayMars(1426, 1, 1)],

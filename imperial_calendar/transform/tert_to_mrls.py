@@ -9,6 +9,7 @@ Allison M, McEwen M. (2000)
 with improved timing recipes for Mars seasonal/diurnal climate studies"
 Planetary and Space Science, 48: pp.215-235
 """
+
 from imperial_calendar.TerrestrialTime import TerrestrialTime
 import math
 

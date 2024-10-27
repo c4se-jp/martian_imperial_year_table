@@ -1,4 +1,5 @@
 """ユリウス通日を地球時に變換する."""
+
 from imperial_calendar.JulianDay import JulianDay
 from imperial_calendar.TerrestrialTime import TerrestrialTime
 

@@ -52,12 +52,23 @@ steps:
     #   - DOCKER_BUILDKIT=1
     timeout: 300s
   - name: gcr.io/cloud-builders/docker
-    args: [push, "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:builder"]
+    args:
+      [
+        push,
+        "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:builder",
+      ]
   - name: gcr.io/cloud-builders/docker
     args:
-      [push, "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:${SHORT_SHA}"]
+      [
+        push,
+        "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:${SHORT_SHA}",
+      ]
   - name: gcr.io/cloud-builders/docker
-    args: [push, "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:latest"]
+    args:
+      [
+        push,
+        "asia-docker.pkg.dev/${PROJECT_ID}/asia.gcr.io/martian_imperial_year_table:latest",
+      ]
   - name: gcr.io/cloud-builders/kubectl
     entrypoint: bash
     args: [./deployments/staging/kubectl.sh]

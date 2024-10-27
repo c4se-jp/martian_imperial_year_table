@@ -1,4 +1,5 @@
 """Main."""
+
 from ui.components.App import App
 import typing as t
 

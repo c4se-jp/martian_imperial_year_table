@@ -1,4 +1,5 @@
 """MSDから地球時を算出する."""
+
 from imperial_calendar.MarsSolDate import MarsSolDate
 from imperial_calendar.TerrestrialTime import TerrestrialTime
 

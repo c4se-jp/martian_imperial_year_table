@@ -1,4 +1,5 @@
 """帝國火星日からMSDを算出する."""
+
 from imperial_calendar.ImperialSolNumber import ImperialSolNumber
 from imperial_calendar.MarsSolDate import MarsSolDate
 

@@ -1,4 +1,5 @@
 """Test conversions ImperialDateTime to ImperialSolNumber."""
+
 from imperial_calendar import ImperialDateTime, ImperialSolNumber
 from imperial_calendar.transform import imdt_to_imsn
 import unittest

@@ -1,4 +1,5 @@
 """App."""
+
 from datetime import timedelta
 from flasgger import Swagger
 from flasgger.utils import swag_from
