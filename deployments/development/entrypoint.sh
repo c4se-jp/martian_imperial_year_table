@@ -1,8 +1,6 @@
-#!/bin/sh -eux
-# shellcheck shell=dash
-if [ ! -d node_modules ] ; then
-  rsync -au /tmp/node_modules .
-fi
+#!/bin/bash
+set -eux
+
 set +u
 if [ -z "$1" ] ; then
   set -u

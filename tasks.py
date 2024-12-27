@@ -139,12 +139,14 @@ def build():
     os.makedirs("static/js", exist_ok=True)
     if not within_docker():
         run(f"{docker_exe()} compose pull --ignore-pull-failures web-src")
-        run(rf"""
+        run(
+            rf"""
             {docker_exe()} compose build \
               --build-arg BUILDKIT_INLINE_CACHE=1 \
               --force-rm \
               --pull
-            """)
+            """
+        )
         run(
             f"{docker_exe()} compose run --rm web-src /docker-entrypoint.d/precopy_appsync.sh"
         )
@@ -199,7 +201,8 @@ def deploy_production():
         build_id = build["id"]
         _run(f"gcloud builds log --stream {quote(build_id)}")
     time.sleep(10)
-    run(f"""
+    run(
+        f"""
         {kubectl_exe()} -n martian-imperial-year-table-production \
           wait \
           po \
@@ -207,7 +210,8 @@ def deploy_production():
           -l role=web \
           --for=condition=ready \
           --timeout=10m
-        """)
+        """
+    )
 
 
 @task
@@ -215,7 +219,7 @@ def format():
     """Format code."""
     run(r"ag -l '\r' | xargs -t -I{} sed -i -e 's/\r//' {}")
     with docker() as _run:
-        _run("pipenv run black *.py imperial_calendar stubs tests ui web")
+        _run("pipenv run black *.py deployments imperial_calendar stubs tests ui web")
         _run("npx prettier --write README.md templates/*.md")
         _run("npx prettier --write *.js")
         _run(
@@ -256,22 +260,26 @@ def start():
 @task
 def start_as_production():
     """Start a production build development server."""
-    run(rf"""
+    run(
+        rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
           -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
           --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
           --target builder \
           .
-        """)
-    run(rf"""
+        """
+    )
+    run(
+        rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
           -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
           --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
           --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
           .
-        """)
+        """
+    )
     run(
         f"{docker_exe()} run -p 5000:5000 --rm asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest"
     )
@@ -282,7 +290,8 @@ def test():
     """Test."""
     if not within_docker():
         for env in ["development", "staging"]:
-            run(rf"""
+            run(
+                rf"""
                {docker_exe()} run -i \
                  -v {cwd_for_docker_volume()}:/mnt \
                  --rm \
@@ -290,7 +299,8 @@ def test():
                  hadolint \
                    --config /mnt/.hadolint.yaml \
                    /mnt/deployments/{env}/Dockerfile
-               """)
+               """
+            )
         for env in ["staging", "production"]:
             run(
                 "bash -eux -c {:s}".format(

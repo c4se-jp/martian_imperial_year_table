@@ -1,4 +1,5 @@
-__target__
-.git
-.venv
-node_modules
+.#*
+.git/
+.venv/
+__target__/
+node_modules/
