@@ -17,4 +17,4 @@ spec:
               service:
                 name: martian-imperial-year-table
                 port:
-                  number: 80
+                  number: 443
