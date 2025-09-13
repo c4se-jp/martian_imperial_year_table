@@ -264,8 +264,8 @@ def start_as_production():
         rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
-          -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
-          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
+          -t "547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:builder" \
+          --cache-from "547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:builder" \
           --target builder \
           .
         """
@@ -274,14 +274,14 @@ def start_as_production():
         rf"""
         {docker_exe()} build \
           -f deployments/staging/Dockerfile \
-          -t "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
-          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:builder" \
-          --cache-from "asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest" \
+          -t "547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:latest" \
+          --cache-from "547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:builder" \
+          --cache-from "547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:latest" \
           .
         """
     )
     run(
-        f"{docker_exe()} run -p 5000:5000 --rm asia-docker.pkg.dev/c4se-197915/asia.gcr.io/martian_imperial_year_table:latest"
+        f"{docker_exe()} run -p 5000:5000 --rm 547071375521.dkr.ecr.ap-northeast-1.amazonaws.com/c4se/martian_imperial_year_table:latest"
     )
 
 

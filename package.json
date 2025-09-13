@@ -30,6 +30,7 @@
     "react-router-dom": "^6.27.0"
   },
   "devDependencies": {
+    "cdktf-cli": "^0.20.10",
     "npm-check-updates": "^17.1.6",
     "prettier": "^3.3.3",
     "transcrypt-loader": "^1.0.2",

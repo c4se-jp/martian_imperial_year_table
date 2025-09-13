@@ -13,7 +13,7 @@ RUN apt-get update \
     ca-certificates \
     curl \
     gnupg \
-    libpcre3-dev \
+    libpcre2-dev \
     python3-dev \
  && mkdir -p /etc/apt/keyrings \
  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -59,7 +59,7 @@ ENV PATH=/root/.local/bin:$PATH
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
-    libpcre3-dev \
+    libpcre2-dev \
  && pip install --upgrade pip \
  && pip install --no-cache-dir pipenv \
  && useradd uwsgi --no-create-home --user-group \
