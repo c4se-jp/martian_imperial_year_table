@@ -11,5 +11,8 @@
   "scripts": {
     "build": "vite build",
     "test": "vitest"
+  },
+  "dependencies": {
+    "@holiday-jp/holiday_jp": "^2.5.1"
   }
 }
