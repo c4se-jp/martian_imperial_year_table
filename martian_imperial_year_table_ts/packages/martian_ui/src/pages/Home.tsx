@@ -122,7 +122,7 @@ export default function HomePage() {
 
   const derivedValues = useMemo(
     () => [
-      { label: "Julian Day", value: `${state.juld.day} + ${(state.juld.second / 86400).toFixed(5)}` },
+      { label: "Julian Day", value: (state.juld.day + state.juld.second / 86400).toFixed(5) },
       { label: "⊿t", value: `${state.deltaT.toFixed(5)} s` },
       { label: "Terrestrial Time", value: state.tert.terrestrialTime.toFixed(5) },
       { label: "Mars Sol Date", value: state.mrsd.marsSolDate.toFixed(5) },
