@@ -88,7 +88,7 @@ describe("ImperialDateTime", () => {
         },
         {
           lhs: { year: 2, month: 2, day: 2, hour: 2, minute: 1, second: 2, timezone: null },
-          rhs: { year: 2, month: 2, day: 2, hour: 2, minute: 2, second: 2, timezone: null },
+          rhs: { year: 2, month: 2, day: 2, hour: 1, minute: 2, second: 2, timezone: null },
         },
         {
           lhs: { year: 2, month: 2, day: 2, hour: 2, minute: 2, second: 1, timezone: null },
