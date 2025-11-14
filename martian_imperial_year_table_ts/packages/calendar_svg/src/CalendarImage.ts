@@ -1,4 +1,3 @@
-import { JSDOM } from "jsdom";
 import { GregorianDateTime } from "../../imperial_calendar/src/GregorianDateTime";
 import { ImperialDateTime } from "../../imperial_calendar/src/ImperialDateTime";
 import { ImperialYearMonth } from "../../imperial_calendar/src/ImperialYearMonth";
@@ -25,6 +24,39 @@ type TextAttributes = ElementAttributes & {
 
 function textY(y: number, fontSize: number): number {
   return y + fontSize * 0.353;
+}
+
+type DomEnvironment = {
+  document: Document;
+  serializer: XMLSerializer;
+  cleanup: () => void;
+};
+
+function hasBrowserDom(): boolean {
+  return typeof globalThis.document !== "undefined" && typeof globalThis.document.createElement === "function";
+}
+
+async function createDomEnvironment(): Promise<DomEnvironment> {
+  if (hasBrowserDom()) {
+    const serializerCtor =
+      (globalThis as typeof globalThis & { XMLSerializer?: typeof XMLSerializer }).XMLSerializer ?? XMLSerializer;
+    return {
+      document: globalThis.document,
+      serializer: new serializerCtor(),
+      cleanup: () => {},
+    };
+  }
+  const { JSDOM } = await import("jsdom");
+  const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
+  return {
+    document: dom.window.document,
+    serializer: new dom.window.XMLSerializer(),
+    cleanup: () => {
+      if (typeof dom.window.close === "function") {
+        dom.window.close();
+      }
+    },
+  };
 }
 
 function nextGrdtDayOf(grdt: GregorianDateTime): GregorianDateTime {
@@ -115,8 +147,9 @@ export class CalendarImage {
   private readonly imdt: ImperialDateTime;
   private readonly grdtTimezone: string;
 
-  private dom: JSDOM | null = null;
   private document: Document | null = null;
+  private serializer: XMLSerializer | null = null;
+  private cleanupDom: (() => void) | null = null;
 
   constructor(imdt: ImperialDateTime, grdtTimezone: string) {
     this.grdtTimezone = grdtTimezone;
@@ -127,9 +160,11 @@ export class CalendarImage {
     this.imdt.second = 0;
   }
 
-  drawAsSvg(): string {
-    this.dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-    this.document = this.dom.window.document;
+  async drawAsSvg(): Promise<string> {
+    const domEnv = await createDomEnvironment();
+    this.document = domEnv.document;
+    this.serializer = domEnv.serializer;
+    this.cleanupDom = domEnv.cleanup;
     const svg = this.document.createElementNS(SVG_NS, "svg");
     this.setAttributes(svg, {
       height: "148mm",
@@ -144,8 +179,16 @@ export class CalendarImage {
     this.drawImdtDays(group);
     this.drawImdtSyukuzitu(group);
     this.drawGrdtDays(group);
-    const serializer = new this.dom.window.XMLSerializer();
-    return serializer.serializeToString(svg);
+    const serializer = this.serializer;
+    if (!serializer) {
+      throw new Error("Serializer is not initialized");
+    }
+    const output = serializer.serializeToString(svg);
+    this.cleanupDom?.();
+    this.cleanupDom = null;
+    this.document = null;
+    this.serializer = null;
+    return output;
   }
 
   private get doc(): Document {
@@ -513,6 +556,6 @@ function ImperialYearMonthDays(imdt: ImperialDateTime): number {
   return new ImperialYearMonth(imdt.year, imdt.month).days();
 }
 
-export function drawCalendarSvg(imdt: ImperialDateTime, grdtTimezone: string): string {
+export async function drawCalendarSvg(imdt: ImperialDateTime, grdtTimezone: string): Promise<string> {
   return new CalendarImage(imdt, grdtTimezone).drawAsSvg();
 }
