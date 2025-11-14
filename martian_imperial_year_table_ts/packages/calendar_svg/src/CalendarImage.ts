@@ -11,6 +11,11 @@ import { juldToTert } from "../../imperial_calendar/src/transform/juldToTert";
 import { imdtToImsn } from "../../imperial_calendar/src/transform/imdtToImsn";
 import { imsnToImdt } from "../../imperial_calendar/src/transform/imsnToImdt";
 import { SECONDS_PER_DAY } from "../../imperial_calendar/src/utils";
+import { imsnToMrsd } from "../../imperial_calendar/src/transform/imsnToMrsd";
+import { mrsdToImsn } from "../../imperial_calendar/src/transform/mrsdToImsn";
+import { mrsdToTert } from "../../imperial_calendar/src/transform/mrsdToTert";
+import { tertToMrsd } from "../../imperial_calendar/src/transform/tertToMrsd";
+import { tertToJuld } from "../../imperial_calendar/src/transform/tertToJuld";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const DEFAULT_TIMEZONE = "+00:00";
@@ -78,29 +83,6 @@ function nextGrdtDayOf(grdt: GregorianDateTime): GregorianDateTime {
     copy.day += 1;
   }
   return copy;
-}
-
-function imsnToMrsd(imsn: ImperialSolNumber): MarsSolDate {
-  return new MarsSolDate(imsn.imperialSolNumber + 0.375 - 901195);
-}
-
-function mrsdToImsn(mrsd: MarsSolDate): ImperialSolNumber {
-  return new ImperialSolNumber(mrsd.marsSolDate - 0.375 + 901195);
-}
-
-function mrsdToTert(mrsd: MarsSolDate): TerrestrialTime {
-  return new TerrestrialTime(1.0274912517 * (mrsd.marsSolDate - 44796 + 0.0009626) + 2451545 + 4.5);
-}
-
-function tertToMrsd(tert: TerrestrialTime): MarsSolDate {
-  return new MarsSolDate((tert.terrestrialTime - 2451545 - 4.5) / 1.0274912517 + 44796 - 0.0009626);
-}
-
-function tertToJuld(tert: TerrestrialTime): JulianDay {
-  const deltaT = new JulianDay(tert.terrestrialTime).deltaT;
-  const juldPrime = new JulianDay(tert.terrestrialTime - deltaT / SECONDS_PER_DAY);
-  const tertPrime = juldToTert(juldPrime);
-  return new JulianDay(juldPrime.julianDay + tert.terrestrialTime - tertPrime.terrestrialTime);
 }
 
 function grdtToImdt(grdt: GregorianDateTime, timezone: string | null): ImperialDateTime {

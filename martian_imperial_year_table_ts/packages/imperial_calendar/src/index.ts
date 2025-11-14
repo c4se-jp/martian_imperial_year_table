@@ -12,6 +12,11 @@ import { grdtToJuld } from "./transform/grdtToJuld";
 import { juldToGrdt } from "./transform/juldToGrdt";
 import { juldToTert } from "./transform/juldToTert";
 import { tertToMrls } from "./transform/tertToMrls";
+import { tertToJuld } from "./transform/tertToJuld";
+import { tertToMrsd } from "./transform/tertToMrsd";
+import { mrsdToTert } from "./transform/mrsdToTert";
+import { mrsdToImsn } from "./transform/mrsdToImsn";
+import { imsnToMrsd } from "./transform/imsnToMrsd";
 import { imdtToImsn } from "./transform/imdtToImsn";
 import { imsnToImdt } from "./transform/imsnToImdt";
 import { deriveImperialDateTimeFields } from "./transform/imperialHelpers";
@@ -36,6 +41,11 @@ const exportedObjects = {
   juldToGrdt,
   juldToTert,
   tertToMrls,
+  tertToJuld,
+  tertToMrsd,
+  mrsdToTert,
+  mrsdToImsn,
+  imsnToMrsd,
   imdtToImsn,
   imsnToImdt,
   deriveImperialDateTimeFields,
@@ -69,6 +79,11 @@ export {
   juldToGrdt,
   juldToTert,
   tertToMrls,
+  tertToJuld,
+  tertToMrsd,
+  mrsdToTert,
+  mrsdToImsn,
+  imsnToMrsd,
   imdtToImsn,
   imsnToImdt,
   deriveImperialDateTimeFields,

@@ -1,0 +1,41 @@
+@import "bulma/css/bulma.min.css";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  min-height: 100vh;
+  background: #f8f8f8;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.navbar {
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fff;
+}
+
+.hero.is-dark {
+  background: linear-gradient(135deg, #1d3557, #3a0ca3);
+}
+
+.section {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.calendar-svg-wrapper svg {
+  max-width: 100%;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.button + .button {
+  margin-left: 0.5rem;
+}
