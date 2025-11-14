@@ -14,15 +14,7 @@ type ImperialDateTimeInit = {
 };
 
 const buildImperial = (data: ImperialDateTimeInit) =>
-  new ImperialDateTime(
-    data.year,
-    data.month,
-    data.day,
-    data.hour,
-    data.minute,
-    data.second,
-    data.timezone,
-  );
+  new ImperialDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
 
 describe("ImperialDateTime", () => {
   describe("等値性", () => {
@@ -30,9 +22,9 @@ describe("ImperialDateTime", () => {
       expect(buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 6, timezone: "+00:00" })).toEqual(
         buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 6, timezone: "+00:00" }),
       );
-      expect(buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 6, timezone: "+00:00" })).not.toEqual(
-        buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 7, timezone: "+00:00" }),
-      );
+      expect(
+        buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 6, timezone: "+00:00" }),
+      ).not.toEqual(buildImperial({ year: 1, month: 2, day: 3, hour: 4, minute: 5, second: 7, timezone: "+00:00" }));
     });
   });
 
@@ -137,12 +129,8 @@ describe("ImperialDateTime", () => {
     it("標準タイムゾーンナイーブなImperialDateTimeから変換", () => {
       for (let hour = 0; hour < 23; hour += 1) {
         [0, 15, 30, 45].forEach((minute) => {
-          const negativeTimezone = `-${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
-          const positiveTimezone = `+${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
+          const negativeTimezone = `-${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+          const positiveTimezone = `+${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
 
           const negResult = ImperialDateTime.fromStandardNaive(
             buildImperial({ year: 1398, month: 1, day: 1, hour, minute, second: 0, timezone: null }),
@@ -167,15 +155,25 @@ describe("ImperialDateTime", () => {
   describe("holiday", () => {
     it("該当する祝日", () => {
       const holiday = new HolidayMars(1425, 1, 1);
-      expect(buildImperial({ year: 1425, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).holiday).toEqual(holiday);
-      expect(buildImperial({ year: 1425, month: 1, day: 4, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).holiday).toBeNull();
+      expect(
+        buildImperial({ year: 1425, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).holiday,
+      ).toEqual(holiday);
+      expect(
+        buildImperial({ year: 1425, month: 1, day: 4, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).holiday,
+      ).toBeNull();
     });
   });
 
   describe("japaneseMonthName", () => {
     it("日本語（火星語）月名", () => {
-      expect(buildImperial({ year: 1425, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).japaneseMonthName).toBe("立春");
-      expect(buildImperial({ year: 1425, month: 24, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).japaneseMonthName).toBe("大寒");
+      expect(
+        buildImperial({ year: 1425, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" })
+          .japaneseMonthName,
+      ).toBe("立春");
+      expect(
+        buildImperial({ year: 1425, month: 24, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" })
+          .japaneseMonthName,
+      ).toBe("大寒");
     });
   });
 
@@ -198,7 +196,15 @@ describe("ImperialDateTime", () => {
 
       const invalidTimezone = "+00";
       expect(() => {
-        const imperial = buildImperial({ year: 0, month: 1, day: 1, hour: 1, minute: 1, second: 1, timezone: invalidTimezone });
+        const imperial = buildImperial({
+          year: 0,
+          month: 1,
+          day: 1,
+          hour: 1,
+          minute: 1,
+          second: 1,
+          timezone: invalidTimezone,
+        });
         return imperial.offset;
       }).toThrow();
     });
@@ -208,12 +214,8 @@ describe("ImperialDateTime", () => {
     it("標準タイムゾーンナイーブなImperialDateTimeに変換", () => {
       for (let hour = 0; hour < 23; hour += 1) {
         [0, 15, 30, 45].forEach((minute) => {
-          const negativeTimezone = `-${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
-          const positiveTimezone = `+${hour.toString().padStart(2, "0")}:${minute
-            .toString()
-            .padStart(2, "0")}`;
+          const negativeTimezone = `-${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+          const positiveTimezone = `+${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
 
           const negativeExpected = buildImperial({
             year: 1398,
@@ -235,10 +237,26 @@ describe("ImperialDateTime", () => {
           });
 
           expect(
-            buildImperial({ year: 1398, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: negativeTimezone }).toStandardNaive(),
+            buildImperial({
+              year: 1398,
+              month: 1,
+              day: 1,
+              hour: 0,
+              minute: 0,
+              second: 0,
+              timezone: negativeTimezone,
+            }).toStandardNaive(),
           ).toEqual(negativeExpected);
           expect(
-            buildImperial({ year: 1398, month: 1, day: 1, hour, minute, second: 0, timezone: positiveTimezone }).toStandardNaive(),
+            buildImperial({
+              year: 1398,
+              month: 1,
+              day: 1,
+              hour,
+              minute,
+              second: 0,
+              timezone: positiveTimezone,
+            }).toStandardNaive(),
           ).toEqual(positiveExpected);
         });
       }

@@ -15,15 +15,7 @@ type GregorianDateTimeInit = {
 };
 
 const buildGregorian = (data: GregorianDateTimeInit) =>
-  new GregorianDateTime(
-    data.year,
-    data.month,
-    data.day,
-    data.hour,
-    data.minute,
-    data.second,
-    data.timezone,
-  );
+  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
 
 describe("juldToGrdt", () => {
   it("JulianDayをGregorianDateTimeに変換する", () => {

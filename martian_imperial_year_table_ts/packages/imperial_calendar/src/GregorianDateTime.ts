@@ -14,11 +14,7 @@ const NAMED_TIMEZONE_OFFSETS: Record<string, number> = {
   "Asia/Tokyo": 9,
 };
 
-const JAPANESE_HOLIDAYS = new Set([
-  "2020-01-01",
-  "2020-02-23",
-  "2020-02-24",
-]);
+const JAPANESE_HOLIDAYS = new Set(["2020-01-01", "2020-02-23", "2020-02-24"]);
 
 function toUtcDate(parts: DateParts): Date {
   return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
@@ -94,15 +90,7 @@ export class GregorianDateTime {
   }
 
   copy(): GregorianDateTime {
-    return new GregorianDateTime(
-      this.year,
-      this.month,
-      this.day,
-      this.hour,
-      this.minute,
-      this.second,
-      this.timezone,
-    );
+    return new GregorianDateTime(this.year, this.month, this.day, this.hour, this.minute, this.second, this.timezone);
   }
 
   static fromUtcNaive(naive: GregorianDateTime, timezone: string): GregorianDateTime {

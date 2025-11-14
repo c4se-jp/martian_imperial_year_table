@@ -77,7 +77,8 @@ export class JulianDay {
   }
 
   get deltaT(): number {
-    const yearNumber = this.julianDay < JulianDay.calendarReform ? julianDayToJulianYear(this) : julianDayToGregorianYear(this);
+    const yearNumber =
+      this.julianDay < JulianDay.calendarReform ? julianDayToJulianYear(this) : julianDayToGregorianYear(this);
     if (yearNumber < -500) {
       const deltaU = (yearNumber - 1820) / 100;
       return -20 + 32 * deltaU ** 2;

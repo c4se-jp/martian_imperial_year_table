@@ -10,9 +10,9 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [],
-    }
+    },
   },
   test: {
     environment: "node",
-  }
+  },
 });

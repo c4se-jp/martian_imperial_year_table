@@ -14,15 +14,7 @@ type GregorianDateTimeInit = {
 };
 
 const buildGregorian = (data: GregorianDateTimeInit) =>
-  new GregorianDateTime(
-    data.year,
-    data.month,
-    data.day,
-    data.hour,
-    data.minute,
-    data.second,
-    data.timezone,
-  );
+  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
 
 describe("grdtToJuld", () => {
   it("GregorianDateTimeをJulianDayに変換する", () => {
@@ -46,8 +38,14 @@ describe("grdtToJuld", () => {
 
   it("時刻を変換する", () => {
     const testCases = [
-      { grdt: { year: 1970, month: 1, day: 1, hour: 21, minute: 5, second: 22, timezone: null }, expected: 2440588.37873 },
-      { grdt: { year: 1970, month: 1, day: 1, hour: 21, minute: 5, second: 23, timezone: null }, expected: 2440588.37874 },
+      {
+        grdt: { year: 1970, month: 1, day: 1, hour: 21, minute: 5, second: 22, timezone: null },
+        expected: 2440588.37873,
+      },
+      {
+        grdt: { year: 1970, month: 1, day: 1, hour: 21, minute: 5, second: 23, timezone: null },
+        expected: 2440588.37874,
+      },
     ];
 
     testCases.forEach(({ grdt, expected }) => {

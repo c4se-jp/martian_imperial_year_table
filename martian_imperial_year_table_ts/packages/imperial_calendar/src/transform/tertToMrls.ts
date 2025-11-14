@@ -13,7 +13,7 @@ function offsetToAngleOfFictitiousMeanSun(offset: number): number {
 }
 
 function offsetToPerturbers(offset: number): number {
-  const amp = [0.0071, 0.0057, 0.0039, 0.0037, 0.0021, 0.0020, 0.0018];
+  const amp = [0.0071, 0.0057, 0.0039, 0.0037, 0.0021, 0.002, 0.0018];
   const tau = [2.2353, 2.7543, 1.1177, 15.7866, 2.1354, 2.4694, 32.8493];
   const phi = [49.409, 168.173, 191.837, 21.736, 15.704, 95.528, 49.095];
   let perturbers = 0;
@@ -30,7 +30,7 @@ function offsetToEquationOfCenter(offset: number): number {
   return (
     (10.691 + 0.0000003 * offset) * Math.sin(angleM) +
     0.623 * Math.sin(2 * angleM) +
-    0.050 * Math.sin(3 * angleM) +
+    0.05 * Math.sin(3 * angleM) +
     0.005 * Math.sin(4 * angleM) +
     0.0005 * Math.sin(5 * angleM) +
     pbs

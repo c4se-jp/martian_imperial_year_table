@@ -13,15 +13,7 @@ type GregorianDateTimeInit = {
 };
 
 const buildGregorian = (data: GregorianDateTimeInit) =>
-  new GregorianDateTime(
-    data.year,
-    data.month,
-    data.day,
-    data.hour,
-    data.minute,
-    data.second,
-    data.timezone,
-  );
+  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
 
 describe("GregorianDateTime", () => {
   describe("fromUtcNaive", () => {
@@ -112,8 +104,12 @@ describe("GregorianDateTime", () => {
 
   describe("weekday", () => {
     it("曜日番号（1=月）", () => {
-      expect(buildGregorian({ year: 2020, month: 2, day: 24, hour: 0, minute: 0, second: 0, timezone: null }).weekday).toBe(1);
-      expect(buildGregorian({ year: 2020, month: 2, day: 25, hour: 0, minute: 0, second: 0, timezone: null }).weekday).toBe(2);
+      expect(
+        buildGregorian({ year: 2020, month: 2, day: 24, hour: 0, minute: 0, second: 0, timezone: null }).weekday,
+      ).toBe(1);
+      expect(
+        buildGregorian({ year: 2020, month: 2, day: 25, hour: 0, minute: 0, second: 0, timezone: null }).weekday,
+      ).toBe(2);
     });
   });
 });

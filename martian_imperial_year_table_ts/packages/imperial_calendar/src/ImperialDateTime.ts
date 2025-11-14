@@ -73,15 +73,7 @@ export class ImperialDateTime {
   }
 
   copy(): ImperialDateTime {
-    return new ImperialDateTime(
-      this.year,
-      this.month,
-      this.day,
-      this.hour,
-      this.minute,
-      this.second,
-      this.timezone,
-    );
+    return new ImperialDateTime(this.year, this.month, this.day, this.hour, this.minute, this.second, this.timezone);
   }
 
   valueOf(): number {
@@ -112,7 +104,15 @@ export class ImperialDateTime {
       second -= SECONDS_PER_DAY;
     }
     const fields = deriveImperialDateTimeFields(new ImperialSolNumber(day, second));
-    return new ImperialDateTime(fields.year, fields.month, fields.day, fields.hour, fields.minute, fields.second, timezone);
+    return new ImperialDateTime(
+      fields.year,
+      fields.month,
+      fields.day,
+      fields.hour,
+      fields.minute,
+      fields.second,
+      timezone,
+    );
   }
 
   get holiday(): HolidayMars | null {
