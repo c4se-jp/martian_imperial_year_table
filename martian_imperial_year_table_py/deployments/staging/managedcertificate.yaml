@@ -1,0 +1,8 @@
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: martian-imperial-year-table-staging-c4se-jp
+spec:
+  domains:
+    - martian-imperial-year-table.staging.c4se.jp

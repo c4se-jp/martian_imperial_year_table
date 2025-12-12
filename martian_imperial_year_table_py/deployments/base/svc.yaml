@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: martian-imperial-year-table
+spec:
+  type: NodePort
+  ports:
+    - name: martian-imperial-year-table
+      port: 80
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    app: martian-imperial-year-table
+    role: web

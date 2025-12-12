@@ -1,0 +1,12 @@
+uwsgi:
+  callable: app
+  die-on-term: true
+  http-socket: :5000
+  master: true
+  plugin: python3
+  processes: 2
+  stats-http: true
+  stats: :9191
+  threads: 2
+  uid: uwsgi
+  wsgi-file: web_main.py
