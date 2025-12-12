@@ -125,12 +125,9 @@ export default function HomePage() {
       { label: "Julian Day", value: (state.juld.day + state.juld.second / 86400).toFixed(5) },
       { label: "⊿t", value: `${state.deltaT.toFixed(5)} s` },
       { label: "Terrestrial Time", value: state.tert.terrestrialTime.toFixed(5) },
+      { label: "Areocentric Solar Longitude (Mars Ls)", value: `${state.mrls.toFixed(5)}°` },
       { label: "Mars Sol Date", value: state.mrsd.marsSolDate.toFixed(5) },
-      {
-        label: "Imperial Sol Number",
-        value: `${state.imsn.day} sols + ${state.imsn.second.toFixed(3)} sec`,
-      },
-      { label: "M.R.L.S.", value: `${state.mrls.toFixed(2)}°` },
+      { label: "Imperial Sol Number", value: (state.imsn.day + state.imsn.second / 86400).toFixed(5) },
     ],
     [state],
   );
