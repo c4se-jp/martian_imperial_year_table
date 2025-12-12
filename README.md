@@ -1,6 +1,4 @@
-![test](https://github.com/c4se-jp/martian_imperial_year_table/workflows/test/badge.svg)
-
-# 帝國火星曆
+# 帝國火星曆 (帝国火星暦。Imperial Martian Calendar)
 
 https://martian-imperial-year-table.c4se.jp/
 
@@ -14,3 +12,7 @@ https://martian-imperial-year-table.c4se.jp/
 - mrsd : `MarsSolDate`
 - imsn : `ImperialSolNumber`
 - imdt : `ImperialDateTime`
+
+## 開發用 server の起動
+
+$ npm run -w martian_ui dev
