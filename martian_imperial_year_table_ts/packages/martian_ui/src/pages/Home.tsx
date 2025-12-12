@@ -57,6 +57,46 @@ export default function HomePage() {
   const [imdtForm, setImdtForm] = useState<ImperialFormState>(buildImperialForm(initialState.imdt));
   const [error, setError] = useState<string | null>(null);
 
+  const convertGrdtForm = (form: GregorianFormState) => {
+    try {
+      const timezone = normalizeTimezone(form.timezone);
+      const grdt = new GregorianDateTime(
+        parseIntField("年", form.year),
+        parseIntField("月", form.month),
+        parseIntField("日", form.day),
+        parseIntField("時", form.hour),
+        parseIntField("分", form.minute),
+        parseIntField("秒", form.second),
+        timezone,
+      );
+      const next = convertFromGregorian(grdt, imdtForm.timezone);
+      setState(next);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  const convertImdtForm = (form: ImperialFormState) => {
+    try {
+      const timezone = normalizeTimezone(form.timezone);
+      const imdt = new ImperialDateTime(
+        parseIntField("年", form.year),
+        parseIntField("月", form.month),
+        parseIntField("日", form.day),
+        parseIntField("時", form.hour),
+        parseIntField("分", form.minute),
+        parseIntField("秒", form.second),
+        timezone,
+      );
+      const next = convertFromImperial(imdt, grdtForm.timezone);
+      setState(next);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
   useEffect(() => {
     setGrdtForm(buildGregorianForm(state.grdt));
     setImdtForm(buildImperialForm(state.imdt));
@@ -70,44 +110,12 @@ export default function HomePage() {
 
   const handleGrdtSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const timezone = normalizeTimezone(grdtForm.timezone);
-      const grdt = new GregorianDateTime(
-        parseIntField("年", grdtForm.year),
-        parseIntField("月", grdtForm.month),
-        parseIntField("日", grdtForm.day),
-        parseIntField("時", grdtForm.hour),
-        parseIntField("分", grdtForm.minute),
-        parseIntField("秒", grdtForm.second),
-        timezone,
-      );
-      const next = convertFromGregorian(grdt, imdtForm.timezone);
-      setState(next);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
+    convertGrdtForm(grdtForm);
   };
 
   const handleImdtSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      const timezone = normalizeTimezone(imdtForm.timezone);
-      const imdt = new ImperialDateTime(
-        parseIntField("年", imdtForm.year),
-        parseIntField("月", imdtForm.month),
-        parseIntField("日", imdtForm.day),
-        parseIntField("時", imdtForm.hour),
-        parseIntField("分", imdtForm.minute),
-        parseIntField("秒", imdtForm.second),
-        timezone,
-      );
-      const next = convertFromImperial(imdt, grdtForm.timezone);
-      setState(next);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
+    convertImdtForm(imdtForm);
   };
 
   const handleSetNow = () => {
@@ -171,6 +179,11 @@ export default function HomePage() {
                           [field]: event.target.value,
                         }))
                       }
+                      onBlur={(event) => {
+                        const next = { ...grdtForm, [field]: event.target.value };
+                        setGrdtForm(next);
+                        convertGrdtForm(next);
+                      }}
                     />
                   </p>
                 ))}
@@ -180,12 +193,14 @@ export default function HomePage() {
                     type="text"
                     value={grdtForm.timezone}
                     onChange={(event) => setGrdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
+                    onBlur={(event) => {
+                      const next = { ...grdtForm, timezone: event.target.value };
+                      setGrdtForm(next);
+                      convertGrdtForm(next);
+                    }}
                   />
                 </p>
               </div>
-              <button className="button is-link" type="submit">
-                火星へ變換
-              </button>
             </form>
           </div>
           <div className="column">
@@ -204,6 +219,11 @@ export default function HomePage() {
                           [field]: event.target.value,
                         }))
                       }
+                      onBlur={(event) => {
+                        const next = { ...imdtForm, [field]: event.target.value };
+                        setImdtForm(next);
+                        convertImdtForm(next);
+                      }}
                     />
                   </p>
                 ))}
@@ -213,12 +233,14 @@ export default function HomePage() {
                     type="text"
                     value={imdtForm.timezone}
                     onChange={(event) => setImdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
+                    onBlur={(event) => {
+                      const next = { ...imdtForm, timezone: event.target.value };
+                      setImdtForm(next);
+                      convertImdtForm(next);
+                    }}
                   />
                 </p>
               </div>
-              <button className="button is-link" type="submit">
-                地球へ變換
-              </button>
             </form>
           </div>
         </div>
