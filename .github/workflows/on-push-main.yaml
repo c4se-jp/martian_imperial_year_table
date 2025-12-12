@@ -1,0 +1,14 @@
+---
+name: main branch
+"on":
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-pages:
+    permissions:
+      contents: read
+      id-token: write
+      pages: write
+    uses: ./.github/workflows/run-deploy-pages.yaml

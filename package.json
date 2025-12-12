@@ -11,6 +11,7 @@
     "build": "npm run -ws build",
     "lint": "npm run -ws lint",
     "test": "npm run -ws test",
+    "test:gha": "yamllint .github/workflows/ && actionlint && ghalint run && zizmor .",
     "format": "prettier --write \"packages/**/*.ts\" \"packages/**/*.tsx\""
   },
   "dependencies": {
