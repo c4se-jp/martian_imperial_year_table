@@ -18,24 +18,21 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSvg = useCallback(
-    async (year: number, month: number, tz: string) => {
-      setLoading(true);
-      setError(null);
-      try {
-        const timezone = normalizeTimezone(tz);
-        const imdt = new ImperialDateTime(year, month, 1, 0, 0, 0, "+00:00");
-        const svg = await drawCalendarSvg(imdt, timezone);
-        setSvgMarkup(svg);
-        setForm({ year, month, timezone });
-      } catch (err) {
-        setError(err instanceof Error ? err.message : String(err));
-      } finally {
-        setLoading(false);
-      }
-    },
-    [],
-  );
+  const fetchSvg = useCallback(async (year: number, month: number, tz: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const timezone = normalizeTimezone(tz);
+      const imdt = new ImperialDateTime(year, month, 1, 0, 0, 0, "+00:00");
+      const svg = await drawCalendarSvg(imdt, timezone);
+      setSvgMarkup(svg);
+      setForm({ year, month, timezone });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     document.title = "七曜表 | 帝國火星曆";

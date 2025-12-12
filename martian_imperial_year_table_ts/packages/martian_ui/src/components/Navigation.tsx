@@ -26,7 +26,12 @@ export default function Navigation() {
             </NavLink>
           </div>
           <div className="navbar-end">
-            <a className="navbar-item" href="https://github.com/c4se-jp/martian_imperial_year_table" target="_blank" rel="noreferrer">
+            <a
+              className="navbar-item"
+              href="https://github.com/c4se-jp/martian_imperial_year_table"
+              target="_blank"
+              rel="noreferrer"
+            >
               <img src="/img/GitHub-Mark-120px-plus.png" alt="GitHub" style={{ width: "28px" }} />
             </a>
           </div>
