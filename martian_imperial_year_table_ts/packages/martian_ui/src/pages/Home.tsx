@@ -1,5 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
-import { GregorianDateTime, ImperialDateTime } from "imperial_calendar";
+import {
+  GregorianDateTime,
+  ImperialDateTime,
+  ImperialSolNumber,
+  JulianDay,
+  MarsSolDate,
+  TerrestrialTime,
+  imsnToImdt,
+  imsnToMrsd,
+  juldToGrdt,
+  juldToTert,
+  mrsdToImsn,
+  mrsdToTert,
+  tertToJuld,
+  tertToMrls,
+  tertToMrsd,
+} from "imperial_calendar";
 import { ConversionResult, convertFromGregorian, convertFromImperial } from "../lib/conversion";
 import { getBrowserGregorian } from "../lib/date";
 import { normalizeTimezone } from "../lib/time";
@@ -18,6 +34,13 @@ type GregorianFormState = {
 };
 
 type ImperialFormState = GregorianFormState;
+
+type DerivedFormState = {
+  juld: string;
+  tert: string;
+  mrsd: string;
+  imsn: string;
+};
 
 function buildGregorianForm(grdt: GregorianDateTime): GregorianFormState {
   return {
@@ -51,10 +74,32 @@ function parseIntField(label: string, value: string): number {
   return Math.trunc(num);
 }
 
+function parseNumberField(label: string, value: string): number {
+  const num = Number(value);
+  if (!Number.isFinite(num)) {
+    throw new Error(`${label} を正しく入力してください`);
+  }
+  return num;
+}
+
+function formatJulianDayValue(juld: ConversionResult["juld"]): string {
+  return (juld.day + juld.second / 86400).toFixed(5);
+}
+
+function formatImsnValue(imsn: ConversionResult["imsn"]): string {
+  return (imsn.day + imsn.second / 86400).toFixed(5);
+}
+
 export default function HomePage() {
   const [state, setState] = useState<ConversionResult>(initialState);
   const [grdtForm, setGrdtForm] = useState<GregorianFormState>(buildGregorianForm(initialState.grdt));
   const [imdtForm, setImdtForm] = useState<ImperialFormState>(buildImperialForm(initialState.imdt));
+  const [derivedForm, setDerivedForm] = useState<DerivedFormState>({
+    juld: formatJulianDayValue(initialState.juld),
+    tert: initialState.tert.terrestrialTime.toFixed(5),
+    mrsd: initialState.mrsd.marsSolDate.toFixed(5),
+    imsn: formatImsnValue(initialState.imsn),
+  });
   const [error, setError] = useState<string | null>(null);
 
   const convertGrdtForm = (form: GregorianFormState) => {
@@ -97,9 +142,71 @@ export default function HomePage() {
     }
   };
 
+  const applyStateFromDerived = (kind: keyof DerivedFormState, rawValue: string) => {
+    const labels: Record<keyof DerivedFormState, string> = {
+      juld: "Julian Day",
+      tert: "Terrestrial Time",
+      mrsd: "Mars Sol Date",
+      imsn: "Imperial Sol Number",
+    };
+    try {
+      const value = parseNumberField(labels[kind], rawValue);
+      let juld: JulianDay;
+      let tert: TerrestrialTime;
+      let mrsd: MarsSolDate;
+      let imsn: ImperialSolNumber;
+
+      if (kind === "juld") {
+        juld = new JulianDay(value);
+        tert = juldToTert(juld);
+        mrsd = tertToMrsd(tert);
+        imsn = mrsdToImsn(mrsd);
+      } else if (kind === "tert") {
+        tert = new TerrestrialTime(value);
+        juld = tertToJuld(tert);
+        mrsd = tertToMrsd(tert);
+        imsn = mrsdToImsn(mrsd);
+      } else if (kind === "mrsd") {
+        mrsd = new MarsSolDate(value);
+        tert = mrsdToTert(mrsd);
+        juld = tertToJuld(tert);
+        imsn = mrsdToImsn(mrsd);
+      } else {
+        imsn = new ImperialSolNumber(value);
+        mrsd = imsnToMrsd(imsn);
+        tert = mrsdToTert(mrsd);
+        juld = tertToJuld(tert);
+      }
+
+      const imdt = ImperialDateTime.fromStandardNaive(imsnToImdt(imsn), imdtForm.timezone);
+      const grdtUtc = juldToGrdt(juld);
+      const grdt = GregorianDateTime.fromUtcNaive(grdtUtc, grdtForm.timezone);
+
+      setState({
+        grdt,
+        juld,
+        deltaT: juld.deltaT,
+        tert,
+        mrsd,
+        imsn,
+        imdt,
+        mrls: tertToMrls(tert),
+      });
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
   useEffect(() => {
     setGrdtForm(buildGregorianForm(state.grdt));
     setImdtForm(buildImperialForm(state.imdt));
+    setDerivedForm({
+      juld: formatJulianDayValue(state.juld),
+      tert: state.tert.terrestrialTime.toFixed(5),
+      mrsd: state.mrsd.marsSolDate.toFixed(5),
+      imsn: formatImsnValue(state.imsn),
+    });
   }, [state]);
 
   useEffect(() => {
@@ -130,12 +237,8 @@ export default function HomePage() {
 
   const derivedValues = useMemo(
     () => [
-      { label: "Julian Day", value: (state.juld.day + state.juld.second / 86400).toFixed(5) },
       { label: "⊿t", value: `${state.deltaT.toFixed(5)} s` },
-      { label: "Terrestrial Time", value: state.tert.terrestrialTime.toFixed(5) },
       { label: "Areocentric Solar Longitude (Mars Ls)", value: `${state.mrls.toFixed(5)}°` },
-      { label: "Mars Sol Date", value: state.mrsd.marsSolDate.toFixed(5) },
-      { label: "Imperial Sol Number", value: (state.imsn.day + state.imsn.second / 86400).toFixed(5) },
     ],
     [state],
   );
@@ -248,6 +351,70 @@ export default function HomePage() {
         <div className="box">
           <h3 className="title is-5">換算結果</h3>
           <div className="columns is-multiline">
+            <div className="column is-half">
+              <p className="heading">Julian Day</p>
+              <input
+                className="input"
+                type="number"
+                value={derivedForm.juld}
+                onChange={(event) => setDerivedForm((prev) => ({ ...prev, juld: event.target.value }))}
+                onBlur={(event) => applyStateFromDerived("juld", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyStateFromDerived("juld", (event.target as HTMLInputElement).value);
+                  }
+                }}
+              />
+            </div>
+            <div className="column is-half">
+              <p className="heading">Terrestrial Time</p>
+              <input
+                className="input"
+                type="number"
+                value={derivedForm.tert}
+                onChange={(event) => setDerivedForm((prev) => ({ ...prev, tert: event.target.value }))}
+                onBlur={(event) => applyStateFromDerived("tert", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyStateFromDerived("tert", (event.target as HTMLInputElement).value);
+                  }
+                }}
+              />
+            </div>
+            <div className="column is-half">
+              <p className="heading">Mars Sol Date</p>
+              <input
+                className="input"
+                type="number"
+                value={derivedForm.mrsd}
+                onChange={(event) => setDerivedForm((prev) => ({ ...prev, mrsd: event.target.value }))}
+                onBlur={(event) => applyStateFromDerived("mrsd", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyStateFromDerived("mrsd", (event.target as HTMLInputElement).value);
+                  }
+                }}
+              />
+            </div>
+            <div className="column is-half">
+              <p className="heading">Imperial Sol Number</p>
+              <input
+                className="input"
+                type="number"
+                value={derivedForm.imsn}
+                onChange={(event) => setDerivedForm((prev) => ({ ...prev, imsn: event.target.value }))}
+                onBlur={(event) => applyStateFromDerived("imsn", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    applyStateFromDerived("imsn", (event.target as HTMLInputElement).value);
+                  }
+                }}
+              />
+            </div>
             {derivedValues.map((entry) => (
               <div className="column is-half" key={entry.label}>
                 <p className="heading">{entry.label}</p>
