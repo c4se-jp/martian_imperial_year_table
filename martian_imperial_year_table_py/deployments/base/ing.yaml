@@ -1,0 +1,9 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: martian-imperial-year-table
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  rules: []

@@ -1,0 +1,20 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: martian-imperial-year-table
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: martian-imperial-year-table-staging-c4se-jp
+    networking.gke.io/managed-certificates: martian-imperial-year-table-staging-c4se-jp
+spec:
+  rules:
+    - host: martian-imperial-year-table.staging.c4se.jp
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: martian-imperial-year-table
+                port:
+                  number: 443

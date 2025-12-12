@@ -1,7 +1,7 @@
 .envrc
-/deployments/*/secret
-/static/css
-/static/js
+deployments/*/secret
+static/css
+static/js
 __target__
 
 
