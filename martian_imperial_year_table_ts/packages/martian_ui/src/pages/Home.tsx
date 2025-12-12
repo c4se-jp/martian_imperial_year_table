@@ -90,6 +90,20 @@ function formatImsnValue(imsn: ConversionResult["imsn"]): string {
   return (imsn.day + imsn.second / 86400).toFixed(5);
 }
 
+function pad(num: number, length: number): string {
+  return num.toString().padStart(length, "0");
+}
+
+function formatIsoGregorian(grdt: GregorianDateTime): string {
+  const tz = grdt.timezone ?? "+00:00";
+  return `${pad(grdt.year, 4)}-${pad(grdt.month, 2)}-${pad(grdt.day, 2)}T${pad(grdt.hour, 2)}:${pad(grdt.minute, 2)}:${pad(grdt.second, 2)}${tz}`;
+}
+
+function formatIsoImperial(imdt: ImperialDateTime): string {
+  const tz = imdt.timezone ?? "+00:00";
+  return `${pad(imdt.year, 4)}-${pad(imdt.month, 2)}-${pad(imdt.day, 2)}T${pad(imdt.hour, 2)}:${pad(imdt.minute, 2)}:${pad(imdt.second, 2)}${tz}`;
+}
+
 export default function HomePage() {
   const [state, setState] = useState<ConversionResult>(initialState);
   const [grdtForm, setGrdtForm] = useState<GregorianFormState>(buildGregorianForm(initialState.grdt));
@@ -275,7 +289,19 @@ export default function HomePage() {
                     <input
                       className="input"
                       type="number"
-                      placeholder={field === "year" ? "年" : field === "month" ? "月" : field === "day" ? "日" : field === "hour" ? "時" : field === "minute" ? "分" : "秒"}
+                      placeholder={
+                        field === "year"
+                          ? "年"
+                          : field === "month"
+                            ? "月"
+                            : field === "day"
+                              ? "日"
+                              : field === "hour"
+                                ? "時"
+                                : field === "minute"
+                                  ? "分"
+                                  : "秒"
+                      }
                       value={grdtForm[field]}
                       onChange={(event) =>
                         setGrdtForm((prev) => ({
@@ -306,6 +332,9 @@ export default function HomePage() {
                   />
                 </p>
               </div>
+              <p className="is-size-7">
+                <code>{formatIsoGregorian(state.grdt)}</code>
+              </p>
             </form>
           </div>
           <div className="column">
@@ -317,7 +346,19 @@ export default function HomePage() {
                     <input
                       className="input"
                       type="number"
-                      placeholder={field === "year" ? "年" : field === "month" ? "月" : field === "day" ? "日" : field === "hour" ? "時" : field === "minute" ? "分" : "秒"}
+                      placeholder={
+                        field === "year"
+                          ? "年"
+                          : field === "month"
+                            ? "月"
+                            : field === "day"
+                              ? "日"
+                              : field === "hour"
+                                ? "時"
+                                : field === "minute"
+                                  ? "分"
+                                  : "秒"
+                      }
                       value={imdtForm[field]}
                       onChange={(event) =>
                         setImdtForm((prev) => ({
@@ -348,6 +389,9 @@ export default function HomePage() {
                   />
                 </p>
               </div>
+              <p className="is-size-7">
+                <code>{formatIsoImperial(state.imdt)}</code>
+              </p>
             </form>
           </div>
         </div>
