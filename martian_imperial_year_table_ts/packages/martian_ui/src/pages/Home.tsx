@@ -275,6 +275,7 @@ export default function HomePage() {
                     <input
                       className="input"
                       type="number"
+                      placeholder={field === "year" ? "年" : field === "month" ? "月" : field === "day" ? "日" : field === "hour" ? "時" : field === "minute" ? "分" : "秒"}
                       value={grdtForm[field]}
                       onChange={(event) =>
                         setGrdtForm((prev) => ({
@@ -294,6 +295,7 @@ export default function HomePage() {
                   <input
                     className="input"
                     type="text"
+                    placeholder="タイムゾーン"
                     value={grdtForm.timezone}
                     onChange={(event) => setGrdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
                     onBlur={(event) => {
@@ -315,6 +317,7 @@ export default function HomePage() {
                     <input
                       className="input"
                       type="number"
+                      placeholder={field === "year" ? "年" : field === "month" ? "月" : field === "day" ? "日" : field === "hour" ? "時" : field === "minute" ? "分" : "秒"}
                       value={imdtForm[field]}
                       onChange={(event) =>
                         setImdtForm((prev) => ({
@@ -334,6 +337,7 @@ export default function HomePage() {
                   <input
                     className="input"
                     type="text"
+                    placeholder="タイムゾーン"
                     value={imdtForm.timezone}
                     onChange={(event) => setImdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
                     onBlur={(event) => {
