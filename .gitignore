@@ -1,10 +1,6 @@
 *.tsbuildinfo
-.coverage
-.envrc
 __pycache__
 __target__
 deployments/*/secret
 dist
 node_modules
-static/css
-static/js
