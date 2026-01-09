@@ -282,7 +282,7 @@ export default function TransformPage() {
         <div className="columns">
           <div className="column">
             <form className="box" onSubmit={handleGrdtSubmit}>
-              <h2 className="title is-5">地球 (Gregorian Date Time)</h2>
+              <h2 className="title is-5">グレゴリオ曆 (地球)</h2>
               <div className="field is-grouped is-grouped-multiline">
                 {(["year", "month", "day", "hour", "minute", "second"] as const).map((field) => (
                   <p className="control" key={field}>
