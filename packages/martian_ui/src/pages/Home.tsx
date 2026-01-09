@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { GregorianDateTime } from "imperial_calendar";
+import { GregorianDateTime, ImperialDateTime } from "imperial_calendar";
+import { drawCalendarSvg } from "calendar_svg";
 import { convertFromGregorian } from "../lib/conversion";
 
 type NowState = {
@@ -38,6 +39,9 @@ function buildNowState(): NowState {
 
 export default function Home() {
   const [nowState, setNowState] = useState<NowState>(() => buildNowState());
+  const [calendarSvg, setCalendarSvg] = useState<string>("");
+  const [calendarLoading, setCalendarLoading] = useState<boolean>(false);
+  const [calendarError, setCalendarError] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = "帝國火星曆";
@@ -49,6 +53,33 @@ export default function Home() {
     }, 50);
     return () => window.clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    let canceled = false;
+    const loadCalendar = async () => {
+      setCalendarLoading(true);
+      setCalendarError(null);
+      try {
+        const imdt = new ImperialDateTime(nowState.imdtUtc.year, nowState.imdtUtc.month, 1, 0, 0, 0, "+00:00");
+        const svg = await drawCalendarSvg(imdt, "+00:00");
+        if (!canceled) {
+          setCalendarSvg(svg);
+        }
+      } catch (err) {
+        if (!canceled) {
+          setCalendarError(err instanceof Error ? err.message : String(err));
+        }
+      } finally {
+        if (!canceled) {
+          setCalendarLoading(false);
+        }
+      }
+    };
+    void loadCalendar();
+    return () => {
+      canceled = true;
+    };
+  }, [nowState.imdtUtc.year, nowState.imdtUtc.month]);
 
   return (
     <section className="section">
@@ -67,6 +98,14 @@ export default function Home() {
               <strong>{formatImperial(nowState.imdtUtc)}</strong>
             </p>
           </div>
+        </div>
+        <div className="box">
+          <h2 className="title is-5">七曜表</h2>
+          {calendarError && <div className="notification is-danger">{calendarError}</div>}
+          {calendarLoading && <progress className="progress is-small is-primary" max="100" />}
+          {!calendarLoading && calendarSvg && (
+            <div className="calendar-svg-wrapper" dangerouslySetInnerHTML={{ __html: calendarSvg }} />
+          )}
         </div>
       </div>
     </section>
