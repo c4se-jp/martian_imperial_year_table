@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/Home";
-import BlankPage from "./pages/Blank";
+import TransformPage from "./pages/Transform";
 import DescriptionPage from "./pages/Description";
 import CalendarPage from "./pages/Calendar";
 
@@ -11,8 +11,8 @@ function AppShell() {
       <Navigation />
       <main>
         <Routes>
-          <Route path="/" element={<BlankPage />} />
-          <Route path="/transform" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/transform" element={<TransformPage />} />
           <Route path="/description" element={<DescriptionPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
         </Routes>
