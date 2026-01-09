@@ -3,5 +3,5 @@
 <script>
   const path = location.pathname + location.search + location.hash;
   const params = new URLSearchParams({ p: path });
-  location.replace(`/${params.toString()}`);
+  location.replace(`/?${params.toString()}`);
 </script>

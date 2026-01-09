@@ -9,7 +9,10 @@
       const params = new URLSearchParams(location.search);
       const p = params.get("p");
       if (p) {
-        history.replaceState(null, "", p);
+        params.delete("p");
+        const rest = params.toString();
+        const suffix = rest ? `?${rest}` : "";
+        history.replaceState(null, "", `${p}${suffix}`);
       }
     </script>
   </head>
