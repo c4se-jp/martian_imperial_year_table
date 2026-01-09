@@ -282,7 +282,7 @@ export class CalendarImage {
           },
           showMonthDay,
         );
-      } else if (canDrawInCell) {
+      } else {
         const column = (imdt.day - 1) % 7;
         const row = Math.floor((imdt.day - 1) / 7);
         const x = CalendarImage.WIDTH_LEFT_SPACE + lineX + 1 + CalendarImage.SIZE_DAY_SQUARE * column;
