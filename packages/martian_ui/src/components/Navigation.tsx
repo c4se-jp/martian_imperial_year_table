@@ -1,21 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 export default function Navigation() {
   return (
     <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
-          <div className="navbar-item">
+          <Link className="navbar-item" to="/">
             <img src="./img/martian_empire.png" alt="帝國火星曆" style={{ width: "48px", marginRight: "0.75rem" }} />
             <div>
               <p className="title is-5">帝國火星曆</p>
               <p className="subtitle is-7">Martian Imperial Year Table</p>
             </div>
-          </div>
+          </Link>
         </div>
         <div className="navbar-menu">
           <div className="navbar-start">
-            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/">
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/transform">
               變換
             </NavLink>
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/description">
