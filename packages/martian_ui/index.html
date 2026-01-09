@@ -5,6 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>帝國火星曆</title>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const p = params.get("p");
+      if (p) {
+        history.replaceState(null, "", p);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
