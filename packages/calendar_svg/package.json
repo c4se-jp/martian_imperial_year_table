@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "imperial_calendar": "file:../imperial_calendar",
-    "jsdom": "^24.0.0"
+    "jsdom": "^27.4.0"
   }
 }

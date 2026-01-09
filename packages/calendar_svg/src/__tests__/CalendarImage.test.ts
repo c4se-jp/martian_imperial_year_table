@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { JSDOM } from "jsdom";
-import { ImperialDateTime } from "../../../imperial_calendar/src/ImperialDateTime";
+import { ImperialDateTime } from "imperial_calendar";
 import { CalendarImage, drawCalendarSvg } from "../CalendarImage";
 
 describe("CalendarImage", () => {

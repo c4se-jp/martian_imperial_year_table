@@ -4,11 +4,20 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ["jsdom"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
       imperial_calendar: path.resolve(__dirname, "../imperial_calendar/src/index.ts"),
       calendar_svg: path.resolve(__dirname, "../calendar_svg/src/index.ts"),
+    },
+    dedupe: ["react", "react-dom"],
+  },
+  build: {
+    rollupOptions: {
+      external: ["jsdom"],
     },
   },
   server: {
