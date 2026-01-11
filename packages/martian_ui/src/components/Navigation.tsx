@@ -6,7 +6,7 @@ export default function Navigation() {
       <div className="container">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            <img src="./img/martian_empire.png" alt="帝國火星曆" style={{ width: "48px", marginRight: "0.75rem" }} />
+            <img src="./img/martian_empire.png" alt="帝國火星曆" style={{ width: "38px", marginRight: "0.75rem" }} />
             <div>
               <p className="title is-5">帝國火星曆</p>
               <p className="subtitle is-7">Martian Imperial Year Table</p>
