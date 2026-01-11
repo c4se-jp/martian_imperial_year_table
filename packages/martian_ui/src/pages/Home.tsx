@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { GregorianDateTime, ImperialDateTime } from "imperial_calendar";
 import { drawCalendarSvg } from "calendar_svg";
 import { convertFromGregorian } from "../lib/conversion";
+import { getBrowserGregorian } from "../lib/date";
 
 type NowState = {
-  grdtJst: GregorianDateTime;
-  imdtUtc: ReturnType<typeof convertFromGregorian>["imdt"];
+  grdtLocal: GregorianDateTime;
+  imdt: ReturnType<typeof convertFromGregorian>["imdt"];
+  grdtTimezone: string;
 };
 
 function pad(num: number, length: number): string {
@@ -16,7 +18,7 @@ function formatGregorian(grdt: GregorianDateTime, label: string): string {
   return `${pad(grdt.year, 4)}-${pad(grdt.month, 2)}-${pad(grdt.day, 2)} ${pad(grdt.hour, 2)}:${pad(grdt.minute, 2)}:${pad(grdt.second, 2)} (${label})`;
 }
 
-function formatImperial(imdt: NowState["imdtUtc"]): string {
+function formatImperial(imdt: NowState["imdt"]): string {
   return `${pad(imdt.year, 4)}-${pad(imdt.month, 2)}-${pad(imdt.day, 2)} ${pad(imdt.hour, 2)}:${pad(imdt.minute, 2)}:${pad(imdt.second, 2)} (${imdt.timezone ?? "+00:00"})`;
 }
 
@@ -32,10 +34,11 @@ function buildNowState(): NowState {
     now.getUTCMilliseconds(),
     null,
   );
-  const grdtJst = GregorianDateTime.fromUtcNaive(utcNaive, "Asia/Tokyo");
   const grdtUtc = GregorianDateTime.fromUtcNaive(utcNaive, "+00:00");
-  const { imdt: imdtUtc } = convertFromGregorian(grdtUtc, "+00:00");
-  return { grdtJst, imdtUtc };
+  const { imdt: imdt } = convertFromGregorian(grdtUtc, "+00:00");
+  const grdtLocal = getBrowserGregorian();
+  const grdtTimezone = grdtLocal.timezone ?? "+00:00";
+  return { grdtLocal, imdt, grdtTimezone };
 }
 
 export default function Home() {
@@ -51,7 +54,7 @@ export default function Home() {
   useEffect(() => {
     const timer = window.setInterval(() => {
       setNowState(buildNowState());
-    }, 1000/60);
+    }, 1000 / 60);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -61,8 +64,7 @@ export default function Home() {
       setCalendarLoading(true);
       setCalendarError(null);
       try {
-        const imdt = new ImperialDateTime(nowState.imdtUtc.year, nowState.imdtUtc.month, 1, 0, 0, 0, "+00:00");
-        const svg = await drawCalendarSvg(imdt, "+00:00");
+        const svg = await drawCalendarSvg(nowState.imdt, nowState.grdtTimezone);
         if (!canceled) {
           setCalendarSvg(svg);
         }
@@ -80,7 +82,7 @@ export default function Home() {
     return () => {
       canceled = true;
     };
-  }, [nowState.imdtUtc.year, nowState.imdtUtc.month]);
+  }, [nowState.imdt.year, nowState.imdt.month, nowState.grdtTimezone]);
 
   return (
     <section className="section">
@@ -89,14 +91,14 @@ export default function Home() {
           <h2 className="title is-5">現在の日時</h2>
           <div className="content">
             <p>
-              <span className="has-text-grey">グレゴリオ曆 (JST)</span>
+              <span className="has-text-grey">グレゴリオ曆 ({nowState.grdtTimezone})</span>
               <br />
-              <strong>{formatGregorian(nowState.grdtJst, "JST")}</strong>
+              <strong>{formatGregorian(nowState.grdtLocal, nowState.grdtTimezone)}</strong>
             </p>
             <p>
               <span className="has-text-grey">帝國火星曆 (+00:00)</span>
               <br />
-              <strong>{formatImperial(nowState.imdtUtc)}</strong>
+              <strong>{formatImperial(nowState.imdt)}</strong>
             </p>
           </div>
         </div>
