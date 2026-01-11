@@ -15,9 +15,10 @@ export function juldToGrdt(juld: JulianDay): GregorianDateTime {
   const u = 100 * (a - 49) + c + f;
   const v = e - 12 * f + 2;
   const w = d - Math.floor(30.59 * e) + (B % 1);
-  const roundedSecond = Math.round(juld.second);
-  const [hourRaw, remainder] = pyDivmod(roundedSecond, 3600);
+  const totalMs = Math.round(juld.second * 1000);
+  const [hourRaw, remainderMs] = pyDivmod(totalMs, 3600 * 1000);
   const hour = (hourRaw + 12) % 24;
-  const [minute, second] = pyDivmod(remainder, 60);
-  return new GregorianDateTime(u, v, Math.floor(w), hour, minute, second, null);
+  const [minute, secondMs] = pyDivmod(remainderMs, 60 * 1000);
+  const [second, ms] = pyDivmod(secondMs, 1000);
+  return new GregorianDateTime(u, v, Math.floor(w), hour, minute, second, ms, null);
 }

@@ -18,7 +18,7 @@ export function computeJulianComponents(grdt: GregorianDateTime): JulianComponen
     Math.floor((tweakedMonth - 2) * 30.59) +
     grdt.day +
     interceptDay;
-  let second = grdt.hour * 3600 + grdt.minute * 60 + grdt.second + interceptSecond;
+  let second = grdt.hour * 3600 + grdt.minute * 60 + grdt.second + grdt.ms / 1000 + interceptSecond;
   if (second >= SECONDS_PER_DAY) {
     day += 1;
     second -= SECONDS_PER_DAY;

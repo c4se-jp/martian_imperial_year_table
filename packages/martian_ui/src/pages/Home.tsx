@@ -29,6 +29,7 @@ function buildNowState(): NowState {
     now.getUTCHours(),
     now.getUTCMinutes(),
     now.getUTCSeconds(),
+    now.getUTCMilliseconds(),
     null,
   );
   const grdtJst = GregorianDateTime.fromUtcNaive(utcNaive, "Asia/Tokyo");
@@ -50,7 +51,7 @@ export default function Home() {
   useEffect(() => {
     const timer = window.setInterval(() => {
       setNowState(buildNowState());
-    }, 50);
+    }, 1000/60);
     return () => window.clearInterval(timer);
   }, []);
 

@@ -9,11 +9,12 @@ type GregorianDateTimeInit = {
   hour: number;
   minute: number;
   second: number;
+  ms: number;
   timezone: Timezone;
 };
 
 const buildGregorian = (data: GregorianDateTimeInit) =>
-  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
+  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.ms, data.timezone);
 
 describe("GregorianDateTime", () => {
   describe("fromUtcNaive", () => {
@@ -24,19 +25,19 @@ describe("GregorianDateTime", () => {
         expected: GregorianDateTimeInit;
       }> = [
         {
-          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
           timezone: "+09:00",
-          expected: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, timezone: "+09:00" },
+          expected: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, ms: 0, timezone: "+09:00" },
         },
         {
-          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
           timezone: "Asia/Tokyo",
-          expected: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, timezone: "Asia/Tokyo" },
+          expected: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, ms: 0, timezone: "Asia/Tokyo" },
         },
         {
-          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          naive: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
           timezone: "-09:00",
-          expected: { year: 1969, month: 12, day: 31, hour: 15, minute: 0, second: 0, timezone: "-09:00" },
+          expected: { year: 1969, month: 12, day: 31, hour: 15, minute: 0, second: 0, ms: 0, timezone: "-09:00" },
         },
       ];
 
@@ -58,6 +59,7 @@ describe("GregorianDateTime", () => {
           hour: 0,
           minute: 0,
           second: 0,
+          ms: 0,
           timezone: null,
         }).isHoliday,
       ).toBe(true);
@@ -69,6 +71,7 @@ describe("GregorianDateTime", () => {
           hour: 0,
           minute: 0,
           second: 0,
+          ms: 0,
           timezone: null,
         }).isHoliday,
       ).toBe(false);
@@ -82,16 +85,16 @@ describe("GregorianDateTime", () => {
         expected: GregorianDateTimeInit;
       }> = [
         {
-          original: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, timezone: "+09:00" },
-          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          original: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, ms: 0, timezone: "+09:00" },
+          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
         },
         {
-          original: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, timezone: "Asia/Tokyo" },
-          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          original: { year: 1970, month: 1, day: 1, hour: 9, minute: 0, second: 0, ms: 0, timezone: "Asia/Tokyo" },
+          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
         },
         {
-          original: { year: 1969, month: 12, day: 31, hour: 15, minute: 0, second: 0, timezone: "-09:00" },
-          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: null },
+          original: { year: 1969, month: 12, day: 31, hour: 15, minute: 0, second: 0, ms: 0, timezone: "-09:00" },
+          expected: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, ms: 0, timezone: null },
         },
       ];
 
@@ -105,10 +108,10 @@ describe("GregorianDateTime", () => {
   describe("weekday", () => {
     it("曜日番号（1=月）", () => {
       expect(
-        buildGregorian({ year: 2020, month: 2, day: 24, hour: 0, minute: 0, second: 0, timezone: null }).weekday,
+        buildGregorian({ year: 2020, month: 2, day: 24, hour: 0, minute: 0, second: 0, ms: 0, timezone: null }).weekday,
       ).toBe(1);
       expect(
-        buildGregorian({ year: 2020, month: 2, day: 25, hour: 0, minute: 0, second: 0, timezone: null }).weekday,
+        buildGregorian({ year: 2020, month: 2, day: 25, hour: 0, minute: 0, second: 0, ms: 0, timezone: null }).weekday,
       ).toBe(2);
     });
   });

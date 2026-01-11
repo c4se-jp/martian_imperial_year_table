@@ -7,6 +7,7 @@ type DateParts = {
   hour: number;
   minute: number;
   second: number;
+  ms: number;
 };
 
 const NAMED_TIMEZONE_OFFSETS: Record<string, number> = {
@@ -17,7 +18,7 @@ const NAMED_TIMEZONE_OFFSETS: Record<string, number> = {
 const JAPANESE_HOLIDAYS = new Set(["2020-01-01", "2020-02-23", "2020-02-24"]);
 
 function toUtcDate(parts: DateParts): Date {
-  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second));
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second, parts.ms));
 }
 
 function fromUtcDate(date: Date): DateParts {
@@ -28,6 +29,7 @@ function fromUtcDate(date: Date): DateParts {
     hour: date.getUTCHours(),
     minute: date.getUTCMinutes(),
     second: date.getUTCSeconds(),
+    ms: date.getUTCMilliseconds(),
   };
 }
 
@@ -58,6 +60,7 @@ export class GregorianDateTime {
   hour: number;
   minute: number;
   second: number;
+  ms: number;
   timezone: Timezone;
 
   constructor(
@@ -67,6 +70,7 @@ export class GregorianDateTime {
     hour: number,
     minute: number,
     second: number,
+    ms: number,
     timezone: Timezone,
   ) {
     this.year = year;
@@ -75,6 +79,7 @@ export class GregorianDateTime {
     this.hour = hour;
     this.minute = minute;
     this.second = second;
+    this.ms = ms;
     this.timezone = timezone;
   }
 
@@ -86,11 +91,21 @@ export class GregorianDateTime {
       hour: this.hour,
       minute: this.minute,
       second: this.second,
+      ms: this.ms,
     };
   }
 
   copy(): GregorianDateTime {
-    return new GregorianDateTime(this.year, this.month, this.day, this.hour, this.minute, this.second, this.timezone);
+    return new GregorianDateTime(
+      this.year,
+      this.month,
+      this.day,
+      this.hour,
+      this.minute,
+      this.second,
+      this.ms,
+      this.timezone,
+    );
   }
 
   static fromUtcNaive(naive: GregorianDateTime, timezone: string): GregorianDateTime {
@@ -106,6 +121,7 @@ export class GregorianDateTime {
       shifted.hour,
       shifted.minute,
       shifted.second,
+      shifted.ms,
       timezone,
     );
   }
@@ -143,6 +159,7 @@ export class GregorianDateTime {
       shifted.hour,
       shifted.minute,
       shifted.second,
+      shifted.ms,
       null,
     );
   }

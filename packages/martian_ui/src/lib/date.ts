@@ -12,6 +12,7 @@ export function getBrowserGregorian(): GregorianDateTime {
     now.getHours(),
     now.getMinutes(),
     now.getSeconds(),
+    now.getMilliseconds(),
     timezone,
   );
 }

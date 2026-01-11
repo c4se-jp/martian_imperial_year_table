@@ -4,3 +4,5 @@ __target__
 deployments/*/secret
 dist
 node_modules
+src/**/*.d.ts
+src/**/*.js

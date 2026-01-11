@@ -37,8 +37,8 @@ function julianDayToJulianYear(juld: JulianDay): number {
 
 function julianDayToGregorianYear(juld: JulianDay): number {
   const year = juldToGrdt(juld).year;
-  const january1st = computeJulianValue(new GregorianDateTime(year, 1, 1, 0, 0, 0, null));
-  const nextJanuary1st = computeJulianValue(new GregorianDateTime(year + 1, 1, 1, 0, 0, 0, null));
+  const january1st = computeJulianValue(new GregorianDateTime(year, 1, 1, 0, 0, 0, 0, null));
+  const nextJanuary1st = computeJulianValue(new GregorianDateTime(year + 1, 1, 1, 0, 0, 0, 0, null));
   const annualDay = (juld.julianDay - january1st) / (nextJanuary1st - january1st);
   return year + annualDay;
 }

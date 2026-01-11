@@ -1,6 +1,7 @@
 # 帝國火星曆 (帝国火星暦。Imperial Martian Calendar)
 
 https://martian-imperial-year-table.c4se.jp/
+( https://c4se-jp.github.io/martian_imperial_year_table/ )
 
 ## 略語 (abbreviation)
 

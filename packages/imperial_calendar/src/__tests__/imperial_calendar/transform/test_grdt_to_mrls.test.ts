@@ -12,11 +12,12 @@ type GregorianDateTimeInit = {
   hour: number;
   minute: number;
   second: number;
+  ms: number;
   timezone: Timezone;
 };
 
 const buildGregorian = (data: GregorianDateTimeInit) =>
-  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.timezone);
+  new GregorianDateTime(data.year, data.month, data.day, data.hour, data.minute, data.second, data.ms, data.timezone);
 
 describe("grdtToMrls", () => {
   it("GregorianDateTimeをMars LSに変換する", () => {
@@ -69,6 +70,7 @@ describe("grdtToMrls", () => {
         hour: 0,
         minute: 0,
         second: 0,
+        ms: 0,
         timezone: "UTC",
       });
       const actual = tertToMrls(juldToTert(grdtToJuld(gregorian)));

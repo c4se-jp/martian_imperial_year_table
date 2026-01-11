@@ -126,6 +126,7 @@ export default function TransformPage() {
         parseIntField("時", form.hour),
         parseIntField("分", form.minute),
         parseIntField("秒", form.second),
+        0,
         timezone,
       );
       const next = convertFromGregorian(grdt, imdtForm.timezone);
