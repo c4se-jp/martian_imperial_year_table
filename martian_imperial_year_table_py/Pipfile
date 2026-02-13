@@ -4,13 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-Flask = "*"
-Markdown = "*"
-flasgger = "*"
 holiday-jp = "*"
 pytz = "*"
 types-pytz = "*"
-uwsgi = "*"
 
 [dev-packages]
 black = "*"
@@ -18,12 +14,10 @@ coverage = "*"
 flake8 = "*"
 flake8-docstrings = "*"
 mypy = "*"
-transcrypt = "*"
 typing-extensions = "*"
-yamllint = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"
 
 [pipenv]
 allow_prereleases = true
