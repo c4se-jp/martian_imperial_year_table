@@ -1,5 +1,6 @@
 ---
-name: Deploy GitHub Pages
+name: Deploy AWS CDK
+
 "on":
   workflow_call:
   workflow_dispatch:
@@ -7,52 +8,57 @@ name: Deploy GitHub Pages
 permissions:
   contents: read
   id-token: write
-  pages: write
 
 concurrency:
-  group: pages
+  group: cdk-deploy
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions:
       contents: read
+      id-token: write
+    env:
+      AWS_REGION: ap-northeast-1
+      HOSTED_ZONE_DOMAIN_NAME: c4se.jp
+      SITE_DOMAIN_NAME: martian-imperial-year-table.c4se.jp
     steps:
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
 
-      - name: Setup Node
+      - name: Node.jsを使ふ
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           cache: npm
           node-version: 24
 
-      - name: Install dependencies
+      - name: 依存libraryを入れる
         run: npm ci
 
-      - name: Build martian_ui
+      - name: Web siteをbuildする
         run: npm run -w martian_ui build
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+      - name: AWSに認可をとる
+        uses: aws-actions/configure-aws-credentials@3a5b31f2d53b5f347251fdeff5f9f7d8f8d4974a # v4.2.0
         with:
-          path: dist
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+      - name: CDKの依存libraryを入れる
+        run: npm install --prefix cdk
+
+      - name: CDK deploy
+        env:
+          CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
+          HOSTED_ZONE_ID: ${{ secrets.HOSTED_ZONE_ID }}
+        run: |
+          npx --prefix cdk cdk deploy --require-approval never \
+            -c certificateArn="${CERTIFICATE_ARN}" \
+            -c hostedZoneDomainName="${HOSTED_ZONE_DOMAIN_NAME}" \
+            -c hostedZoneId="${HOSTED_ZONE_ID}" \
+            -c siteDomainName="${SITE_DOMAIN_NAME}" \
+            -c siteAssetsPath="${GITHUB_WORKSPACE}/dist"
