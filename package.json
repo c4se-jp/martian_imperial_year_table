@@ -15,10 +15,10 @@
     "format": "prettier --write \"packages/**/*.ts\" \"packages/**/*.tsx\""
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
-    "prettier": "^3.7.4",
+    "@types/node": "^25.2.3",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.18"
   }
 }

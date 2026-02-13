@@ -6,22 +6,23 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --base ./ --outDir ../../dist --emptyOutDir true",
+    "lint": "echo \"No linting configured\"",
     "preview": "vite preview",
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {
     "bulma": "^1.0.4",
-    "marked": "^17.0.1",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-router-dom": "^7.12.0"
+    "marked": "^17.0.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.2",
+    "@vitejs/plugin-react": "^5.1.4",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.18"
   }
 }

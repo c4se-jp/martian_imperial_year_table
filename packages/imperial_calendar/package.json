@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "lint": "echo \"No linting configured\"",
     "test": "vitest"
   },
   "dependencies": {
