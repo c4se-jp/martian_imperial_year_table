@@ -2,6 +2,7 @@
   "name": "imperial_calendar",
   "private": true,
   "type": "module",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -9,7 +10,7 @@
     }
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.types.json",
     "lint": "echo \"No linting configured\"",
     "test": "vitest"
   },

@@ -1,6 +1,9 @@
-# AWS CDK (S3 + CloudFront)
+# AWS CDK (S3 + CloudFront + API Gateway + Lambda)
 
-このディレクトリは、`martian-imperial-year-table.c4se.jp` を `S3 + CloudFront` 構成で配信するための CDK です。
+このディレクトリは、`martian-imperial-year-table.c4se.jp` を以下の構成で配信するための CDK です。
+
+- 靜的サイト: `CloudFront -> S3`
+- Web API: `CloudFront (/api/*) -> API Gateway (HTTP API) -> Lambda (Hono)`
 
 ## 前提
 
@@ -39,6 +42,8 @@ npx cdk deploy \
 ## 含まれるリソース
 
 - 非公開 S3 バケット (靜的サイト配信元)
+- Lambda Function (`packages/martian_api/src/index.ts` をエントリにバンドル)
+- API Gateway HTTP API (デフォルト `execute-api` エンドポイント無効)
 - CloudFront ディストリビューション (`HTTPS` 強制)
 - Route53 の A / AAAA Alias レコード
 - `aws-s3-deployment` による `dist/` のアップロードと invalidation

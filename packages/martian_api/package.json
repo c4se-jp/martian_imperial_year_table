@@ -3,11 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "echo \"No build configured\"",
+    "build": "tsc -p tsconfig.json",
     "lint": "echo \"No linting configured\"",
     "test": "echo \"No tests configured\""
   },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
   "dependencies": {
+    "hono": "^4.11.9",
     "imperial_calendar": "file:../imperial_calendar"
   }
 }

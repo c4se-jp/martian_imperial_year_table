@@ -1,1 +1,2 @@
-- `/martian_imperial_year_table_py/` ディレクトリには舊い實裝を殘してゐるだけです。無視してください。
+- コメントは日本語で書く。
+- `/martian_imperial_year_table_py/` ディレクトリには舊い實裝を殘してゐるだけである。無視して。
