@@ -3,6 +3,13 @@ name: Deploy AWS CDK
 
 "on":
   workflow_call:
+    secrets:
+      AWS_ROLE_ARN:
+        required: true
+      CERTIFICATE_ARN:
+        required: true
+      HOSTED_ZONE_ID:
+        required: true
   workflow_dispatch:
 
 permissions:
