@@ -65,6 +65,30 @@ export class MartianSiteStack extends Stack {
 
     const apiOriginDomainName = Fn.select(2, Fn.split("/", httpApi.apiEndpoint));
 
+    const spaRewriteFunction = new cloudfront.Function(this, "SpaRewriteFunction", {
+      code: cloudfront.FunctionCode.fromInline(`
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri || "/";
+
+  if (uri.startsWith("/api/")) {
+    return request;
+  }
+
+  if (uri.endsWith("/")) {
+    request.uri = uri + "index.html";
+    return request;
+  }
+
+  if (uri.indexOf(".") === -1) {
+    request.uri = "/index.html";
+  }
+
+  return request;
+}
+`),
+    });
+
     const distribution = new cloudfront.Distribution(this, "SiteDistribution", {
       certificate,
       comment: "martian_imperial_year_table static site",
@@ -72,6 +96,12 @@ export class MartianSiteStack extends Stack {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(siteBucket),
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+        functionAssociations: [
+          {
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+            function: spaRewriteFunction,
+          },
+        ],
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       additionalBehaviors: {
@@ -84,20 +114,6 @@ export class MartianSiteStack extends Stack {
         },
       },
       domainNames: [props.siteDomainName],
-      errorResponses: [
-        {
-          httpStatus: 403,
-          responseHttpStatus: 200,
-          responsePagePath: "/index.html",
-          ttl: Duration.minutes(5),
-        },
-        {
-          httpStatus: 404,
-          responseHttpStatus: 200,
-          responsePagePath: "/index.html",
-          ttl: Duration.minutes(5),
-        },
-      ],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
     });
