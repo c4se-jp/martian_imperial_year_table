@@ -53,6 +53,7 @@ function parseTimezone(timezone: string): number {
   return sign * (hours + minutes / 60);
 }
 
+// グレゴリオ曆でのタイムゾーン附き日時。略稱は "grdt"。
 export class GregorianDateTime {
   year: number;
   month: number;

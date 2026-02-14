@@ -1,0 +1,13 @@
+{
+  "name": "martian_api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"No build configured\"",
+    "lint": "echo \"No linting configured\"",
+    "test": "echo \"No tests configured\""
+  },
+  "dependencies": {
+    "imperial_calendar": "file:../imperial_calendar"
+  }
+}

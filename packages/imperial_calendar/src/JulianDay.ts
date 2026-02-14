@@ -43,6 +43,7 @@ function julianDayToGregorianYear(juld: JulianDay): number {
   return year + annualDay;
 }
 
+// ユリウス通日。略稱は "juld"。
 export class JulianDay {
   static calendarReform = 2299160.5;
 
