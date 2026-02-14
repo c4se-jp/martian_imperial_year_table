@@ -43,7 +43,7 @@ npx cdk deploy \
 
 - 非公開 S3 バケット (靜的サイト配信元)
 - Lambda Function (`packages/martian_api/src/index.ts` をエントリにバンドル)
-- API Gateway HTTP API (デフォルト `execute-api` エンドポイント無効)
+- API Gateway HTTP API
 - CloudFront ディストリビューション (`HTTPS` 強制)
 - Route53 の A / AAAA Alias レコード
 - `aws-s3-deployment` による `dist/` のアップロードと invalidation

@@ -61,7 +61,6 @@ export class MartianSiteStack extends Stack {
     const httpApi = new apigwv2.HttpApi(this, "ImperialCalendarHttpApi", {
       createDefaultStage: true,
       defaultIntegration: new apigwv2Integrations.HttpLambdaIntegration("DefaultLambdaIntegration", apiLambda),
-      disableExecuteApiEndpoint: true,
     });
 
     const apiOriginDomainName = Fn.select(2, Fn.split("/", httpApi.apiEndpoint));
