@@ -46,6 +46,17 @@ export class MartianSiteStack extends Stack {
 
     const apiLambda = new lambdaNodejs.NodejsFunction(this, "ApiLambda", {
       bundling: {
+        commandHooks: {
+          afterBundling(): string[] {
+            return [];
+          },
+          beforeBundling(inputDir: string): string[] {
+            return [`npm --prefix "${inputDir}" run -w imperial_calendar build`];
+          },
+          beforeInstall(): string[] {
+            return [];
+          },
+        },
         format: lambdaNodejs.OutputFormat.ESM,
         target: "node22",
       },
