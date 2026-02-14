@@ -5,12 +5,16 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "echo \"No linting configured\"",
+    "start": "node dist/server.js",
+    "start:dev": "tsx src/server.ts",
     "test": "echo \"No tests configured\""
   },
   "devDependencies": {
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@hono/node-server": "^1.19.5",
     "hono": "^4.11.9",
     "imperial_calendar": "file:../imperial_calendar"
   }

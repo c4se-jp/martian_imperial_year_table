@@ -9,7 +9,7 @@ info:
 servers:
   - url: https://martian-imperial-year-table.c4se.jp/api/
     description: 本番サーバー
-    variables: { }
+    variables: {}
 tags:
   - name: imperial-datetime
     description: 帝國火星曆日時
@@ -28,7 +28,7 @@ paths:
           required: false
           description: >
             帝國火星曆のタイムゾーン。省略時は +00:00 (基準時)。
-            形式は +09:00 のやうな ±HH:MM。
+            形式は +09:00 のやうな ±HH:M。timezone=%2B09:00 等の樣にURLエンコードする事。
           schema:
             type: string
             pattern: ^([+-])(\d{2}):(\d{2})$
