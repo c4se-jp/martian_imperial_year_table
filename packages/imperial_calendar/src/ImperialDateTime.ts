@@ -45,6 +45,7 @@ function parseImperialTimezone(timezone: string): number {
   return sign * (hours + minutes / 60);
 }
 
+// 帝國火星曆でのタイムゾーン附き日時。略稱は "imdt"。
 export class ImperialDateTime {
   year: number;
   month: number;

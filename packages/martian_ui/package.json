@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vite build --base ./ --outDir ../../dist --emptyOutDir true",
     "lint": "echo \"No linting configured\"",
     "preview": "vite preview",
+    "start:dev": "vite",
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {

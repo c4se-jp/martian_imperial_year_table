@@ -1,0 +1,134 @@
+---
+openapi: 3.1.0
+info:
+  title: 帝國火星曆 API
+  version: 0.1.0
+  description: >
+    帝國火星曆に關する Web API。
+    まづは現在日時の ImperialDateTime を返すエンドポイントを提供する。
+servers:
+  - url: https://martian-imperial-year-table.c4se.jp/api/
+    description: 本番サーバー
+    variables: {}
+tags:
+  - name: imperial-datetime
+    description: 帝國火星曆日時
+
+paths:
+  /imperial-datetime/current:
+    get:
+      tags:
+        - imperial-datetime
+      operationId: getCurrentImperialDateTime
+      summary: 現在の帝國火星曆での日時を取得する
+      description: 指定したタイムゾーン帝國火星曆での現在日時を返す。
+      parameters:
+        - name: timezone
+          in: query
+          required: false
+          description: >
+            帝國火星曆のタイムゾーン。省略時は +00:00 (基準時)。
+            形式は +09:00 のやうな ±HH:M。timezone=%2B09:00 等の樣にURLエンコードする事。
+          schema:
+            type: string
+            pattern: ^([+-])(\d{2}):(\d{2})$
+            default: +00:00
+            examples:
+              - +00:00
+              - +09:00
+              - -05:30
+      responses:
+        "200":
+          description: 現在の帝國火星曆日時
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CurrentImperialDateTimeResponse"
+        "400":
+          description: リクエストパラメータが不正
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: サーバー内部エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    CurrentImperialDateTimeResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - gregorianDateTime
+        - imperialDateTime
+      properties:
+        gregorianDateTime:
+          description: API がレスポンスを生成した UTC 時刻 (ISO 8601)。
+          type: string
+          format: date-time
+          example: 2026-02-14T12:34:56Z
+        imperialDateTime:
+          $ref: "#/components/schemas/ImperialDateTime"
+
+    ImperialDateTime:
+      type: object
+      additionalProperties: false
+      required:
+        - year
+        - month
+        - day
+        - hour
+        - minute
+        - second
+        - timezone
+      properties:
+        year:
+          description: 帝國火星曆での年
+          type: integer
+          example: 101
+        month:
+          description: 帝國火星曆での月
+          type: integer
+          minimum: 1
+          maximum: 24
+          example: 5
+        day:
+          description: 帝國火星曆での日
+          type: integer
+          minimum: 1
+          maximum: 28
+          example: 14
+        hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+          example: 8
+        minute:
+          type: integer
+          minimum: 0
+          maximum: 59
+          example: 31
+        second:
+          type: integer
+          minimum: 0
+          maximum: 59
+          example: 42
+        timezone:
+          description: タイムゾーン (±HH:MM)
+          type: string
+          pattern: ^([+-])(\d{2}):(\d{2})$
+          example: +09:00
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: Invalid timezone format
