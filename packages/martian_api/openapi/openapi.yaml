@@ -15,6 +15,40 @@ tags:
     description: 帝國火星曆日時
 
 paths:
+  /gregorian-datetime/from-imperial:
+    post:
+      tags:
+        - imperial-datetime
+      operationId: convertImperialToGregorianDateTime
+      summary: 帝國火星曆日時をグレゴリオ曆日時に變換する
+      description: >
+        帝國火星曆の文字列表記 (1428-19-18T01:29:08+00:00 のやうな形式) とグレゴリオ曆でのタイムゾーンを受け取り、對應するグレゴリオ曆日時 (ISO 8601 文字列) を返す。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImperialToGregorianRequest"
+      responses:
+        "200":
+          description: 變換後のグレゴリオ曆日時
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GregorianDateTimeConversionResponse"
+        "400":
+          description: リクエストボディが不正
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: サーバー内部エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /imperial-datetime/current:
     get:
       tags:
@@ -57,8 +91,72 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /imperial-datetime/from-gregorian:
+    post:
+      tags:
+        - imperial-datetime
+      operationId: convertGregorianToImperialDateTime
+      summary: グレゴリオ曆日時を帝國火星曆日時に變換する
+      description: >
+        グレゴリオ曆での日時 (ISO 8601 文字列) と帝國火星曆でのタイムゾーンを受け取り、對應する帝國火星曆日時を返す。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GregorianToImperialRequest"
+      responses:
+        "200":
+          description: 變換後の帝國火星曆日時
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImperialDateTimeConversionResponse"
+        "400":
+          description: リクエストボディが不正
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: サーバー内部エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
+    ImperialToGregorianRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - imperialDateTimeFormatted
+        - gregorianTimezone
+      properties:
+        imperialDateTimeFormatted:
+          description: 變換元となる帝國火星曆日時文字列 (ISO 8601 と似た形式)。
+          type: string
+          pattern: ^(\d{4,})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})([+-])(\d{2}):(\d{2})$
+          example: 1428-19-18T01:29:08+09:00
+        gregorianTimezone:
+          description: 變換先のグレゴリオ曆でのタイムゾーン (±HH:MM)。
+          type: string
+          pattern: ^([+-])(\d{2}):(\d{2})$
+          example: +09:00
+
+    GregorianDateTimeConversionResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - gregorianDateTime
+      properties:
+        gregorianDateTime:
+          description: 變換後のグレゴリオ曆日時 (ISO 8601)。
+          type: string
+          format: date-time
+          example: 2026-02-14T21:34:56+09:00
+
     CurrentImperialDateTimeResponse:
       type: object
       additionalProperties: false
@@ -78,6 +176,38 @@ components:
           description: 帝國火星曆の文字列表記 (ISO 8601 と似た形式)。
           type: string
           example: 1428-19-18T01:29:08+00:00
+
+    GregorianToImperialRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - gregorianDateTime
+        - imperialTimezone
+      properties:
+        gregorianDateTime:
+          description: 變換元となるグレゴリオ曆日時 (ISO 8601)。
+          type: string
+          format: date-time
+          example: 2026-02-14T12:34:56Z
+        imperialTimezone:
+          description: 變換先の帝國火星曆でのタイムゾーン (±HH:MM)。
+          type: string
+          pattern: ^([+-])(\d{2}):(\d{2})$
+          example: +09:00
+
+    ImperialDateTimeConversionResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - imperialDateTime
+        - imperialDateTimeFormatted
+      properties:
+        imperialDateTime:
+          $ref: "#/components/schemas/ImperialDateTime"
+        imperialDateTimeFormatted:
+          description: 帝國火星曆の文字列表記 (ISO 8601 と似た形式)。
+          type: string
+          example: 1428-19-18T01:29:08+09:00
 
     ImperialDateTime:
       type: object
