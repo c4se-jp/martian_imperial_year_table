@@ -24,6 +24,7 @@ type CurrentImperialDateTimeResponse = {
     second: number;
     timezone: string;
   };
+  imperialDateTimeFormatted: string;
 };
 
 const TIMEZONE_PATTERN = /^([+-])(\d{2}):(\d{2})$/;
@@ -66,19 +67,29 @@ function toImperialDateTime(date: Date, timezone: string): ImperialDateTime {
   return ImperialDateTime.fromStandardNaive(standardNaiveImdt, timezone);
 }
 
+function pad(num: number, length: number): string {
+  return num.toString().padStart(length, "0");
+}
+
+function formatImperial(imdt: CurrentImperialDateTimeResponse["imperialDateTime"]): string {
+  return `${pad(imdt.year, 4)}-${pad(imdt.month, 2)}-${pad(imdt.day, 2)}T${pad(imdt.hour, 2)}:${pad(imdt.minute, 2)}:${pad(imdt.second, 2)}${imdt.timezone}`;
+}
+
 function buildCurrentImperialDateTimeResponse(now: Date, timezone: string): CurrentImperialDateTimeResponse {
   const imdt = toImperialDateTime(now, timezone);
+  const imperialDateTime = {
+    year: imdt.year,
+    month: imdt.month,
+    day: imdt.day,
+    hour: imdt.hour,
+    minute: imdt.minute,
+    second: imdt.second,
+    timezone,
+  };
   return {
     gregorianDateTime: now.toISOString(),
-    imperialDateTime: {
-      year: imdt.year,
-      month: imdt.month,
-      day: imdt.day,
-      hour: imdt.hour,
-      minute: imdt.minute,
-      second: imdt.second,
-      timezone,
-    },
+    imperialDateTime,
+    imperialDateTimeFormatted: formatImperial(imperialDateTime),
   };
 }
 
