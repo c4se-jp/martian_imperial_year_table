@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import {
   GregorianDateTime,
   ImperialDateTime,
+  ImperialYearMonth,
   grdtToJuld,
   imdtToImsn,
   imsnToImdt,
@@ -115,10 +116,14 @@ function parseImperialDateTimeFormatted(value: string): ImperialDateTime | null 
   const minute = Number(match[5]);
   const second = Number(match[6]);
 
-  if (month < 1 || month > 24 || day < 1 || day > 28) {
+  if (month < 1 || month > 24 || day < 1) {
     return null;
   }
   if (hour > 23 || minute > 59 || second > 59) {
+    return null;
+  }
+  const maxDay = new ImperialYearMonth(year, month).days();
+  if (day > maxDay) {
     return null;
   }
 
