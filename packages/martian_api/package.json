@@ -10,12 +10,15 @@
     "test": "echo \"No tests configured\""
   },
   "devDependencies": {
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.5",
+    "@hono/mcp": "^0.2.3",
+    "@hono/node-server": "^1.19.9",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "hono": "^4.11.9",
-    "imperial_calendar": "file:../imperial_calendar"
+    "imperial_calendar": "file:../imperial_calendar",
+    "zod": "^4.3.6"
   }
 }
