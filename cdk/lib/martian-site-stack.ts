@@ -86,7 +86,7 @@ function handler(event) {
     return request;
   }
 
-  if (uri === "/mcp" || uri.startsWith("/mcp/")) {
+  if (uri === "/mcp") {
     return request;
   }
 
@@ -128,13 +128,6 @@ function handler(event) {
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
         mcp: {
-          origin: new origins.HttpOrigin(apiOriginDomainName),
-          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        },
-        "mcp/*": {
           origin: new origins.HttpOrigin(apiOriginDomainName),
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
