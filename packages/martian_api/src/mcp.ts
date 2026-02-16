@@ -22,14 +22,35 @@ function textResult(value: unknown) {
   };
 }
 
+const timezoneSchema = z
+  .string()
+  .regex(/^[+-](?:[01]\d|2[0-3]):[0-5]\d$/, "Timezone must be in format ±HH:MM")
+  .describe("Timezone offset from UTC in ±HH:MM format (example: +09:00)");
+
+const gregorianDateTimeSchema = z
+  .string()
+  .regex(
+    /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/,
+    "DateTime must be ISO 8601 with timezone (e.g. 2026-02-16T00:00:00+00:00)",
+  )
+  .describe("Gregorian datetime in ISO 8601 format with timezone");
+
+const imperialDateTimeFormattedSchema = z
+  .string()
+  .regex(
+    /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/,
+    "DateTime must be YYYY-MM-DDTHH:mm:ss±HH:MM (e.g. 1220-01-01T00:00:00+00:00)",
+  )
+  .describe("Imperial datetime formatted as YYYY-MM-DDTHH:mm:ss±HH:MM");
+
 function createMcpServer(): McpServer {
   const server = new McpServer({ name: "martian_api", version: "0.1.0" });
 
   server.tool(
     "convert_gregorian_to_imperial_datetime",
     {
-      gregorianDateTime: z.string(),
-      imperialTimezone: z.string(),
+      gregorianDateTime: gregorianDateTimeSchema,
+      imperialTimezone: timezoneSchema,
     },
     async ({ gregorianDateTime, imperialTimezone }: { gregorianDateTime: string; imperialTimezone: string }) => {
       const validationError = validateTimezone(imperialTimezone);
@@ -53,7 +74,7 @@ function createMcpServer(): McpServer {
 
   server.tool(
     "get_current_imperial_datetime",
-    { timezone: z.string().default("+00:00") },
+    { timezone: timezoneSchema.default("+00:00") },
     async ({ timezone }: { timezone: string }) => {
       const validationError = validateTimezone(timezone);
       if (validationError) {
@@ -71,8 +92,8 @@ function createMcpServer(): McpServer {
   server.tool(
     "convert_imperial_to_gregorian_datetime",
     {
-      imperialDateTimeFormatted: z.string(),
-      gregorianTimezone: z.string(),
+      imperialDateTimeFormatted: imperialDateTimeFormattedSchema,
+      gregorianTimezone: timezoneSchema,
     },
     async ({
       imperialDateTimeFormatted,

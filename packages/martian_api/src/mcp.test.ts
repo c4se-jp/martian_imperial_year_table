@@ -49,7 +49,7 @@ describe("/mcp", () => {
     expect(jsonrpc.id).toBe(1);
 
     const result = jsonrpc.result as {
-      tools: Array<{ name: string }>;
+      tools: Array<{ name: string; inputSchema?: { properties?: Record<string, { description?: string }> } }>;
     };
     expect(result.tools.map((tool) => tool.name)).toEqual(
       expect.arrayContaining([
@@ -57,6 +57,11 @@ describe("/mcp", () => {
         "get_current_imperial_datetime",
         "convert_imperial_to_gregorian_datetime",
       ]),
+    );
+
+    const getCurrentImperialDateTimeTool = result.tools.find((tool) => tool.name === "get_current_imperial_datetime");
+    expect(getCurrentImperialDateTimeTool?.inputSchema?.properties?.timezone?.description).toBe(
+      "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
     );
   });
 
@@ -115,7 +120,7 @@ describe("/mcp", () => {
       isError?: boolean;
     };
     expect(result.isError).toBe(true);
-    expect(result.content[0]?.text).toBe("Invalid timezone format");
+    expect(result.content[0]?.text).toContain("Timezone must be in format");
   });
 
   test("Accept ヘッダーが不足してゐる場合は 406 を返す", async () => {
