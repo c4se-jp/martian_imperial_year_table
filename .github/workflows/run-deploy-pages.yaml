@@ -43,7 +43,7 @@ jobs:
           cache: npm
           node-version: 24
 
-      - name: 依存libraryを入れる
+      - name: 依存するlibraryを入れる
         run: npm ci
 
       - name: Web siteをbuildする
@@ -55,7 +55,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: CDKの依存libraryを入れる
+      - name: CDKの依存するlibraryを入れる
         run: npm install --prefix cdk
 
       - name: CDK deploy
