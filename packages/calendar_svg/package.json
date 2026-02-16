@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "echo \"No linting configured\"",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "imperial_calendar": "file:../imperial_calendar",

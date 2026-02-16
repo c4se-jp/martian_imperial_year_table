@@ -12,7 +12,7 @@
   "scripts": {
     "build": "vite build && tsc -p tsconfig.types.json",
     "lint": "echo \"No linting configured\"",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@holiday-jp/holiday_jp": "^2.5.1"

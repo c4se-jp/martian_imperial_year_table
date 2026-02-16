@@ -165,7 +165,8 @@ export function buildCurrentImperialDateTimeResponse(now: Date, timezone: string
   };
 }
 
-const GREGORIAN_DATETIME_WITH_TIMEZONE_PATTERN = /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
+const GREGORIAN_DATETIME_WITH_TIMEZONE_PATTERN =
+  /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
 export function buildGregorianToImperialResponse(
   gregorianDateTime: string,
   imperialTimezone: string,

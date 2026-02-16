@@ -7,11 +7,12 @@
     "lint": "echo \"No linting configured\"",
     "start": "node dist/server.js",
     "start:dev": "tsx src/server.ts",
-    "test": "echo \"No tests configured\""
+    "test": "vitest run"
   },
   "devDependencies": {
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "@hono/mcp": "^0.2.3",
