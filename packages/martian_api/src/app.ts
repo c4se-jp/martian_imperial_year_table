@@ -30,6 +30,8 @@ type ImperialDateTimeBody = {
 };
 
 const TIMEZONE_PATTERN = /^([+-])(\d{2}):(\d{2})$/;
+const GREGORIAN_DATETIME_WITH_TIMEZONE_PATTERN =
+  /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
 
 function validateTimezone(timezone: string): string | null {
   const match = TIMEZONE_PATTERN.exec(timezone);
@@ -242,6 +244,9 @@ function buildGregorianToImperialResponse(
   gregorianDateTime: string,
   imperialTimezone: string,
 ): ImperialDateTimeConversionResponse {
+  if (!GREGORIAN_DATETIME_WITH_TIMEZONE_PATTERN.test(gregorianDateTime)) {
+    throw new Error("Invalid gregorianDateTime format");
+  }
   const date = new Date(gregorianDateTime);
   if (Number.isNaN(date.getTime())) {
     throw new Error("Invalid gregorianDateTime");
@@ -276,7 +281,10 @@ app.post("/api/imperial-datetime/from-gregorian", async (c) => {
       200,
     );
   } catch (error) {
-    if (error instanceof Error && error.message === "Invalid gregorianDateTime") {
+    if (
+      error instanceof Error &&
+      (error.message === "Invalid gregorianDateTime" || error.message === "Invalid gregorianDateTime format")
+    ) {
       return c.json<ErrorResponse>({ message: error.message }, 400);
     }
     return c.json<ErrorResponse>({ message: "Internal server error" }, 500);
