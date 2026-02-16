@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { registerMcpRoute } from "./mcp.js";
 import {
   GregorianDateTime,
   ImperialDateTime,
@@ -292,5 +293,7 @@ app.post("/api/imperial-datetime/from-gregorian", async (c) => {
 });
 
 // }}} POST /api/imperial-datetime/from-gregorian
+
+registerMcpRoute(app);
 
 app.notFound((c) => c.json<ErrorResponse>({ message: "Not Found" }, 404));
