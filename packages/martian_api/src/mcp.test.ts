@@ -49,7 +49,11 @@ describe("/mcp", () => {
     expect(jsonrpc.id).toBe(1);
 
     const result = jsonrpc.result as {
-      tools: Array<{ name: string; inputSchema?: { properties?: Record<string, { description?: string }> } }>;
+      tools: Array<{
+        name: string;
+        inputSchema?: { properties?: Record<string, { description?: string }> };
+        _meta?: Record<string, unknown>;
+      }>;
     };
     expect(result.tools.map((tool) => tool.name)).toEqual(
       expect.arrayContaining([
@@ -63,6 +67,7 @@ describe("/mcp", () => {
     expect(getCurrentImperialDateTimeTool?.inputSchema?.properties?.timezone?.description).toBe(
       "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
     );
+    expect(getCurrentImperialDateTimeTool?._meta?.["openai/outputTemplate"]).toBe("ui://widget/martian-datetime.html");
   });
 
   test("tools/call で現在の帝國火星曆日時を返す", async () => {
@@ -85,9 +90,11 @@ describe("/mcp", () => {
 
     const result = jsonrpc.result as {
       content: Array<{ type: string; text: string }>;
+      structuredContent?: { mode?: string };
       isError?: boolean;
     };
     expect(result.isError).toBeUndefined();
+    expect(result.structuredContent?.mode).toBe("get_current_imperial");
 
     const payload = JSON.parse(result.content[0]?.text ?? "{}") as {
       imperialDateTime: { timezone: string };
@@ -121,6 +128,29 @@ describe("/mcp", () => {
     };
     expect(result.isError).toBe(true);
     expect(result.content[0]?.text).toContain("Timezone must be in format");
+  });
+
+  test("resources/read で widget resource を返す", async () => {
+    const response = await postMcp({
+      jsonrpc: "2.0",
+      id: 5,
+      method: "resources/read",
+      params: {
+        uri: "ui://widget/martian-datetime.html",
+      },
+    });
+    expect(response.status).toBe(200);
+
+    const jsonrpc = await parseSseJsonRpc(response);
+    expect(jsonrpc.error).toBeUndefined();
+    expect(jsonrpc.id).toBe(5);
+
+    const result = jsonrpc.result as {
+      contents: Array<{ uri: string; mimeType?: string; text?: string }>;
+    };
+    expect(result.contents[0]?.uri).toBe("ui://widget/martian-datetime.html");
+    expect(result.contents[0]?.mimeType).toBe("text/html");
+    expect(result.contents[0]?.text).toContain("帝國火星曆");
   });
 
   test("Accept ヘッダーが不足してゐる場合は 406 を返す", async () => {

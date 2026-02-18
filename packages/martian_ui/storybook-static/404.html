@@ -1,0 +1,7 @@
+<!doctype html>
+<meta charset="utf-8" />
+<script>
+  const path = location.pathname + location.search + location.hash;
+  const params = new URLSearchParams({ p: path });
+  location.replace(`/?${params.toString()}`);
+</script>
