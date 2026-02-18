@@ -9,11 +9,6 @@
     "start:dev": "tsx src/server.ts",
     "test": "vitest run"
   },
-  "devDependencies": {
-    "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
-  },
   "dependencies": {
     "@hono/mcp": "^0.2.3",
     "@hono/node-server": "^1.19.9",
@@ -21,5 +16,10 @@
     "hono": "^4.11.9",
     "imperial_calendar": "file:../imperial_calendar",
     "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }

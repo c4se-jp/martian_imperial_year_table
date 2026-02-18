@@ -1,4 +1,4 @@
-# 帝國火星曆 (帝国火星暦。Imperial Martian Calendar)
+# 帝國火星曆 (帝国火星曆。Imperial Martian Calendar)
 
 https://martian-imperial-year-table.c4se.jp/
 
@@ -15,8 +15,15 @@ https://martian-imperial-year-table.c4se.jp/
 
 ## 開發用 server の起動
 
+APIサーバー
+
 $ npm run -w martian_api start:dev
+
+Web UI
+
+$ npm run -w martian_ui storybook
 $ npm run -w martian_ui start:dev
+$ npm run -w martian_ui build:widget
 
 ## packages/
 

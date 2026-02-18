@@ -441,7 +441,7 @@ export class CalendarImage {
     this.drawText(
       parent,
       { fill: CalendarImage.BLACK, "font-size": CalendarImage.FONT_SIZE_LARGE, x: "5mm", y: 9.5 },
-      "帝國火星暦",
+      "帝國火星曆",
     );
     this.drawText(
       parent,

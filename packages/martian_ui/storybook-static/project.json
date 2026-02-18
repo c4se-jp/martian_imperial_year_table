@@ -1,0 +1,33 @@
+{
+  "generatedAt": 1771265143961,
+  "userSince": 1771264346213,
+  "hasCustomBabel": false,
+  "hasCustomWebpack": false,
+  "hasStaticDirs": false,
+  "hasStorybookEslint": false,
+  "refCount": 0,
+  "knownPackages": {
+    "testPackages": { "vitest": "4.0.18" },
+    "stylingPackages": { "bulma": "^1.0.4" },
+    "routerPackages": { "react-router-dom": "^7.13.0" }
+  },
+  "hasRouterPackage": true,
+  "monorepo": "Workspaces",
+  "packageManager": { "type": "npm", "agent": "npm", "nodeLinker": "node_modules" },
+  "preview": { "usesGlobals": false },
+  "framework": { "name": "@storybook/react-vite", "options": {} },
+  "builder": "@storybook/builder-vite",
+  "renderer": "@storybook/react",
+  "portableStoriesFileCount": 0,
+  "applicationFileCount": 4,
+  "storybookVersion": "10.2.8",
+  "storybookVersionSpecifier": "^10.2.8",
+  "language": "typescript",
+  "storybookPackages": {
+    "@storybook/react": { "version": "10.2.8" },
+    "@storybook/react-vite": { "version": "10.2.8" },
+    "storybook": {}
+  },
+  "addons": { "@storybook/addon-essentials": {} },
+  "packageJsonType": "module"
+}

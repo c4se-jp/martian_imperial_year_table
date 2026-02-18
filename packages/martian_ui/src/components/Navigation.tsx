@@ -24,6 +24,9 @@ export default function Navigation() {
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/calendar">
               七曜表
             </NavLink>
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/storybook/widget">
+              Widget Storybook
+            </NavLink>
           </div>
           <div className="navbar-end">
             <a

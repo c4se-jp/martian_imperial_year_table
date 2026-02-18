@@ -1,4 +1,4 @@
-"""帝國火星曆とグレゴリオ暦とを變換する."""
+"""帝國火星曆とグレゴリオ曆とを變換する."""
 
 from imperial_calendar.transform.grdt_to_juld import grdt_to_juld
 from imperial_calendar.transform.imdt_to_imsn import imdt_to_imsn

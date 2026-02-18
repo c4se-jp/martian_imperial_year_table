@@ -1,0 +1,16 @@
+{
+  "v": 5,
+  "entries": {
+    "widget-martiandatetimewidget--default": {
+      "type": "story",
+      "subtype": "story",
+      "id": "widget-martiandatetimewidget--default",
+      "name": "Default",
+      "title": "Widget/MartianDatetimeWidget",
+      "importPath": "./src/widget/MartianDatetimeWidget.stories.tsx",
+      "componentPath": "./src/widget/MartianDatetimeWidget.tsx",
+      "tags": ["dev", "test", "manifest"],
+      "exportName": "Default"
+    }
+  }
+}

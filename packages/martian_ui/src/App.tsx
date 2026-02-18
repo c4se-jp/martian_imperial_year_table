@@ -4,6 +4,7 @@ import HomePage from "./pages/Home";
 import TransformPage from "./pages/Transform";
 import DescriptionPage from "./pages/Description";
 import CalendarPage from "./pages/Calendar";
+import WidgetStorybookPage from "./pages/WidgetStorybook";
 
 function AppShell() {
   return (
@@ -15,6 +16,7 @@ function AppShell() {
           <Route path="/transform" element={<TransformPage />} />
           <Route path="/description" element={<DescriptionPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/storybook/widget" element={<WidgetStorybookPage />} />
         </Routes>
       </main>
     </>
