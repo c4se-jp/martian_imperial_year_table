@@ -7,7 +7,8 @@
     "declarationDir": "dist/types",
     "rootDir": "src",
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "types": []
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/__tests__/**"]
