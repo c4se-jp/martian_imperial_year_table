@@ -13,7 +13,7 @@
     "@hono/mcp": "^0.2.3",
     "@hono/node-server": "^1.19.9",
     "@modelcontextprotocol/sdk": "^1.26.0",
-    "hono": "^4.11.9",
+    "hono": "^4.11.10",
     "imperial_calendar": "file:../imperial_calendar",
     "zod": "^4.3.6"
   },
