@@ -5,7 +5,6 @@ info:
   version: 0.1.0
   description: >
     帝國火星曆に關する Web API。
-    まづは現在日時の ImperialDateTime を返すエンドポイントを提供する。
 servers:
   - url: https://martian-imperial-year-table.c4se.jp/api/
     description: 本番サーバー

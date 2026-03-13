@@ -5,7 +5,7 @@ const apiDoc = {
   info: {
     title: "帝國火星曆 API",
     version: "0.1.0",
-    description: "帝國火星曆に關する Web API。 まづは現在日時の ImperialDateTime を返すエンドポイントを提供する。\n",
+    description: "帝國火星曆に關する Web API。\n",
   },
   servers: [
     {
