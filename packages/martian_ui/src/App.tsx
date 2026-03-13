@@ -37,7 +37,11 @@ export default function App() {
 
   useEffect(() => {
     applyThemePreference(themePreference);
-    window.localStorage.setItem(THEME_STORAGE_KEY, themePreference);
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, themePreference);
+    } catch {
+      // localStorage が使へない環境では永續化を諦める。
+    }
   }, [themePreference]);
 
   return (

@@ -10,8 +10,12 @@ export function readThemePreference(): ThemePreference {
   if (typeof window === "undefined") {
     return "system";
   }
-  const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
-  return isThemePreference(saved) ? saved : "system";
+  try {
+    const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return isThemePreference(saved) ? saved : "system";
+  } catch {
+    return "system";
+  }
 }
 
 export function applyThemePreference(preference: ThemePreference): void {
