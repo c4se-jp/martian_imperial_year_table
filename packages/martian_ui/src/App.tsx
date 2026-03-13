@@ -1,14 +1,22 @@
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/Home";
 import TransformPage from "./pages/Transform";
 import DescriptionPage from "./pages/Description";
 import CalendarPage from "./pages/Calendar";
+import { applyThemePreference, readThemePreference, THEME_STORAGE_KEY, type ThemePreference } from "./lib/theme";
 
-function AppShell() {
+function AppShell({
+  themePreference,
+  onThemePreferenceChange,
+}: {
+  themePreference: ThemePreference;
+  onThemePreferenceChange: (preference: ThemePreference) => void;
+}) {
   return (
     <>
-      <Navigation />
+      <Navigation themePreference={themePreference} onThemePreferenceChange={onThemePreferenceChange} />
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -25,10 +33,16 @@ export default function App() {
   // Vite の BASE_URL は開発時は "/"、GitHub Pages ではリポジトリ名を含む。
   // "./" のような相対指定でも実行時のフルパスに解決されるよう URL で補正する。
   const basename = new URL(import.meta.env.BASE_URL, window.location.href).pathname;
+  const [themePreference, setThemePreference] = useState<ThemePreference>(() => readThemePreference());
+
+  useEffect(() => {
+    applyThemePreference(themePreference);
+    window.localStorage.setItem(THEME_STORAGE_KEY, themePreference);
+  }, [themePreference]);
 
   return (
     <BrowserRouter basename={basename}>
-      <AppShell />
+      <AppShell themePreference={themePreference} onThemePreferenceChange={setThemePreference} />
     </BrowserRouter>
   );
 }

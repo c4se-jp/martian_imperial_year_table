@@ -1,7 +1,15 @@
 @import "bulma/css/bulma.min.css";
 
 :root {
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
   color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /*
@@ -64,4 +72,12 @@ pre {
 
 .button + .button {
   margin-left: 0.5rem;
+}
+
+.theme-switcher .button {
+  min-width: 4.75rem;
+}
+
+.theme-switcher .button.is-selected {
+  cursor: default;
 }

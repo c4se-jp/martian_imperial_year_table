@@ -1,6 +1,19 @@
 import { NavLink, Link } from "react-router-dom";
+import type { ThemePreference } from "../lib/theme";
 
-export default function Navigation() {
+const THEME_OPTIONS: Array<{ value: ThemePreference; label: string }> = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" },
+];
+
+export default function Navigation({
+  themePreference,
+  onThemePreferenceChange,
+}: {
+  themePreference: ThemePreference;
+  onThemePreferenceChange: (preference: ThemePreference) => void;
+}) {
   return (
     <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
       <div className="container">
@@ -26,6 +39,21 @@ export default function Navigation() {
             </NavLink>
           </div>
           <div className="navbar-end">
+            <div className="navbar-item">
+              <div className="theme-switcher buttons has-addons are-small" role="group" aria-label="テーマ切り替へ">
+                {THEME_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`button ${themePreference === option.value ? "is-link is-selected" : ""}`}
+                    type="button"
+                    onClick={() => onThemePreferenceChange(option.value)}
+                    aria-pressed={themePreference === option.value}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <a
               className="navbar-item"
               href="https://github.com/c4se-jp/martian_imperial_year_table"
