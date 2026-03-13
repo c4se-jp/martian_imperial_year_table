@@ -1,10 +1,52 @@
 import { NavLink, Link } from "react-router-dom";
 import type { ThemePreference } from "../lib/theme";
 
-const THEME_OPTIONS: Array<{ value: ThemePreference; label: string }> = [
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
-  { value: "system", label: "System" },
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" fill="currentColor" />
+      <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M12 2.5v3" />
+        <path d="M12 18.5v3" />
+        <path d="M2.5 12h3" />
+        <path d="M18.5 12h3" />
+        <path d="M5.3 5.3l2.1 2.1" />
+        <path d="M16.6 16.6l2.1 2.1" />
+        <path d="M18.7 5.3l-2.1 2.1" />
+        <path d="M7.4 16.6l-2.1 2.1" />
+      </g>
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M15.5 2.8a8.9 8.9 0 1 0 5.7 15.8A9.6 9.6 0 0 1 15.5 2.8Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SystemIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="4" y="5" width="16" height="11" rx="2" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M9 19h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M12 16v3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const THEME_OPTIONS: Array<{ value: ThemePreference; label: string; icon: JSX.Element }> = [
+  { value: "light", label: "ライトテーマ", icon: <SunIcon /> },
+  { value: "dark", label: "ダークテーマ", icon: <MoonIcon /> },
+  { value: "system", label: "システム設定に追隨", icon: <SystemIcon /> },
 ];
 
 export default function Navigation({
@@ -48,8 +90,10 @@ export default function Navigation({
                     type="button"
                     onClick={() => onThemePreferenceChange(option.value)}
                     aria-pressed={themePreference === option.value}
+                    aria-label={option.label}
+                    title={option.label}
                   >
-                    {option.label}
+                    <span className="theme-switcher__icon">{option.icon}</span>
                   </button>
                 ))}
               </div>
