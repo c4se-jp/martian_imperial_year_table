@@ -67,6 +67,9 @@ describe("/mcp", () => {
     expect(getCurrentImperialDateTimeTool?.inputSchema?.properties?.timezone?.description).toBe(
       "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
     );
+    expect(getCurrentImperialDateTimeTool?._meta?.ui).toEqual({
+      resourceUri: "ui://widget/martian-datetime.html",
+    });
     expect(getCurrentImperialDateTimeTool?._meta?.["openai/outputTemplate"]).toBe("ui://widget/martian-datetime.html");
   });
 
@@ -146,10 +149,16 @@ describe("/mcp", () => {
     expect(jsonrpc.id).toBe(5);
 
     const result = jsonrpc.result as {
-      contents: Array<{ uri: string; mimeType?: string; text?: string }>;
+      contents: Array<{
+        uri: string;
+        mimeType?: string;
+        text?: string;
+        _meta?: { ui?: { prefersBorder?: boolean } };
+      }>;
     };
     expect(result.contents[0]?.uri).toBe("ui://widget/martian-datetime.html");
-    expect(result.contents[0]?.mimeType).toBe("text/html");
+    expect(result.contents[0]?.mimeType).toBe("text/html;profile=mcp-app");
+    expect(result.contents[0]?._meta?.ui?.prefersBorder).toBe(true);
     expect(result.contents[0]?.text).toContain("帝國火星曆");
   });
 
