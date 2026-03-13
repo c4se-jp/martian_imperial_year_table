@@ -6,6 +6,8 @@ import TransformPage from "./pages/Transform";
 import DescriptionPage from "./pages/Description";
 import CalendarPage from "./pages/Calendar";
 import { applyThemePreference, readThemePreference, THEME_STORAGE_KEY, type ThemePreference } from "./lib/theme";
+import ApiPage from "./pages/Api";
+import McpPage from "./pages/Mcp";
 
 function AppShell({
   themePreference,
@@ -23,6 +25,8 @@ function AppShell({
           <Route path="/transform" element={<TransformPage />} />
           <Route path="/description" element={<DescriptionPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/docs/api" element={<ApiPage />} />
+          <Route path="/docs/mcp" element={<McpPage />} />
         </Routes>
       </main>
     </>

@@ -101,3 +101,67 @@ pre {
   height: 100%;
   display: block;
 }
+
+.api-doc-page {
+  padding-bottom: 4rem;
+}
+
+.api-doc-sidebar {
+  position: sticky;
+  top: 1.5rem;
+}
+
+.api-doc-summary-list,
+.api-doc-response-list,
+.api-doc-schema-list,
+.api-doc-nested-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.api-doc-summary-card {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 0.75rem;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.api-doc-summary-card:hover {
+  transform: translateY(-1px);
+  border-color: #b75d2e;
+  box-shadow: 0 8px 24px rgb(112 62 29 / 12%);
+}
+
+.api-doc-endpoint {
+  scroll-margin-top: 1.5rem;
+}
+
+.api-doc-response,
+.api-doc-schema-entry,
+.api-doc-nested {
+  border: 1px solid #ece3d9;
+}
+
+.api-doc-nested {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+.api-doc-schema .table td,
+.api-doc-schema .table th {
+  vertical-align: top;
+}
+
+@media (max-width: 768px) {
+  .api-doc-sidebar {
+    position: static;
+  }
+}

@@ -79,6 +79,12 @@ export default function Navigation({
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/calendar">
               七曜表
             </NavLink>
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/api">
+              API
+            </NavLink>
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/mcp">
+              MCP
+            </NavLink>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">

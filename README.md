@@ -21,9 +21,8 @@ $ npm run -w martian_api start:dev
 
 Web UI
 
-$ npm run -w martian_ui storybook
 $ npm run -w martian_ui start:dev
-$ npm run -w martian_ui build:widget
+$ npm run -w martian_ui storybook
 
 ## packages/
 

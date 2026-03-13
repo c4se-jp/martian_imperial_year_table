@@ -48,7 +48,7 @@ def julian_day_to_gregorian_year(juld) -> float:
     year = juld_to_grdt(juld).year
     january_1st = grdt_to_juld(GregorianDateTime(year, 1, 1, 0, 0, 0, None))
     next_january_1st = grdt_to_juld(GregorianDateTime(year + 1, 1, 1, 0, 0, 0, None))
-    # 年内日數の小數表示
+    # 年內日數の小數表示
     annual_day = (juld.julian_day - january_1st.julian_day) / (
         next_january_1st.julian_day - january_1st.julian_day
     )
