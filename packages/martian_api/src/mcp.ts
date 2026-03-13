@@ -13,7 +13,7 @@ import {
 const widgetUri = "ui://widget/martian-datetime.html";
 const widgetJsUri = "ui://widget/chatgpt-widget.js";
 const widgetCssUri = "ui://widget/chatgpt-widget.css";
-const widgetHtmlPath = new URL("../../../dist/widget/src/widget/chatgpt-widget.html", import.meta.url);
+const widgetHtmlPath = new URL("../../../dist/widget/chatgpt-widget.html", import.meta.url);
 const widgetJsPath = new URL("../../../dist/widget/chatgpt-widget.js", import.meta.url);
 const widgetCssPath = new URL("../../../dist/widget/chatgpt-widget.css", import.meta.url);
 const widgetSourceHtmlPath = new URL("../../martian_ui/src/widget/chatgpt-widget.html", import.meta.url);
