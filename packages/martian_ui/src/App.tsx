@@ -25,8 +25,8 @@ function AppShell({
           <Route path="/transform" element={<TransformPage />} />
           <Route path="/description" element={<DescriptionPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/api" element={<ApiPage />} />
-          <Route path="/mcp" element={<McpPage />} />
+          <Route path="/docs/api" element={<ApiPage />} />
+          <Route path="/docs/mcp" element={<McpPage />} />
         </Routes>
       </main>
     </>
