@@ -82,6 +82,9 @@ export default function Navigation({
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/api">
               API
             </NavLink>
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/mcp">
+              MCP
+            </NavLink>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">

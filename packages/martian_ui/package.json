@@ -4,17 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate:api-doc": "node ./scripts/generate-api-doc.mjs",
+    "prebuild": "npm run generate:docs",
     "build": "npm run build:web && npm run build:widget",
-    "prebuild:web": "npm run generate:api-doc",
     "build:web": "vite build --base ./ --outDir ../../dist --emptyOutDir true",
     "build:widget": "vite build --config vite.widget.config.ts",
+    "generate:api-doc": "node ./scripts/generate-api-doc.mjs",
+    "generate:docs": "npm run generate:api-doc && npm run generate:mcp-doc",
+    "generate:mcp-doc": "node ./scripts/generate-mcp-doc.mjs",
     "lint": "echo \"No linting configured\"",
     "preview": "vite preview",
+    "prestart:dev": "npm run generate:docs",
+    "start:dev": "vite",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "prestart:dev": "npm run generate:api-doc",
-    "start:dev": "vite",
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {

@@ -3,6 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
 import { readFileSync } from "node:fs";
 import { z } from "zod";
+import mcpManifest from "./mcp-manifest.json" with { type: "json" };
 import {
   buildCurrentImperialDateTimeResponse,
   buildGregorianToImperialResponse,
@@ -10,15 +11,50 @@ import {
   validateTimezone,
 } from "./datetime-conversion.js";
 
-const widgetUri = "ui://widget/martian-datetime.html";
-const widgetJsUri = "ui://widget/chatgpt-widget.js";
-const widgetCssUri = "ui://widget/chatgpt-widget.css";
 const widgetHtmlPath = new URL("../../../dist/widget/chatgpt-widget.html", import.meta.url);
 const widgetJsPath = new URL("../../../dist/widget/chatgpt-widget.js", import.meta.url);
 const widgetCssPath = new URL("../../../dist/widget/chatgpt-widget.css", import.meta.url);
 const widgetSourceHtmlPath = new URL("../../martian_ui/src/widget/chatgpt-widget.html", import.meta.url);
+const widgetJsUri = "ui://widget/chatgpt-widget.js";
+const widgetCssUri = "ui://widget/chatgpt-widget.css";
 
 type ToolMode = "convert_gregorian_to_imperial" | "get_current_imperial" | "convert_imperial_to_gregorian";
+
+type ManifestField = {
+  type: "string";
+  pattern?: string;
+  patternMessage?: string;
+  description?: string;
+  default?: string;
+};
+
+type ManifestTool = {
+  name: string;
+  mode: ToolMode;
+  title: string;
+  description: string;
+  readOnlyHint?: boolean;
+  inputSchema: Record<string, ManifestField>;
+  meta?: {
+    outputTemplate?: string;
+    invoking?: string;
+    invoked?: string;
+  };
+};
+
+type ManifestResource = {
+  id: string;
+  uri: string;
+  title: string;
+  description: string;
+  mimeType: string;
+  meta: {
+    widgetDescription: string;
+    widgetPrefersBorder: boolean;
+    connectDomains: string[];
+    resourceDomains: string[];
+  };
+};
 
 type ToolResult = {
   error?: string;
@@ -52,44 +88,123 @@ function successResult(mode: ToolMode, request: Record<string, unknown>, respons
   };
 }
 
-const timezoneSchema = z
-  .string()
-  .regex(/^[+-](?:[01]\d|2[0-3]):[0-5]\d$/, "Timezone must be in format ±HH:MM")
-  .describe("Timezone offset from UTC in ±HH:MM format (example: +09:00)");
+function createStringSchema(field: ManifestField) {
+  let schema = z.string();
+  if (field.pattern) {
+    schema = schema.regex(new RegExp(field.pattern), field.patternMessage ?? "Invalid format");
+  }
+  if (field.description) {
+    schema = schema.describe(field.description);
+  }
+  if (field.default !== undefined) {
+    return schema.default(field.default);
+  }
+  return schema;
+}
 
-const gregorianDateTimeSchema = z
-  .string()
-  .regex(
-    /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/,
-    "DateTime must be ISO 8601 with timezone (e.g. 2026-02-16T00:00:00+00:00)",
-  )
-  .describe("Gregorian datetime in ISO 8601 format with timezone");
+function buildInputSchema(shape: ManifestTool["inputSchema"]) {
+  return Object.fromEntries(Object.entries(shape).map(([key, field]) => [key, createStringSchema(field)]));
+}
 
-const imperialDateTimeFormattedSchema = z
-  .string()
-  .regex(
-    /^\d{4,}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/,
-    "DateTime must be YYYY-MM-DDTHH:mm:ss±HH:MM (e.g. 1220-01-01T00:00:00+00:00)",
-  )
-  .describe("Imperial datetime formatted as YYYY-MM-DDTHH:mm:ss±HH:MM");
+function buildToolMeta(tool: ManifestTool) {
+  return {
+    ...(tool.meta?.outputTemplate ? { "openai/outputTemplate": tool.meta.outputTemplate } : {}),
+    ...(tool.meta?.invoked ? { "openai/toolInvocation/invoked": tool.meta.invoked } : {}),
+    ...(tool.meta?.invoking ? { "openai/toolInvocation/invoking": tool.meta.invoking } : {}),
+  };
+}
+
+async function handleToolCall(
+  mode: ToolMode,
+  args: Record<string, string>,
+): Promise<{
+  content: Array<{ type: "text"; text: string }>;
+  isError?: boolean;
+  structuredContent: ToolResult;
+}> {
+  if (mode === "convert_gregorian_to_imperial") {
+    const request = {
+      gregorianDateTime: args.gregorianDateTime,
+      imperialTimezone: args.imperialTimezone,
+    };
+    const validationError = validateTimezone(args.imperialTimezone);
+    if (validationError) {
+      return errorResult(validationError, mode, request);
+    }
+
+    try {
+      const response = buildGregorianToImperialResponse(args.gregorianDateTime, args.imperialTimezone) as Record<
+        string,
+        unknown
+      >;
+      return successResult(mode, request, response);
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        (error.message === "Invalid gregorianDateTime" || error.message === "Invalid gregorianDateTime format")
+      ) {
+        return errorResult(error.message, mode, request);
+      }
+      return errorResult("Internal server error", mode, request);
+    }
+  }
+
+  if (mode === "get_current_imperial") {
+    const request = { timezone: args.timezone };
+    const validationError = validateTimezone(args.timezone);
+    if (validationError) {
+      return errorResult(validationError, mode, request);
+    }
+
+    try {
+      const response = buildCurrentImperialDateTimeResponse(new Date(), args.timezone) as Record<string, unknown>;
+      return successResult(mode, request, response);
+    } catch {
+      return errorResult("Internal server error", mode, request);
+    }
+  }
+
+  const request = {
+    imperialDateTimeFormatted: args.imperialDateTimeFormatted,
+    gregorianTimezone: args.gregorianTimezone,
+  };
+  const validationError = validateTimezone(args.gregorianTimezone);
+  if (validationError) {
+    return errorResult(validationError, mode, request);
+  }
+
+  try {
+    const response = buildImperialToGregorianResponse(args.imperialDateTimeFormatted, args.gregorianTimezone) as Record<
+      string,
+      unknown
+    >;
+    return successResult(mode, request, response);
+  } catch (error) {
+    if (error instanceof Error && error.message === "Invalid imperialDateTimeFormatted") {
+      return errorResult(error.message, mode, request);
+    }
+    return errorResult("Internal server error", mode, request);
+  }
+}
 
 function createMcpServer(): McpServer {
-  const server = new McpServer({ name: "martian_api", version: "0.1.0" });
+  const server = new McpServer({ name: mcpManifest.server.name, version: mcpManifest.server.version });
+  const widgetResource = mcpManifest.resources[0] as ManifestResource;
 
   server.registerResource(
-    "martian_datetime_widget",
-    widgetUri,
+    widgetResource.id,
+    widgetResource.uri,
     {
-      title: "帝國火星曆 Widget",
-      description: "火星曆と地球曆を相互に變換する單一 widget UI",
-      mimeType: "text/html",
+      title: widgetResource.title,
+      description: widgetResource.description,
+      mimeType: widgetResource.mimeType,
       _meta: {
         "openai/widgetCSP": {
-          connect_domains: [],
-          resource_domains: [],
+          connect_domains: widgetResource.meta.connectDomains,
+          resource_domains: widgetResource.meta.resourceDomains,
         },
-        "openai/widgetDescription": "火星曆と地球曆の日時を相互に變換できます。",
-        "openai/widgetPrefersBorder": true,
+        "openai/widgetDescription": widgetResource.meta.widgetDescription,
+        "openai/widgetPrefersBorder": widgetResource.meta.widgetPrefersBorder,
       },
     },
     () => {
@@ -113,7 +228,7 @@ function createMcpServer(): McpServer {
           {
             mimeType: "text/html",
             text: widgetHtml,
-            uri: widgetUri,
+            uri: widgetResource.uri,
           },
           ...(widgetJs.length > 0
             ? [
@@ -138,119 +253,19 @@ function createMcpServer(): McpServer {
     },
   );
 
-  server.registerTool(
-    "convert_gregorian_to_imperial_datetime",
-    {
-      title: "Gregorian日時から帝國火星曆へ變換",
-      description: "グレゴリオ曆の日時を帝國火星曆の日時へ變換します。",
-      annotations: { readOnlyHint: true },
-      inputSchema: {
-        gregorianDateTime: gregorianDateTimeSchema,
-        imperialTimezone: timezoneSchema,
+  for (const tool of mcpManifest.tools as unknown as ManifestTool[]) {
+    server.registerTool(
+      tool.name,
+      {
+        title: tool.title,
+        description: tool.description,
+        annotations: { readOnlyHint: tool.readOnlyHint === true },
+        inputSchema: buildInputSchema(tool.inputSchema),
+        _meta: buildToolMeta(tool),
       },
-      _meta: {
-        "openai/outputTemplate": widgetUri,
-        "openai/toolInvocation/invoked": "變換が完了しました",
-        "openai/toolInvocation/invoking": "變換中です",
-      },
-    },
-    async ({ gregorianDateTime, imperialTimezone }: { gregorianDateTime: string; imperialTimezone: string }) => {
-      const request = { gregorianDateTime, imperialTimezone };
-      const validationError = validateTimezone(imperialTimezone);
-      if (validationError) {
-        return errorResult(validationError, "convert_gregorian_to_imperial", request);
-      }
-
-      try {
-        const response = buildGregorianToImperialResponse(gregorianDateTime, imperialTimezone) as Record<
-          string,
-          unknown
-        >;
-        return successResult("convert_gregorian_to_imperial", request, response);
-      } catch (error) {
-        if (
-          error instanceof Error &&
-          (error.message === "Invalid gregorianDateTime" || error.message === "Invalid gregorianDateTime format")
-        ) {
-          return errorResult(error.message, "convert_gregorian_to_imperial", request);
-        }
-        return errorResult("Internal server error", "convert_gregorian_to_imperial", request);
-      }
-    },
-  );
-
-  server.registerTool(
-    "get_current_imperial_datetime",
-    {
-      title: "現在の帝國火星曆日時を取得",
-      description: "指定タイムゾーンで現在の帝國火星曆日時を返します。",
-      annotations: { readOnlyHint: true },
-      inputSchema: { timezone: timezoneSchema.default("+00:00") },
-      _meta: {
-        "openai/outputTemplate": widgetUri,
-        "openai/toolInvocation/invoked": "取得が完了しました",
-        "openai/toolInvocation/invoking": "取得中です",
-      },
-    },
-    async ({ timezone }: { timezone: string }) => {
-      const request = { timezone };
-      const validationError = validateTimezone(timezone);
-      if (validationError) {
-        return errorResult(validationError, "get_current_imperial", request);
-      }
-
-      try {
-        const response = buildCurrentImperialDateTimeResponse(new Date(), timezone) as Record<string, unknown>;
-        return successResult("get_current_imperial", request, response);
-      } catch {
-        return errorResult("Internal server error", "get_current_imperial", request);
-      }
-    },
-  );
-
-  server.registerTool(
-    "convert_imperial_to_gregorian_datetime",
-    {
-      title: "帝國火星曆日時からGregorianへ變換",
-      description: "帝國火星曆の日時をグレゴリオ曆の日時へ變換します。",
-      annotations: { readOnlyHint: true },
-      inputSchema: {
-        imperialDateTimeFormatted: imperialDateTimeFormattedSchema,
-        gregorianTimezone: timezoneSchema,
-      },
-      _meta: {
-        "openai/outputTemplate": widgetUri,
-        "openai/toolInvocation/invoked": "變換が完了しました",
-        "openai/toolInvocation/invoking": "變換中です",
-      },
-    },
-    async ({
-      imperialDateTimeFormatted,
-      gregorianTimezone,
-    }: {
-      imperialDateTimeFormatted: string;
-      gregorianTimezone: string;
-    }) => {
-      const request = { imperialDateTimeFormatted, gregorianTimezone };
-      const validationError = validateTimezone(gregorianTimezone);
-      if (validationError) {
-        return errorResult(validationError, "convert_imperial_to_gregorian", request);
-      }
-
-      try {
-        const response = buildImperialToGregorianResponse(imperialDateTimeFormatted, gregorianTimezone) as Record<
-          string,
-          unknown
-        >;
-        return successResult("convert_imperial_to_gregorian", request, response);
-      } catch (error) {
-        if (error instanceof Error && error.message === "Invalid imperialDateTimeFormatted") {
-          return errorResult(error.message, "convert_imperial_to_gregorian", request);
-        }
-        return errorResult("Internal server error", "convert_imperial_to_gregorian", request);
-      }
-    },
-  );
+      async (args: Record<string, string>) => handleToolCall(tool.mode, args),
+    );
+  }
 
   return server;
 }

@@ -178,7 +178,7 @@ describe("ImperialDateTime", () => {
   });
 
   describe("offset", () => {
-    it("タイムゾーンの文字列表現を内部表現にする", () => {
+    it("タイムゾーンの文字列表現を內部表現にする", () => {
       const testCases: Array<{ timezone: string; expected: number }> = [
         { timezone: "+00:00", expected: 0.0 },
         { timezone: "-00:00", expected: 0.0 },

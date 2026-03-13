@@ -133,7 +133,7 @@ class TestImperialDateTime(unittest.TestCase):
         )
 
     def test_offset(self):
-        """Timezoneの文字列表現を内部表現にする."""
+        """Timezoneの文字列表現を內部表現にする."""
         for expected, timezone in [
             (0.0, "+00:00"),
             (0.0, "-00:00"),

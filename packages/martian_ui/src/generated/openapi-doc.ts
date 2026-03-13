@@ -135,7 +135,7 @@ const apiDoc = {
         },
         {
           status: "500",
-          description: "サーバー内部エラー",
+          description: "サーバー內部エラー",
           contentType: "application/json",
           schema: {
             title: "ErrorResponse",
@@ -213,9 +213,9 @@ const apiDoc = {
               {
                 name: "gregorianDateTime",
                 required: true,
-                description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
+                description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
                 schema: {
-                  description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
+                  description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
                   type: "string",
                   format: "date-time",
                   example: "2026-02-14T12:34:56Z",
@@ -376,7 +376,7 @@ const apiDoc = {
         },
         {
           status: "500",
-          description: "サーバー内部エラー",
+          description: "サーバー內部エラー",
           contentType: "application/json",
           schema: {
             title: "ErrorResponse",
@@ -633,7 +633,7 @@ const apiDoc = {
         },
         {
           status: "500",
-          description: "サーバー内部エラー",
+          description: "サーバー內部エラー",
           contentType: "application/json",
           schema: {
             title: "ErrorResponse",
@@ -750,9 +750,9 @@ const apiDoc = {
           {
             name: "gregorianDateTime",
             required: true,
-            description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
+            description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
             schema: {
-              description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
+              description: "API がレスポンスを生成した UTC 時刻 (ISO 8601)。",
               type: "string",
               format: "date-time",
               example: "2026-02-14T12:34:56Z",

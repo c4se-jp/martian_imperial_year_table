@@ -4,7 +4,7 @@ import { ImperialDateTime } from "imperial_calendar";
 import { CalendarImage, drawCalendarSvg } from "../CalendarImage";
 
 describe("CalendarImage", () => {
-  it("生成されたSVGにタイトルとテキストを含む", async () => {
+  it("生成されたSVGにタイトルとテキストを含む", async () => {
     const imdt = new ImperialDateTime(1425, 1, 1, 0, 0, 0, "+00:00");
     const svg = await new CalendarImage(imdt, "+09:00").drawAsSvg();
     expect(svg).toContain("帝國火星曆");
