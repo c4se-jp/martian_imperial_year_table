@@ -1,10 +1,10 @@
 import path from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   base: "./",
-  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -33,4 +33,19 @@ export default defineConfig({
       },
     },
   },
+  plugins: [
+    react(),
+    {
+      name: "copy-widget-html-to-dist-root",
+      closeBundle() {
+        const srcHtmlPath = path.resolve(__dirname, "../../dist/widget/src/widget/chatgpt-widget.html");
+        const destHtmlPath = path.resolve(__dirname, "../../dist/widget/chatgpt-widget.html");
+        const html = readFileSync(srcHtmlPath, "utf8")
+          .replaceAll("../../chatgpt-widget.js", "./chatgpt-widget.js")
+          .replaceAll("../../chatgpt-widget.css", "./chatgpt-widget.css");
+        mkdirSync(path.dirname(destHtmlPath), { recursive: true });
+        writeFileSync(destHtmlPath, html, "utf8");
+      },
+    },
+  ],
 });

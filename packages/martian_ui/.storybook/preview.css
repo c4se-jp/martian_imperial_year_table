@@ -1,0 +1,25 @@
+:root[data-theme="light"],
+body[data-theme="light"] {
+  --color-background-primary-solid: #0b57d0;
+  --color-background-primary-solid-hover: #0948ad;
+  --color-background-primary-solid-active: #073a8a;
+  --color-text-primary-solid: #ffffff;
+
+  --color-background-secondary-soft-alpha: #e8eefc;
+  --color-background-secondary-soft-alpha-hover: #d9e4fb;
+  --color-background-secondary-soft-alpha-active: #cad9fa;
+  --color-text-secondary-soft: #123171;
+}
+
+:root[data-theme="dark"],
+body[data-theme="dark"] {
+  --color-background-primary-solid: #7eb6ff;
+  --color-background-primary-solid-hover: #95c4ff;
+  --color-background-primary-solid-active: #68a9ff;
+  --color-text-primary-solid: #0a1322;
+
+  --color-background-secondary-soft-alpha: #273040;
+  --color-background-secondary-soft-alpha-hover: #313b4e;
+  --color-background-secondary-soft-alpha-active: #3a475d;
+  --color-text-secondary-soft: #e7efff;
+}
