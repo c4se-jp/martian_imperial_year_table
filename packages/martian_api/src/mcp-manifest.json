@@ -11,7 +11,7 @@
       "uri": "ui://widget/martian-datetime.html",
       "title": "帝國火星曆 Widget",
       "description": "火星曆と地球曆を相互に變換する單一 widget UI",
-      "mimeType": "text/html",
+      "mimeType": "text/html;profile=mcp-app",
       "meta": {
         "widgetDescription": "火星曆と地球曆の日時を相互に變換できます。",
         "widgetPrefersBorder": true,

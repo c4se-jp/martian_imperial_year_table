@@ -1,4 +1,5 @@
 import { StreamableHTTPTransport } from "@hono/mcp";
+import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
 import { readFileSync } from "node:fs";
@@ -47,12 +48,13 @@ type ManifestResource = {
   uri: string;
   title: string;
   description: string;
-  mimeType: string;
+  mimeType?: string;
   meta: {
     widgetDescription: string;
     widgetPrefersBorder: boolean;
     connectDomains: string[];
     resourceDomains: string[];
+    domain?: string;
   };
 };
 
@@ -108,6 +110,7 @@ function buildInputSchema(shape: ManifestTool["inputSchema"]) {
 
 function buildToolMeta(tool: ManifestTool) {
   return {
+    ...(tool.meta?.outputTemplate ? { ui: { resourceUri: tool.meta.outputTemplate } } : {}),
     ...(tool.meta?.outputTemplate ? { "openai/outputTemplate": tool.meta.outputTemplate } : {}),
     ...(tool.meta?.invoked ? { "openai/toolInvocation/invoked": tool.meta.invoked } : {}),
     ...(tool.meta?.invoking ? { "openai/toolInvocation/invoking": tool.meta.invoking } : {}),
@@ -191,20 +194,22 @@ function createMcpServer(): McpServer {
   const server = new McpServer({ name: mcpManifest.server.name, version: mcpManifest.server.version });
   const widgetResource = mcpManifest.resources[0] as ManifestResource;
 
-  server.registerResource(
-    widgetResource.id,
+  registerAppResource(
+    server,
+    widgetResource.title,
     widgetResource.uri,
     {
-      title: widgetResource.title,
       description: widgetResource.description,
-      mimeType: widgetResource.mimeType,
+      mimeType: widgetResource.mimeType ?? RESOURCE_MIME_TYPE,
       _meta: {
-        "openai/widgetCSP": {
-          connect_domains: widgetResource.meta.connectDomains,
-          resource_domains: widgetResource.meta.resourceDomains,
+        ui: {
+          csp: {
+            connectDomains: widgetResource.meta.connectDomains,
+            resourceDomains: widgetResource.meta.resourceDomains,
+          },
+          domain: widgetResource.meta.domain,
+          prefersBorder: widgetResource.meta.widgetPrefersBorder,
         },
-        "openai/widgetDescription": widgetResource.meta.widgetDescription,
-        "openai/widgetPrefersBorder": widgetResource.meta.widgetPrefersBorder,
       },
     },
     () => {
@@ -226,9 +231,19 @@ function createMcpServer(): McpServer {
       return {
         contents: [
           {
-            mimeType: "text/html",
+            mimeType: RESOURCE_MIME_TYPE,
             text: widgetHtml,
             uri: widgetResource.uri,
+            _meta: {
+              ui: {
+                csp: {
+                  connectDomains: widgetResource.meta.connectDomains,
+                  resourceDomains: widgetResource.meta.resourceDomains,
+                },
+                domain: widgetResource.meta.domain,
+                prefersBorder: widgetResource.meta.widgetPrefersBorder,
+              },
+            },
           },
           ...(widgetJs.length > 0
             ? [
@@ -254,7 +269,8 @@ function createMcpServer(): McpServer {
   );
 
   for (const tool of mcpManifest.tools as unknown as ManifestTool[]) {
-    server.registerTool(
+    registerAppTool(
+      server,
       tool.name,
       {
         title: tool.title,

@@ -1,44 +1,82 @@
+import { useApp, useHostStyles } from "@modelcontextprotocol/ext-apps/react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import MartianDatetimeWidget, { type WidgetToolResult } from "./MartianDatetimeWidget";
 
-type OpenAiBridge = {
-  callTool?: (name: string, args: Record<string, unknown>) => Promise<WidgetToolResult>;
-  on?: (eventName: string, listener: (payload: WidgetToolResult) => void) => void;
-};
+function ChatGptApp() {
+  const [result, setResult] = useState<WidgetToolResult | undefined>(undefined);
+  const { app, error, isConnected } = useApp({
+    appInfo: { name: "martian_datetime_widget", version: "0.1.0" },
+    capabilities: {},
+    onAppCreated: (createdApp) => {
+      createdApp.ontoolresult = (toolResult) => {
+        setResult(toolResult as WidgetToolResult);
+      };
+      createdApp.ontoolcancelled = (params) => {
+        setResult({
+          structuredContent: {
+            mode: "get_current_imperial",
+            request: {},
+            error: params.reason ?? "tool 呼び出しが中斷されました。",
+          },
+          isError: true,
+        });
+      };
+    },
+  });
 
-declare global {
-  interface Window {
-    openai?: OpenAiBridge;
-    martianWidgetSetResult?: (result: WidgetToolResult) => void;
+  useHostStyles(app, app?.getHostContext());
+
+  useEffect(() => {
+    if (isConnected && app !== null) {
+      const hostContext = app.getHostContext();
+      if (hostContext?.toolInfo?.tool?.name !== undefined) {
+        document.title = hostContext.toolInfo.tool.name;
+      }
+    }
+  }, [app, isConnected]);
+
+  if (error !== null) {
+    return (
+      <MartianDatetimeWidget
+        initialResult={{
+          structuredContent: {
+            mode: "get_current_imperial",
+            request: {},
+            error: error.message,
+          },
+          isError: true,
+        }}
+      />
+    );
   }
-}
 
-const root = document.getElementById("root");
-if (root !== null) {
-  ReactDOM.createRoot(root).render(
+  return (
     <MartianDatetimeWidget
       callTool={async (name, args) => {
-        const bridge = window.openai;
-        if (bridge?.callTool === undefined) {
+        if (app === null) {
           return {
             structuredContent: {
               mode: "get_current_imperial",
               request: args,
-              error: "window.openai.callTool が利用できません。",
+              error: "MCP App がまだ初期化されてゐません。",
             },
             isError: true,
           };
         }
-        return bridge.callTool(name, args);
+        return (await app.callServerTool({ name, arguments: args })) as WidgetToolResult;
       }}
+      initialResult={result}
       subscribeToolResult={(listener) => {
-        window.martianWidgetSetResult = listener;
-        if (window.openai?.on !== undefined) {
-          window.openai.on("tool_result", listener);
+        if (result !== undefined) {
+          listener(result);
         }
       }}
-    />,
+    />
   );
 }
 
-window.martianWidgetSetResult = () => {};
+const root = document.getElementById("root");
+if (root !== null) {
+  ReactDOM.createRoot(root).render(<ChatGptApp />);
+}
