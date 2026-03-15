@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "npm run generate:docs",
     "build": "npm run build:web && npm run build:widget",
-    "build:web": "vite build --base ./ --outDir ../../dist --emptyOutDir true",
+    "build:web": "vite build --outDir ../../dist --emptyOutDir true",
     "build:widget": "vite build --config vite.widget.config.ts",
     "generate:api-doc": "node ./scripts/generate-api-doc.mjs",
     "generate:docs": "npm run generate:api-doc && npm run generate:mcp-doc",

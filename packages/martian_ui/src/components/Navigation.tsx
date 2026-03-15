@@ -56,12 +56,18 @@ export default function Navigation({
   themePreference: ThemePreference;
   onThemePreferenceChange: (preference: ThemePreference) => void;
 }) {
+  const imageBaseUrl = `${import.meta.env.BASE_URL}img/`;
+
   return (
     <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
           <Link className="navbar-item" to="/">
-            <img src="./img/martian_empire.png" alt="帝國火星曆" style={{ width: "38px", marginRight: "0.75rem" }} />
+            <img
+              src={`${imageBaseUrl}martian_empire.png`}
+              alt="帝國火星曆"
+              style={{ width: "38px", marginRight: "0.75rem" }}
+            />
             <div>
               <p className="title is-5">帝國火星曆</p>
               <p className="subtitle is-7">Martian Imperial Year Table</p>
@@ -110,7 +116,7 @@ export default function Navigation({
               target="_blank"
               rel="noreferrer"
             >
-              <img src="./img/GitHub-Mark-120px-plus.png" alt="GitHub" style={{ width: "28px" }} />
+              <img src={`${imageBaseUrl}GitHub-Mark-120px-plus.png`} alt="GitHub" style={{ width: "28px" }} />
             </a>
           </div>
         </div>

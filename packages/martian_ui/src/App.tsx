@@ -34,9 +34,6 @@ function AppShell({
 }
 
 export default function App() {
-  // Vite の BASE_URL は開発時は "/"、GitHub Pages ではリポジトリ名を含む。
-  // "./" のような相対指定でも実行時のフルパスに解決されるよう URL で補正する。
-  const basename = new URL(import.meta.env.BASE_URL, window.location.href).pathname;
   const [themePreference, setThemePreference] = useState<ThemePreference>(() => readThemePreference());
 
   useEffect(() => {
@@ -49,7 +46,7 @@ export default function App() {
   }, [themePreference]);
 
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <AppShell themePreference={themePreference} onThemePreferenceChange={setThemePreference} />
     </BrowserRouter>
   );
