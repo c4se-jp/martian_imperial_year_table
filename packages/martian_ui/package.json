@@ -23,21 +23,21 @@
     "@modelcontextprotocol/ext-apps": "^1.2.2",
     "@openai/apps-sdk-ui": "^0.2.1",
     "bulma": "^1.0.4",
-    "marked": "^17.0.2",
+    "marked": "^17.0.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.0"
+    "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
-    "@storybook/react": "^10.2.8",
-    "@storybook/react-vite": "^10.2.8",
+    "@storybook/react": "^10.2.19",
+    "@storybook/react-vite": "^10.2.19",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
-    "storybook": "^10.2.10",
+    "storybook": "^10.2.19",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18",
+    "vitest": "^4.1.0",
     "yaml": "^2.8.2"
   }
 }
