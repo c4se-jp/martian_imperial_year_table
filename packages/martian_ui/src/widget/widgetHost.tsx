@@ -1,5 +1,5 @@
 import { useApp, useHostStyles } from "@modelcontextprotocol/ext-apps/react";
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import ReactDOM from "react-dom/client";
 import { modeFromToolName, type ToolMode, type WidgetToolResult } from "./widgetTypes";
 
@@ -32,15 +32,25 @@ export function mountWidget(
 ) {
   function ChatGptApp() {
     const [result, setResult] = useState<WidgetToolResult | undefined>(undefined);
+    const pendingToolCallRef = useRef<{ args: Record<string, unknown>; name: string } | undefined>(undefined);
     const { app, error, isConnected } = useApp({
       appInfo: { name: appInfoName, version: "0.1.0" },
       capabilities: {},
       onAppCreated: (createdApp) => {
         createdApp.ontoolresult = (toolResult) => {
+          pendingToolCallRef.current = undefined;
           setResult(toolResult as WidgetToolResult);
         };
         createdApp.ontoolcancelled = (params) => {
-          setResult(createErrorResult(params.reason ?? "tool 呼び出しが中斷されました。", fallbackMode));
+          const pendingToolCall = pendingToolCallRef.current;
+          pendingToolCallRef.current = undefined;
+          setResult(
+            createErrorResult(
+              params.reason ?? "tool 呼び出しが中斷されました。",
+              pendingToolCall ? modeFromToolName(pendingToolCall.name) : fallbackMode,
+              pendingToolCall?.args ?? {},
+            ),
+          );
         };
       },
     });
@@ -73,6 +83,7 @@ export function mountWidget(
           if (app === null) {
             return createErrorResult("MCP App がまだ初期化されてゐません。", modeFromToolName(name), args);
           }
+          pendingToolCallRef.current = { name, args };
           return (await app.callServerTool({ name, arguments: args })) as WidgetToolResult;
         }}
         initialResult={result}
