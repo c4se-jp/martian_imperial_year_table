@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import MartianDatetimeWidget, { type WidgetToolResult } from "./MartianDatetimeWidget";
+import DatetimeConversionWidget from "./DatetimeConversionWidget";
+import type { WidgetToolResult } from "./widgetTypes";
 
-const meta: Meta<typeof MartianDatetimeWidget> = {
-  title: "Widget/MartianDatetimeWidget",
-  component: MartianDatetimeWidget,
+const meta: Meta<typeof DatetimeConversionWidget> = {
+  title: "Widget/DatetimeConversionWidget",
+  component: DatetimeConversionWidget,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof MartianDatetimeWidget>;
+type Story = StoryObj<typeof DatetimeConversionWidget>;
 
 function mockResult(name: string, args: Record<string, unknown>): WidgetToolResult {
   if (name === "get_current_imperial_datetime") {

@@ -7,13 +7,28 @@
   },
   "resources": [
     {
-      "id": "martian_datetime_widget",
-      "uri": "ui://widget/martian-datetime.html",
-      "title": "帝國火星曆 Widget",
-      "description": "火星曆と地球曆を相互に變換する單一 widget UI",
+      "id": "martian_datetime_conversion_widget",
+      "uri": "ui://widget/datetime-conversion.html",
+      "title": "帝國火星曆日時變換 Widget",
+      "description": "グレゴリオ曆日時と帝國火星曆日時を相互に變換する widget UI",
       "mimeType": "text/html;profile=mcp-app",
       "meta": {
-        "widgetDescription": "火星曆と地球曆の日時を相互に變換できます。",
+        "widgetDescription": "グレゴリオ曆日時と帝國火星曆日時を相互に變換できます。",
+        "widgetPrefersBorder": true,
+        "connectDomains": [],
+        "resourceDomains": [
+          "https://martian-imperial-year-table.c4se.jp"
+        ]
+      }
+    },
+    {
+      "id": "martian_current_imperial_datetime_widget",
+      "uri": "ui://widget/current-imperial-datetime.html",
+      "title": "現在の帝國火星曆日時 Widget",
+      "description": "現在の帝國火星曆日時を表示する widget UI",
+      "mimeType": "text/html;profile=mcp-app",
+      "meta": {
+        "widgetDescription": "現在の帝國火星曆日時を表示できます。",
         "widgetPrefersBorder": true,
         "connectDomains": [],
         "resourceDomains": [
@@ -50,7 +65,7 @@
         }
       },
       "meta": {
-        "outputTemplate": "ui://widget/martian-datetime.html",
+        "outputTemplate": "ui://widget/datetime-conversion.html",
         "invoking": "變換中です",
         "invoked": "變換が完了しました"
       },
@@ -100,7 +115,7 @@
         }
       },
       "meta": {
-        "outputTemplate": "ui://widget/martian-datetime.html",
+        "outputTemplate": "ui://widget/current-imperial-datetime.html",
         "invoking": "取得中です",
         "invoked": "取得が完了しました"
       },
@@ -156,7 +171,7 @@
         }
       },
       "meta": {
-        "outputTemplate": "ui://widget/martian-datetime.html",
+        "outputTemplate": "ui://widget/datetime-conversion.html",
         "invoking": "變換中です",
         "invoked": "變換が完了しました"
       },

@@ -10,7 +10,7 @@
 
 ### MCP applicationのfrontend
 
-`dist/widget/` directory以下のfile。MCP applicationに對應したapplicationから參照されます。`https://martian-imperial-year-table.c4se.jp/widget/〜.html` からも參照できます。
+`dist/widget/` directory以下のfile。MCP applicationに對應したapplicationから參照されます。現在は日時變換 widget と現在の帝國火星曆日時 widget を配信してをり、`https://martian-imperial-year-table.c4se.jp/widget/〜.html` からも參照できます。
 
 ## npm run build
 

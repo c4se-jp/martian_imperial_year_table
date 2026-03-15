@@ -12,13 +12,6 @@ import {
   validateTimezone,
 } from "./datetime-conversion.js";
 
-const widgetHtmlPath = new URL("../../../dist/widget/chatgpt-widget.html", import.meta.url);
-const widgetJsPath = new URL("../../../dist/widget/chatgpt-widget.js", import.meta.url);
-const widgetCssPath = new URL("../../../dist/widget/chatgpt-widget.css", import.meta.url);
-const widgetSourceHtmlPath = new URL("../../martian_ui/src/widget/chatgpt-widget.html", import.meta.url);
-const widgetJsUri = "ui://widget/chatgpt-widget.js";
-const widgetCssUri = "ui://widget/chatgpt-widget.css";
-
 type ToolMode = "convert_gregorian_to_imperial" | "get_current_imperial" | "convert_imperial_to_gregorian";
 
 type ManifestField = {
@@ -63,6 +56,40 @@ type ToolResult = {
   mode: ToolMode;
   request: Record<string, unknown>;
   response?: Record<string, unknown>;
+};
+
+type WidgetAsset = {
+  cssUri: string;
+  distCssPath: URL;
+  distChunkPath: URL;
+  distHtmlPath: URL;
+  distJsPath: URL;
+  chunkJsUri: string;
+  jsUri: string;
+  sourceHtmlPath: URL;
+};
+
+const widgetAssets: Record<string, WidgetAsset> = {
+  "ui://widget/datetime-conversion.html": {
+    distHtmlPath: new URL("../../../dist/widget/datetime-conversion-widget.html", import.meta.url),
+    distJsPath: new URL("../../../dist/widget/datetime-conversion-widget.js", import.meta.url),
+    distCssPath: new URL("../../../dist/widget/widgetHost.css", import.meta.url),
+    distChunkPath: new URL("../../../dist/widget/widgetHost-chunk.js", import.meta.url),
+    sourceHtmlPath: new URL("../../martian_ui/src/widget/datetime-conversion-widget.html", import.meta.url),
+    jsUri: "ui://widget/datetime-conversion-widget.js",
+    cssUri: "ui://widget/widgetHost.css",
+    chunkJsUri: "ui://widget/widgetHost-chunk.js",
+  },
+  "ui://widget/current-imperial-datetime.html": {
+    distHtmlPath: new URL("../../../dist/widget/current-imperial-datetime-widget.html", import.meta.url),
+    distJsPath: new URL("../../../dist/widget/current-imperial-datetime-widget.js", import.meta.url),
+    distCssPath: new URL("../../../dist/widget/widgetHost.css", import.meta.url),
+    distChunkPath: new URL("../../../dist/widget/widgetHost-chunk.js", import.meta.url),
+    sourceHtmlPath: new URL("../../martian_ui/src/widget/current-imperial-datetime-widget.html", import.meta.url),
+    jsUri: "ui://widget/current-imperial-datetime-widget.js",
+    cssUri: "ui://widget/widgetHost.css",
+    chunkJsUri: "ui://widget/widgetHost-chunk.js",
+  },
 };
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
@@ -192,81 +219,90 @@ async function handleToolCall(
 
 function createMcpServer(): McpServer {
   const server = new McpServer({ name: mcpManifest.server.name, version: mcpManifest.server.version });
-  const widgetResource = mcpManifest.resources[0] as ManifestResource;
-
-  registerAppResource(
-    server,
-    widgetResource.title,
-    widgetResource.uri,
-    {
-      description: widgetResource.description,
-      mimeType: widgetResource.mimeType ?? RESOURCE_MIME_TYPE,
-      _meta: {
-        ui: {
-          csp: {
-            connectDomains: widgetResource.meta.connectDomains,
-            resourceDomains: widgetResource.meta.resourceDomains,
+  for (const widgetResource of mcpManifest.resources as unknown as ManifestResource[]) {
+    const asset = widgetAssets[widgetResource.uri];
+    registerAppResource(
+      server,
+      widgetResource.title,
+      widgetResource.uri,
+      {
+        description: widgetResource.description,
+        mimeType: widgetResource.mimeType ?? RESOURCE_MIME_TYPE,
+        _meta: {
+          ui: {
+            csp: {
+              connectDomains: widgetResource.meta.connectDomains,
+              resourceDomains: widgetResource.meta.resourceDomains,
+            },
+            domain: widgetResource.meta.domain,
+            prefersBorder: widgetResource.meta.widgetPrefersBorder,
           },
-          domain: widgetResource.meta.domain,
-          prefersBorder: widgetResource.meta.widgetPrefersBorder,
         },
       },
-    },
-    () => {
-      let widgetHtml = "";
-      let widgetJs = "";
-      let widgetCss = "";
+      () => {
+        let widgetHtml = "";
+        let widgetJs = "";
+        let widgetCss = "";
+        let widgetChunkJs = "";
 
-      try {
-        widgetHtml = readFileSync(widgetHtmlPath, "utf8");
-        widgetJs = readFileSync(widgetJsPath, "utf8");
-        widgetCss = readFileSync(widgetCssPath, "utf8");
-        widgetHtml = widgetHtml
-          .replaceAll("../../chatgpt-widget.js", "./chatgpt-widget.js")
-          .replaceAll("../../chatgpt-widget.css", "./chatgpt-widget.css");
-      } catch {
-        widgetHtml = readFileSync(widgetSourceHtmlPath, "utf8");
-      }
+        try {
+          widgetHtml = readFileSync(asset.distHtmlPath, "utf8");
+          widgetJs = readFileSync(asset.distJsPath, "utf8");
+          widgetCss = readFileSync(asset.distCssPath, "utf8");
+          widgetChunkJs = readFileSync(asset.distChunkPath, "utf8");
+        } catch {
+          widgetHtml = readFileSync(asset.sourceHtmlPath, "utf8");
+        }
 
-      return {
-        contents: [
-          {
-            mimeType: RESOURCE_MIME_TYPE,
-            text: widgetHtml,
-            uri: widgetResource.uri,
-            _meta: {
-              ui: {
-                csp: {
-                  connectDomains: widgetResource.meta.connectDomains,
-                  resourceDomains: widgetResource.meta.resourceDomains,
+        return {
+          contents: [
+            {
+              mimeType: RESOURCE_MIME_TYPE,
+              text: widgetHtml,
+              uri: widgetResource.uri,
+              _meta: {
+                ui: {
+                  csp: {
+                    connectDomains: widgetResource.meta.connectDomains,
+                    resourceDomains: widgetResource.meta.resourceDomains,
+                  },
+                  domain: widgetResource.meta.domain,
+                  prefersBorder: widgetResource.meta.widgetPrefersBorder,
                 },
-                domain: widgetResource.meta.domain,
-                prefersBorder: widgetResource.meta.widgetPrefersBorder,
               },
             },
-          },
-          ...(widgetJs.length > 0
-            ? [
-                {
-                  mimeType: "application/javascript",
-                  text: widgetJs,
-                  uri: widgetJsUri,
-                },
-              ]
-            : []),
-          ...(widgetCss.length > 0
-            ? [
-                {
-                  mimeType: "text/css",
-                  text: widgetCss,
-                  uri: widgetCssUri,
-                },
-              ]
-            : []),
-        ],
-      };
-    },
-  );
+            ...(widgetJs.length > 0
+              ? [
+                  {
+                    mimeType: "application/javascript",
+                    text: widgetJs,
+                    uri: asset.jsUri,
+                  },
+                ]
+              : []),
+            ...(widgetCss.length > 0
+              ? [
+                  {
+                    mimeType: "text/css",
+                    text: widgetCss,
+                    uri: asset.cssUri,
+                  },
+                ]
+              : []),
+            ...(widgetChunkJs.length > 0
+              ? [
+                  {
+                    mimeType: "application/javascript",
+                    text: widgetChunkJs,
+                    uri: asset.chunkJsUri,
+                  },
+                ]
+              : []),
+          ],
+        };
+      },
+    );
+  }
 
   for (const tool of mcpManifest.tools as unknown as ManifestTool[]) {
     registerAppTool(

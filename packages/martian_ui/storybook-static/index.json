@@ -1,16 +1,1 @@
-{
-  "v": 5,
-  "entries": {
-    "widget-martiandatetimewidget--default": {
-      "type": "story",
-      "subtype": "story",
-      "id": "widget-martiandatetimewidget--default",
-      "name": "Default",
-      "title": "Widget/MartianDatetimeWidget",
-      "importPath": "./src/widget/MartianDatetimeWidget.stories.tsx",
-      "componentPath": "./src/widget/MartianDatetimeWidget.tsx",
-      "tags": ["dev", "test", "manifest"],
-      "exportName": "Default"
-    }
-  }
-}
+{"v":5,"entries":{"widget-currentimperialdatetimewidget--default":{"type":"story","subtype":"story","id":"widget-currentimperialdatetimewidget--default","name":"Default","title":"Widget/CurrentImperialDatetimeWidget","importPath":"./src/widget/CurrentImperialDatetimeWidget.stories.tsx","componentPath":"./src/widget/CurrentImperialDatetimeWidget.tsx","tags":["dev","test","manifest"],"exportName":"Default"},"widget-datetimeconversionwidget--default":{"type":"story","subtype":"story","id":"widget-datetimeconversionwidget--default","name":"Default","title":"Widget/DatetimeConversionWidget","importPath":"./src/widget/MartianDatetimeWidget.stories.tsx","componentPath":"./src/widget/DatetimeConversionWidget.tsx","tags":["dev","test","manifest"],"exportName":"Default"}}}

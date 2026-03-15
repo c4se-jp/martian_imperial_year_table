@@ -43,7 +43,7 @@ export default function Imdt2GrdtTab({
         </label>
         <div>
           <Button color="primary" size="sm" loading={running} onClick={onConvert}>
-            變換する
+            グレゴリオ曆←
           </Button>
         </div>
       </div>
