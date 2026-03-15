@@ -16,7 +16,7 @@ function defaultCallTool(name: string, args: Record<string, unknown>): Promise<W
     structuredContent: {
       mode: modeFromToolName(name),
       request: args,
-      error: "ローカルプレビューではMCP接続の代わりにモックを返しています。",
+      error: "ローカルプレビューではMCP接續の代わりにモックを返してゐます。",
     },
     isError: true,
   });

@@ -1,8 +1,8 @@
 :root[data-theme="light"],
 body[data-theme="light"] {
-  --color-background-primary-solid: #0b57d0;
-  --color-background-primary-solid-hover: #0948ad;
-  --color-background-primary-solid-active: #073a8a;
+  --color-background-primary-solid: #111111;
+  --color-background-primary-solid-hover: #1f1f1f;
+  --color-background-primary-solid-active: #2a2a2a;
   --color-text-primary-solid: #ffffff;
 
   --color-background-secondary-soft-alpha: #e8eefc;
@@ -22,4 +22,13 @@ body[data-theme="dark"] {
   --color-background-secondary-soft-alpha-hover: #313b4e;
   --color-background-secondary-soft-alpha-active: #3a475d;
   --color-text-secondary-soft: #e7efff;
+}
+
+:root[data-theme="light"] .Button[data-variant="solid"][data-color="primary"],
+body[data-theme="light"] .Button[data-variant="solid"][data-color="primary"],
+:root[data-theme="light"] .Button[data-variant="solid"][data-color="primary"] .ButtonInner,
+body[data-theme="light"] .Button[data-variant="solid"][data-color="primary"] .ButtonInner,
+:root[data-theme="light"] .Button[data-variant="solid"][data-color="primary"] svg,
+body[data-theme="light"] .Button[data-variant="solid"][data-color="primary"] svg {
+  color: #ffffff;
 }
