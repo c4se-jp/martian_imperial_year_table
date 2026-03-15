@@ -19,7 +19,7 @@ const mcpDoc = {
         widgetDescription: "火星曆と地球曆の日時を相互に變換できます。",
         widgetPrefersBorder: true,
         connectDomains: [],
-        resourceDomains: [],
+        resourceDomains: ["https://martian-imperial-year-table.c4se.jp"],
       },
     },
   ],
