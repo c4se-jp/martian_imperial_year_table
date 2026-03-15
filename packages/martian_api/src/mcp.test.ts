@@ -162,6 +162,8 @@ describe("/mcp", () => {
     expect(result.contents[0]?.mimeType).toBe("text/html;profile=mcp-app");
     expect(result.contents[0]?._meta?.ui?.prefersBorder).toBe(true);
     expect(result.contents[0]?.text).toContain("帝國火星曆日時變換");
+    expect(result.contents.some((content) => content.uri === "ui://widget/datetime-conversion-widget.js")).toBe(true);
+    expect(result.contents.some((content) => content.uri.endsWith(".css"))).toBe(true);
   });
 
   test("resources/read で現在時刻 widget resource を返す", async () => {
@@ -191,6 +193,10 @@ describe("/mcp", () => {
     expect(result.contents[0]?.mimeType).toBe("text/html;profile=mcp-app");
     expect(result.contents[0]?._meta?.ui?.prefersBorder).toBe(true);
     expect(result.contents[0]?.text).toContain("現在の帝國火星曆日時");
+    expect(result.contents.some((content) => content.uri === "ui://widget/current-imperial-datetime-widget.js")).toBe(
+      true,
+    );
+    expect(result.contents.some((content) => content.uri.endsWith(".css"))).toBe(true);
   });
 
   test("Accept ヘッダーが不足してゐる場合は 406 を返す", async () => {

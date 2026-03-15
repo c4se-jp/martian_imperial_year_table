@@ -59,38 +59,67 @@ type ToolResult = {
 };
 
 type WidgetAsset = {
-  cssUri: string;
-  distCssPath: URL;
-  distChunkPath: URL;
   distHtmlPath: URL;
-  distJsPath: URL;
-  chunkJsUri: string;
-  jsUri: string;
   sourceHtmlPath: URL;
 };
 
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/datetime-conversion.html": {
     distHtmlPath: new URL("../../../dist/widget/datetime-conversion-widget.html", import.meta.url),
-    distJsPath: new URL("../../../dist/widget/datetime-conversion-widget.js", import.meta.url),
-    distCssPath: new URL("../../../dist/widget/widgetHost.css", import.meta.url),
-    distChunkPath: new URL("../../../dist/widget/widgetHost-chunk.js", import.meta.url),
     sourceHtmlPath: new URL("../../martian_ui/src/widget/datetime-conversion-widget.html", import.meta.url),
-    jsUri: "ui://widget/datetime-conversion-widget.js",
-    cssUri: "ui://widget/widgetHost.css",
-    chunkJsUri: "ui://widget/widgetHost-chunk.js",
   },
   "ui://widget/current-imperial-datetime.html": {
     distHtmlPath: new URL("../../../dist/widget/current-imperial-datetime-widget.html", import.meta.url),
-    distJsPath: new URL("../../../dist/widget/current-imperial-datetime-widget.js", import.meta.url),
-    distCssPath: new URL("../../../dist/widget/widgetHost.css", import.meta.url),
-    distChunkPath: new URL("../../../dist/widget/widgetHost-chunk.js", import.meta.url),
     sourceHtmlPath: new URL("../../martian_ui/src/widget/current-imperial-datetime-widget.html", import.meta.url),
-    jsUri: "ui://widget/current-imperial-datetime-widget.js",
-    cssUri: "ui://widget/widgetHost.css",
-    chunkJsUri: "ui://widget/widgetHost-chunk.js",
   },
 };
+
+type BuiltAsset = {
+  mimeType: string;
+  text: string;
+  uri: string;
+};
+
+function toWidgetAssetUri(relativePath: string): string {
+  return `ui://widget/${relativePath.replace(/^\.\//u, "")}`;
+}
+
+function resolveBuiltAssetPath(relativePath: string): URL {
+  return new URL(`../../../dist/widget/${relativePath.replace(/^\.\//u, "")}`, import.meta.url);
+}
+
+function collectBuiltAssetPaths(widgetHtml: string): string[] {
+  const paths = new Set<string>();
+
+  for (const match of widgetHtml.matchAll(/<script[^>]+src="(\.\/[^"]+)"/gu)) {
+    paths.add(match[1]);
+  }
+  for (const match of widgetHtml.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="(\.\/[^"]+)"/gu)) {
+    paths.add(match[1]);
+  }
+  for (const match of widgetHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="(\.\/[^"]+)"/gu)) {
+    paths.add(match[1]);
+  }
+
+  return [...paths];
+}
+
+function buildAssetContent(relativePath: string): BuiltAsset {
+  const normalizedPath = relativePath.replace(/^\.\//u, "");
+  const text = readFileSync(resolveBuiltAssetPath(normalizedPath), "utf8");
+  if (normalizedPath.endsWith(".css")) {
+    return {
+      mimeType: "text/css",
+      text,
+      uri: toWidgetAssetUri(normalizedPath),
+    };
+  }
+  return {
+    mimeType: "application/javascript",
+    text,
+    uri: toWidgetAssetUri(normalizedPath),
+  };
+}
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
   const structuredContent: ToolResult = {
@@ -241,15 +270,11 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
-        let widgetJs = "";
-        let widgetCss = "";
-        let widgetChunkJs = "";
+        let builtAssets: BuiltAsset[] = [];
 
         try {
           widgetHtml = readFileSync(asset.distHtmlPath, "utf8");
-          widgetJs = readFileSync(asset.distJsPath, "utf8");
-          widgetCss = readFileSync(asset.distCssPath, "utf8");
-          widgetChunkJs = readFileSync(asset.distChunkPath, "utf8");
+          builtAssets = collectBuiltAssetPaths(widgetHtml).map((relativePath) => buildAssetContent(relativePath));
         } catch {
           widgetHtml = readFileSync(asset.sourceHtmlPath, "utf8");
         }
@@ -271,33 +296,7 @@ function createMcpServer(): McpServer {
                 },
               },
             },
-            ...(widgetJs.length > 0
-              ? [
-                  {
-                    mimeType: "application/javascript",
-                    text: widgetJs,
-                    uri: asset.jsUri,
-                  },
-                ]
-              : []),
-            ...(widgetCss.length > 0
-              ? [
-                  {
-                    mimeType: "text/css",
-                    text: widgetCss,
-                    uri: asset.cssUri,
-                  },
-                ]
-              : []),
-            ...(widgetChunkJs.length > 0
-              ? [
-                  {
-                    mimeType: "application/javascript",
-                    text: widgetChunkJs,
-                    uri: asset.chunkJsUri,
-                  },
-                ]
-              : []),
+            ...builtAssets,
           ],
         };
       },

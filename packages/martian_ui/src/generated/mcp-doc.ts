@@ -1,201 +1,183 @@
 import type { McpDoc } from "../lib/mcpDoc";
 
 const mcpDoc = {
-  "sourcePath": "packages/martian_api/src/mcp-manifest.json",
-  "server": {
-    "name": "martian_api",
-    "version": "0.1.0",
-    "title": "帝國火星曆 MCP Server",
-    "description": "帝國火星曆とグレゴリオ曆の日時變換、および現在の帝國火星曆日時取得を提供する MCP server です。"
+  sourcePath: "packages/martian_api/src/mcp-manifest.json",
+  server: {
+    name: "martian_api",
+    version: "0.1.0",
+    title: "帝國火星曆 MCP Server",
+    description: "帝國火星曆とグレゴリオ曆の日時變換、および現在の帝國火星曆日時取得を提供する MCP server です。",
   },
-  "resources": [
+  resources: [
     {
-      "id": "martian_datetime_conversion_widget",
-      "uri": "ui://widget/datetime-conversion.html",
-      "title": "帝國火星曆日時變換 Widget",
-      "description": "グレゴリオ曆日時と帝國火星曆日時を相互に變換する widget UI",
-      "mimeType": "text/html;profile=mcp-app",
-      "meta": {
-        "widgetDescription": "グレゴリオ曆日時と帝國火星曆日時を相互に變換できます。",
-        "widgetPrefersBorder": true,
-        "connectDomains": [],
-        "resourceDomains": [
-          "https://martian-imperial-year-table.c4se.jp"
-        ]
-      }
+      id: "martian_datetime_conversion_widget",
+      uri: "ui://widget/datetime-conversion.html",
+      title: "帝國火星曆日時變換 Widget",
+      description: "グレゴリオ曆日時と帝國火星曆日時を相互に變換する widget UI",
+      mimeType: "text/html;profile=mcp-app",
+      meta: {
+        widgetDescription: "グレゴリオ曆日時と帝國火星曆日時を相互に變換できます。",
+        widgetPrefersBorder: true,
+        connectDomains: [],
+        resourceDomains: ["https://martian-imperial-year-table.c4se.jp"],
+      },
     },
     {
-      "id": "martian_current_imperial_datetime_widget",
-      "uri": "ui://widget/current-imperial-datetime.html",
-      "title": "現在の帝國火星曆日時 Widget",
-      "description": "現在の帝國火星曆日時を表示する widget UI",
-      "mimeType": "text/html;profile=mcp-app",
-      "meta": {
-        "widgetDescription": "現在の帝國火星曆日時を表示できます。",
-        "widgetPrefersBorder": true,
-        "connectDomains": [],
-        "resourceDomains": [
-          "https://martian-imperial-year-table.c4se.jp"
-        ]
-      }
-    }
-  ],
-  "tools": [
-    {
-      "name": "convert_gregorian_to_imperial_datetime",
-      "mode": "convert_gregorian_to_imperial",
-      "title": "Gregorian日時から帝國火星曆へ變換",
-      "description": "グレゴリオ曆の日時を帝國火星曆の日時へ變換します。",
-      "readOnlyHint": true,
-      "inputSchema": [
-        {
-          "name": "gregorianDateTime",
-          "type": "string",
-          "description": "Gregorian datetime in ISO 8601 format with timezone",
-          "pattern": "^\\d{4,}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
-          "examples": [
-            "2026-02-16T00:00:00+00:00"
-          ]
-        },
-        {
-          "name": "imperialTimezone",
-          "type": "string",
-          "description": "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
-          "pattern": "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
-          "examples": [
-            "+09:00"
-          ]
-        }
-      ],
-      "meta": {
-        "outputTemplate": "ui://widget/datetime-conversion.html",
-        "invoking": "變換中です",
-        "invoked": "變換が完了しました"
+      id: "martian_current_imperial_datetime_widget",
+      uri: "ui://widget/current-imperial-datetime.html",
+      title: "現在の帝國火星曆日時 Widget",
+      description: "現在の帝國火星曆日時を表示する widget UI",
+      mimeType: "text/html;profile=mcp-app",
+      meta: {
+        widgetDescription: "現在の帝國火星曆日時を表示できます。",
+        widgetPrefersBorder: true,
+        connectDomains: [],
+        resourceDomains: ["https://martian-imperial-year-table.c4se.jp"],
       },
-      "doc": {
-        "summary": "グレゴリオ曆の日時を帝國火星曆へ變換します。",
-        "returns": "帝國火星曆の構造化日時と、同じ內容を表す formatted 文字列を返します。",
-        "requestExample": {
-          "gregorianDateTime": "2026-02-16T00:00:00+00:00",
-          "imperialTimezone": "+09:00"
+    },
+  ],
+  tools: [
+    {
+      name: "convert_gregorian_to_imperial_datetime",
+      mode: "convert_gregorian_to_imperial",
+      title: "Gregorian日時から帝國火星曆へ變換",
+      description: "グレゴリオ曆の日時を帝國火星曆の日時へ變換します。",
+      readOnlyHint: true,
+      inputSchema: [
+        {
+          name: "gregorianDateTime",
+          type: "string",
+          description: "Gregorian datetime in ISO 8601 format with timezone",
+          pattern: "^\\d{4,}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,3})?(?:Z|[+-]\\d{2}:\\d{2})$",
+          examples: ["2026-02-16T00:00:00+00:00"],
         },
-        "responseExample": {
-          "imperialDateTime": {
-            "year": 1428,
-            "month": 19,
-            "day": 19,
-            "hour": 12,
-            "minute": 54,
-            "second": 47,
-            "timezone": "+09:00"
+        {
+          name: "imperialTimezone",
+          type: "string",
+          description: "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
+          pattern: "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
+          examples: ["+09:00"],
+        },
+      ],
+      meta: {
+        outputTemplate: "ui://widget/datetime-conversion.html",
+        invoking: "變換中です",
+        invoked: "變換が完了しました",
+      },
+      doc: {
+        summary: "グレゴリオ曆の日時を帝國火星曆へ變換します。",
+        returns: "帝國火星曆の構造化日時と、同じ內容を表す formatted 文字列を返します。",
+        requestExample: {
+          gregorianDateTime: "2026-02-16T00:00:00+00:00",
+          imperialTimezone: "+09:00",
+        },
+        responseExample: {
+          imperialDateTime: {
+            year: 1428,
+            month: 19,
+            day: 19,
+            hour: 12,
+            minute: 54,
+            second: 47,
+            timezone: "+09:00",
           },
-          "imperialDateTimeFormatted": "1428-19-19T12:54:47+09:00"
+          imperialDateTimeFormatted: "1428-19-19T12:54:47+09:00",
         },
-        "errors": [
+        errors: [
           "imperialTimezone が ±HH:MM 形式でない場合",
           "gregorianDateTime が timezone 付き ISO 8601 形式でない場合",
-          "內部エラー"
-        ]
-      }
+          "內部エラー",
+        ],
+      },
     },
     {
-      "name": "get_current_imperial_datetime",
-      "mode": "get_current_imperial",
-      "title": "現在の帝國火星曆日時を取得",
-      "description": "指定タイムゾーンで現在の帝國火星曆日時を返します。",
-      "readOnlyHint": true,
-      "inputSchema": [
+      name: "get_current_imperial_datetime",
+      mode: "get_current_imperial",
+      title: "現在の帝國火星曆日時を取得",
+      description: "指定タイムゾーンで現在の帝國火星曆日時を返します。",
+      readOnlyHint: true,
+      inputSchema: [
         {
-          "name": "timezone",
-          "type": "string",
-          "description": "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
-          "pattern": "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
-          "defaultValue": "+00:00",
-          "examples": [
-            "+00:00",
-            "+09:00"
-          ]
-        }
-      ],
-      "meta": {
-        "outputTemplate": "ui://widget/current-imperial-datetime.html",
-        "invoking": "取得中です",
-        "invoked": "取得が完了しました"
-      },
-      "doc": {
-        "summary": "指定タイムゾーンでの現在の帝國火星曆日時を取得します。",
-        "returns": "レスポンス生成時の UTC 時刻、帝國火星曆の構造化日時、formatted 文字列を返します。",
-        "requestExample": {
-          "timezone": "+09:00"
+          name: "timezone",
+          type: "string",
+          description: "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
+          pattern: "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
+          defaultValue: "+00:00",
+          examples: ["+00:00", "+09:00"],
         },
-        "responseExample": {
-          "gregorianDateTime": "2026-02-14T12:34:56.000Z",
-          "imperialDateTime": {
-            "year": 1428,
-            "month": 19,
-            "day": 18,
-            "hour": 10,
-            "minute": 29,
-            "second": 8,
-            "timezone": "+09:00"
+      ],
+      meta: {
+        outputTemplate: "ui://widget/current-imperial-datetime.html",
+        invoking: "取得中です",
+        invoked: "取得が完了しました",
+      },
+      doc: {
+        summary: "指定タイムゾーンでの現在の帝國火星曆日時を取得します。",
+        returns: "レスポンス生成時の UTC 時刻、帝國火星曆の構造化日時、formatted 文字列を返します。",
+        requestExample: {
+          timezone: "+09:00",
+        },
+        responseExample: {
+          gregorianDateTime: "2026-02-14T12:34:56.000Z",
+          imperialDateTime: {
+            year: 1428,
+            month: 19,
+            day: 18,
+            hour: 10,
+            minute: 29,
+            second: 8,
+            timezone: "+09:00",
           },
-          "imperialDateTimeFormatted": "1428-19-18T10:29:08+09:00"
+          imperialDateTimeFormatted: "1428-19-18T10:29:08+09:00",
         },
-        "errors": [
-          "timezone が ±HH:MM 形式でない場合",
-          "內部エラー"
-        ]
-      }
+        errors: ["timezone が ±HH:MM 形式でない場合", "內部エラー"],
+      },
     },
     {
-      "name": "convert_imperial_to_gregorian_datetime",
-      "mode": "convert_imperial_to_gregorian",
-      "title": "帝國火星曆日時からGregorianへ變換",
-      "description": "帝國火星曆の日時をグレゴリオ曆の日時へ變換します。",
-      "readOnlyHint": true,
-      "inputSchema": [
+      name: "convert_imperial_to_gregorian_datetime",
+      mode: "convert_imperial_to_gregorian",
+      title: "帝國火星曆日時からGregorianへ變換",
+      description: "帝國火星曆の日時をグレゴリオ曆の日時へ變換します。",
+      readOnlyHint: true,
+      inputSchema: [
         {
-          "name": "imperialDateTimeFormatted",
-          "type": "string",
-          "description": "Imperial datetime formatted as YYYY-MM-DDTHH:mm:ss±HH:MM",
-          "pattern": "^\\d{4,}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}$",
-          "examples": [
-            "1220-01-01T00:00:00+00:00"
-          ]
+          name: "imperialDateTimeFormatted",
+          type: "string",
+          description: "Imperial datetime formatted as YYYY-MM-DDTHH:mm:ss±HH:MM",
+          pattern: "^\\d{4,}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}$",
+          examples: ["1220-01-01T00:00:00+00:00"],
         },
         {
-          "name": "gregorianTimezone",
-          "type": "string",
-          "description": "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
-          "pattern": "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
-          "examples": [
-            "+09:00"
-          ]
-        }
+          name: "gregorianTimezone",
+          type: "string",
+          description: "Timezone offset from UTC in ±HH:MM format (example: +09:00)",
+          pattern: "^[+-](?:[01]\\d|2[0-3]):[0-5]\\d$",
+          examples: ["+09:00"],
+        },
       ],
-      "meta": {
-        "outputTemplate": "ui://widget/datetime-conversion.html",
-        "invoking": "變換中です",
-        "invoked": "變換が完了しました"
+      meta: {
+        outputTemplate: "ui://widget/datetime-conversion.html",
+        invoking: "變換中です",
+        invoked: "變換が完了しました",
       },
-      "doc": {
-        "summary": "帝國火星曆の日時をグレゴリオ曆へ變換します。",
-        "returns": "グレゴリオ曆の ISO 8601 文字列を返します。",
-        "requestExample": {
-          "imperialDateTimeFormatted": "1428-19-18T01:29:08+00:00",
-          "gregorianTimezone": "+09:00"
+      doc: {
+        summary: "帝國火星曆の日時をグレゴリオ曆へ變換します。",
+        returns: "グレゴリオ曆の ISO 8601 文字列を返します。",
+        requestExample: {
+          imperialDateTimeFormatted: "1428-19-18T01:29:08+00:00",
+          gregorianTimezone: "+09:00",
         },
-        "responseExample": {
-          "gregorianDateTime": "2026-02-14T21:34:56+09:00"
+        responseExample: {
+          gregorianDateTime: "2026-02-14T21:34:56+09:00",
         },
-        "errors": [
+        errors: [
           "gregorianTimezone が ±HH:MM 形式でない場合",
           "imperialDateTimeFormatted が帝國火星曆日時形式でない場合",
-          "內部エラー"
-        ]
-      }
-    }
-  ]
+          "內部エラー",
+        ],
+      },
+    },
+  ],
 } satisfies McpDoc;
 
 export default mcpDoc;
