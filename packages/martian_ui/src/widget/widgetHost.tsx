@@ -1,4 +1,6 @@
 import { useApp, useHostStyles } from "@modelcontextprotocol/ext-apps/react";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import ReactDOM from "react-dom/client";
 import { modeFromToolName, type ToolMode, type WidgetToolResult } from "./widgetTypes";
@@ -24,6 +26,36 @@ function createErrorResult(message: string, mode: ToolMode, request: Record<stri
     },
     isError: true,
   };
+}
+
+let standaloneClientPromise: Promise<Client> | undefined;
+
+function resolveStandaloneMcpUrl(): URL {
+  return new URL("/mcp", window.location.href);
+}
+
+async function getStandaloneClient(): Promise<Client> {
+  if (standaloneClientPromise === undefined) {
+    standaloneClientPromise = (async () => {
+      const client = new Client(
+        {
+          name: "martian-widget-client",
+          version: "0.1.0",
+        },
+        {
+          capabilities: {},
+        },
+      );
+      const transport = new StreamableHTTPClientTransport(resolveStandaloneMcpUrl());
+      await client.connect(transport);
+      return client;
+    })().catch((error) => {
+      standaloneClientPromise = undefined;
+      throw error;
+    });
+  }
+
+  return await standaloneClientPromise;
 }
 
 export function mountWidget(
@@ -73,18 +105,23 @@ export function mountWidget(
       }
     }, [app, isConnected]);
 
-    if (error !== null) {
-      return <WidgetComponent initialResult={createErrorResult(error.message, fallbackMode)} />;
-    }
-
     return (
       <WidgetComponent
         callTool={async (name, args) => {
-          if (app === null) {
-            return createErrorResult("MCP App がまだ初期化されてゐません。", modeFromToolName(name), args);
+          if (app !== null) {
+            pendingToolCallRef.current = { name, args };
+            return (await app.callServerTool({ name, arguments: args })) as WidgetToolResult;
           }
-          pendingToolCallRef.current = { name, args };
-          return (await app.callServerTool({ name, arguments: args })) as WidgetToolResult;
+
+          try {
+            const client = await getStandaloneClient();
+            return (await client.callTool({ name, arguments: args })) as WidgetToolResult;
+          } catch (standaloneError) {
+            const message =
+              error?.message ??
+              (standaloneError instanceof Error ? standaloneError.message : "MCP tool の呼び出しに失敗しました。");
+            return createErrorResult(message, modeFromToolName(name), args);
+          }
         }}
         initialResult={result}
         subscribeToolResult={(listener) => {
