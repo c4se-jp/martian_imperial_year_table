@@ -21,8 +21,13 @@ export default function Imdt2GrdtTab({
   return (
     <section className="mt-4 rounded-xl border border-subtle p-3">
       <div className="grid gap-3">
+        <div>
+          <Button color="primary" size="sm" loading={running} onClick={onConvert}>
+            グレゴリオ曆に變換する↑
+          </Button>
+        </div>
         <label className="text-sm text-secondary">
-          帝國火星曆日時 (YYYY-MM-DDTHH:mm:ss±HH:MM)
+          帝國火星曆日時
           <Input
             className="mt-1"
             onChange={(e) => onImperialDateTimeFormattedChange(e.target.value)}
@@ -32,7 +37,7 @@ export default function Imdt2GrdtTab({
           />
         </label>
         <label className="text-sm text-secondary">
-          グレゴリオ曆タイムゾーン
+          タイムゾーン
           <Input
             className="mt-1"
             onChange={(e) => onGregorianTimezoneChange(e.target.value)}
@@ -41,11 +46,6 @@ export default function Imdt2GrdtTab({
             value={gregorianTimezone}
           />
         </label>
-        <div>
-          <Button color="primary" size="sm" loading={running} onClick={onConvert}>
-            グレゴリオ曆←
-          </Button>
-        </div>
       </div>
     </section>
   );

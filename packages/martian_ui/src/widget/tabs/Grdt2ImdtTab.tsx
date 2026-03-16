@@ -32,7 +32,7 @@ export default function Grdt2ImdtTab({
           />
         </label>
         <label className="text-sm text-secondary">
-          帝國火星曆タイムゾーン
+          タイムゾーン
           <Input
             className="mt-1"
             onChange={(e) => onImperialTimezoneChange(e.target.value)}
@@ -43,7 +43,7 @@ export default function Grdt2ImdtTab({
         </label>
         <div>
           <Button color="primary" size="sm" loading={running} onClick={onConvert}>
-            →帝國火星曆
+            帝國火星曆に變換する↓
           </Button>
         </div>
       </div>
