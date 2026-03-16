@@ -61,6 +61,7 @@ export default defineConfig({
           const destHtmlPath = path.resolve(__dirname, `../../dist/widget/${entry.name}.html`);
           const html = readFileSync(srcHtmlPath, "utf8")
             .replaceAll(`../../${entry.name}.js`, `./${entry.name}.js`)
+            .replaceAll(`../../${entry.name}.css`, `./${entry.name}.css`)
             .replaceAll(`../../${sharedWidgetAssets.chunk}`, `./${sharedWidgetAssets.chunk}`)
             .replaceAll(`../../${sharedWidgetAssets.css}`, `./${sharedWidgetAssets.css}`);
           mkdirSync(path.dirname(destHtmlPath), { recursive: true });

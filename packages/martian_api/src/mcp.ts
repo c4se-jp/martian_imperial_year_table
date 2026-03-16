@@ -81,23 +81,26 @@ type BuiltAsset = {
 };
 
 function toWidgetAssetUri(relativePath: string): string {
-  return `ui://widget/${relativePath.replace(/^\.\//u, "")}`;
+  return `ui://widget/${relativePath.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "")}`;
 }
 
 function resolveBuiltAssetPath(relativePath: string): URL {
-  return new URL(`../../../dist/widget/${relativePath.replace(/^\.\//u, "")}`, import.meta.url);
+  return new URL(
+    `../../../dist/widget/${relativePath.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "")}`,
+    import.meta.url,
+  );
 }
 
 function collectBuiltAssetPaths(widgetHtml: string): string[] {
   const paths = new Set<string>();
 
-  for (const match of widgetHtml.matchAll(/<script[^>]+src="(\.\/[^"]+)"/gu)) {
+  for (const match of widgetHtml.matchAll(/<script[^>]+src="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
     paths.add(match[1]);
   }
-  for (const match of widgetHtml.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="(\.\/[^"]+)"/gu)) {
+  for (const match of widgetHtml.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
     paths.add(match[1]);
   }
-  for (const match of widgetHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="(\.\/[^"]+)"/gu)) {
+  for (const match of widgetHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
     paths.add(match[1]);
   }
 
