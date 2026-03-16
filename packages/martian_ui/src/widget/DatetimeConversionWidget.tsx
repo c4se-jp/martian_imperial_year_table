@@ -39,8 +39,29 @@ export default function DatetimeConversionWidget({ callTool, initialResult, subs
   const [runningToolName, setRunningToolName] = useState<string | undefined>(undefined);
   const [results, setResults] = useState(splitResults(initialResult));
 
+  function applyResult(nextResult: WidgetToolResult, mode = nextResult.structuredContent?.mode) {
+    if (mode === "convert_gregorian_to_imperial") {
+      setResults((current) => ({ ...current, gregorianToImperial: nextResult }));
+      const imperialResult = nextResult.structuredContent?.response?.imperialDateTimeFormatted;
+      if (typeof imperialResult === "string") {
+        setImperialDateTimeFormatted(imperialResult);
+      }
+      return;
+    }
+    if (mode === "convert_imperial_to_gregorian") {
+      setResults((current) => ({ ...current, imperialToGregorian: nextResult }));
+      const gregorianResult = nextResult.structuredContent?.response?.gregorianDateTime;
+      if (typeof gregorianResult === "string") {
+        setGregorianDateTime(gregorianResult);
+      }
+    }
+  }
+
   useEffect(() => {
     setResults(splitResults(initialResult));
+    if (initialResult !== undefined) {
+      applyResult(initialResult, initialResult.structuredContent?.mode);
+    }
   }, [initialResult]);
 
   useEffect(() => {
@@ -48,12 +69,7 @@ export default function DatetimeConversionWidget({ callTool, initialResult, subs
       return;
     }
     subscribeToolResult((nextResult) => {
-      const mode = nextResult.structuredContent?.mode;
-      if (mode === "convert_gregorian_to_imperial") {
-        setResults((current) => ({ ...current, gregorianToImperial: nextResult }));
-      } else if (mode === "convert_imperial_to_gregorian") {
-        setResults((current) => ({ ...current, imperialToGregorian: nextResult }));
-      }
+      applyResult(nextResult, nextResult.structuredContent?.mode);
     });
   }, [subscribeToolResult]);
 
@@ -62,12 +78,7 @@ export default function DatetimeConversionWidget({ callTool, initialResult, subs
     try {
       const execute = callTool ?? defaultCallTool;
       const next = await execute(name, args);
-      const mode = next.structuredContent?.mode ?? modeFromToolName(name);
-      if (mode === "convert_gregorian_to_imperial") {
-        setResults((current) => ({ ...current, gregorianToImperial: next }));
-      } else {
-        setResults((current) => ({ ...current, imperialToGregorian: next }));
-      }
+      applyResult(next, next.structuredContent?.mode ?? modeFromToolName(name));
     } catch (error) {
       const failedResult: WidgetToolResult = {
         structuredContent: {
@@ -101,15 +112,9 @@ export default function DatetimeConversionWidget({ callTool, initialResult, subs
           onImperialTimezoneChange={setImperialTimezone}
           running={runningToolName === "convert_gregorian_to_imperial_datetime"}
         />
-        <div className="mt-3">
-          <ToolResultAlert
-            emptyMessage="グレゴリオ曆日時から帝國火星曆日時への變換結果がここに表示されます。"
-            result={results.gregorianToImperial}
-          />
-        </div>
       </section>
 
-      <section className="mt-4">
+      <section className="mt-6">
         <Imdt2GrdtTab
           gregorianTimezone={gregorianTimezone}
           imperialDateTimeFormatted={imperialDateTimeFormatted}
@@ -120,13 +125,27 @@ export default function DatetimeConversionWidget({ callTool, initialResult, subs
           onImperialDateTimeFormattedChange={setImperialDateTimeFormatted}
           running={runningToolName === "convert_imperial_to_gregorian_datetime"}
         />
-        <div className="mt-3">
+      </section>
+
+      {results.gregorianToImperial?.structuredContent?.error !== undefined ? (
+        <div className="mt-4">
           <ToolResultAlert
-            emptyMessage="帝國火星曆日時からグレゴリオ曆日時への變換結果がここに表示されます。"
+            emptyMessage=""
+            formatResult={(result) => result.structuredContent?.error}
+            result={results.gregorianToImperial}
+          />
+        </div>
+      ) : null}
+
+      {results.imperialToGregorian?.structuredContent?.error !== undefined ? (
+        <div className="mt-4">
+          <ToolResultAlert
+            emptyMessage=""
+            formatResult={(result) => result.structuredContent?.error}
             result={results.imperialToGregorian}
           />
         </div>
-      </section>
+      ) : null}
     </main>
   );
 }

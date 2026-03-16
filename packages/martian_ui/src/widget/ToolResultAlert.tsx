@@ -4,11 +4,18 @@ import type { WidgetToolResult } from "./widgetTypes";
 
 type Props = {
   emptyMessage: string;
+  formatResult?: (result: WidgetToolResult) => string | undefined;
   result?: WidgetToolResult;
 };
 
-export default function ToolResultAlert({ emptyMessage, result }: Props) {
+export default function ToolResultAlert({ emptyMessage, formatResult, result }: Props) {
   const outputText = useMemo(() => {
+    if (result !== undefined && formatResult !== undefined) {
+      const formatted = formatResult(result);
+      if (formatted !== undefined) {
+        return formatted;
+      }
+    }
     if (result?.structuredContent !== undefined) {
       return JSON.stringify(result.structuredContent, null, 2);
     }
@@ -17,7 +24,7 @@ export default function ToolResultAlert({ emptyMessage, result }: Props) {
       return text;
     }
     return emptyMessage;
-  }, [emptyMessage, result]);
+  }, [emptyMessage, formatResult, result]);
 
   const isError = Boolean(result?.isError || result?.structuredContent?.error);
 

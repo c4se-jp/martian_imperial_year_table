@@ -65,6 +65,15 @@ export default function CurrentImperialDatetimeWidget({ callTool, initialResult,
     }
   }
 
+  function formatCurrentImperialResult(nextResult: WidgetToolResult) {
+    const error = nextResult.structuredContent?.error;
+    if (error !== undefined) {
+      return error;
+    }
+    const imperialDateTimeFormatted = nextResult.structuredContent?.response?.imperialDateTimeFormatted;
+    return typeof imperialDateTimeFormatted === "string" ? imperialDateTimeFormatted : undefined;
+  }
+
   return (
     <main className="mx-auto w-full max-w-full rounded-2xl border border-default bg-surface p-4">
       <h1 className="heading-md">現在の帝國火星曆日時</h1>
@@ -78,7 +87,11 @@ export default function CurrentImperialDatetimeWidget({ callTool, initialResult,
       />
 
       <section className="mt-4">
-        <ToolResultAlert emptyMessage="現在の帝國火星曆日時がここに表示されます。" result={result} />
+        <ToolResultAlert
+          emptyMessage="現在の帝國火星曆日時がここに表示されます。"
+          formatResult={formatCurrentImperialResult}
+          result={result}
+        />
       </section>
     </main>
   );
