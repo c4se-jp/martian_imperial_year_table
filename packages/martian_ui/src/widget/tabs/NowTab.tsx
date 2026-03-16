@@ -24,7 +24,7 @@ export default function NowTab({ currentTimezone, onCurrentTimezoneChange, onFet
         </label>
         <div>
           <Button color="primary" size="sm" loading={running} onClick={onFetch}>
-            取得する
+            現在の帝國火星曆日時を取得
           </Button>
         </div>
       </div>

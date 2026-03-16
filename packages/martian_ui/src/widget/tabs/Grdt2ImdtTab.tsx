@@ -43,7 +43,7 @@ export default function Grdt2ImdtTab({
         </label>
         <div>
           <Button color="primary" size="sm" loading={running} onClick={onConvert}>
-            變換する
+            →帝國火星曆
           </Button>
         </div>
       </div>
