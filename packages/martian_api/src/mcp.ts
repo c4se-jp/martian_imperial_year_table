@@ -64,6 +64,46 @@ type WidgetAsset = {
   sourceHtmlPath: URL;
 };
 
+const imperialDateTimeBodySchema = {
+  year: z.number(),
+  month: z.number(),
+  day: z.number(),
+  hour: z.number(),
+  minute: z.number(),
+  second: z.number(),
+  timezone: z.string(),
+};
+
+function buildResponseSchema(mode: ToolMode) {
+  if (mode === "convert_gregorian_to_imperial") {
+    return z.object({
+      imperialDateTime: z.object(imperialDateTimeBodySchema),
+      imperialDateTimeFormatted: z.string(),
+    });
+  }
+
+  if (mode === "get_current_imperial") {
+    return z.object({
+      gregorianDateTime: z.string(),
+      imperialDateTime: z.object(imperialDateTimeBodySchema),
+      imperialDateTimeFormatted: z.string(),
+    });
+  }
+
+  return z.object({
+    gregorianDateTime: z.string(),
+  });
+}
+
+function buildOutputSchema(mode: ToolMode) {
+  return {
+    mode: z.literal(mode),
+    request: z.record(z.string(), z.unknown()),
+    response: buildResponseSchema(mode).optional(),
+    error: z.string().optional(),
+  };
+}
+
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/datetime-conversion.html": {
     distHtmlPath: new URL("../../../dist/widget/datetime-conversion-widget.html", import.meta.url),
@@ -229,7 +269,14 @@ async function handleToolCall(
 }
 
 function createMcpServer(): McpServer {
-  const server = new McpServer({ name: mcpManifest.server.name, version: mcpManifest.server.version });
+  const primaryResource = mcpManifest.resources[0] as ManifestResource | undefined;
+  const server = new McpServer({
+    name: mcpManifest.server.name,
+    title: mcpManifest.server.title,
+    description: mcpManifest.server.description,
+    version: mcpManifest.server.version,
+    websiteUrl: primaryResource?.meta.resourceDomains[0],
+  });
   for (const widgetResource of mcpManifest.resources as unknown as ManifestResource[]) {
     const asset = widgetAssets[widgetResource.uri];
     registerAppResource(
@@ -291,6 +338,7 @@ function createMcpServer(): McpServer {
         description: tool.description,
         annotations: { readOnlyHint: tool.readOnlyHint === true },
         inputSchema: buildInputSchema(tool.inputSchema),
+        outputSchema: buildOutputSchema(tool.mode),
         _meta: buildToolMeta(tool),
       },
       async (args: Record<string, string>) => handleToolCall(tool.mode, args),

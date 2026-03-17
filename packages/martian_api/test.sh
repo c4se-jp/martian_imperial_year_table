@@ -43,6 +43,20 @@ curl -sS \
   "${MCP_URL}"
 echo
 
+echo "=== MCP: resources/list ==="
+curl -sS -X POST http://localhost:3000/mcp \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":3,"method":"resources/list","params":{}}'
+echo
+
+echo "=== MCP: resources/read ==="
+curl -sS -X POST http://localhost:3000/mcp \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"ui://widget/datetime-conversion.html"}}'
+echo
+
 echo "=== MCP: tools/call convert_imperial_to_gregorian_datetime ==="
 curl -sS \
   -H 'Content-Type: application/json' \
@@ -55,7 +69,7 @@ echo "=== MCP: tools/call get_current_imperial_datetime ==="
 curl -sS \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
-  --data '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_current_imperial_datetime","arguments":{"timezone":"-01:00"}}}' \
+  --data '{"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"get_current_imperial_datetime","arguments":{"timezone":"-01:00"}}}' \
   "${MCP_URL}"
 echo
 
@@ -63,6 +77,6 @@ echo "=== MCP: tools/call convert_gregorian_to_imperial_datetime ==="
 curl -sS \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
-  --data '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"convert_gregorian_to_imperial_datetime","arguments":{"gregorianDateTime":"2026-02-16T00:00:00+00:00","imperialTimezone":"-01:00"}}}' \
+  --data '{"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"convert_gregorian_to_imperial_datetime","arguments":{"gregorianDateTime":"2026-02-16T00:00:00+00:00","imperialTimezone":"-01:00"}}}' \
   "${MCP_URL}"
 echo
