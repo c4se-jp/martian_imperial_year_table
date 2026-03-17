@@ -3,6 +3,7 @@ import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@model
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
 import { readFileSync } from "node:fs";
+import { URL } from "node:url";
 import { z } from "zod";
 import mcpManifest from "./mcp-manifest.json" with { type: "json" };
 import {
@@ -74,54 +75,32 @@ const widgetAssets: Record<string, WidgetAsset> = {
   },
 };
 
-type BuiltAsset = {
-  mimeType: string;
-  text: string;
-  uri: string;
-};
+function resolveWidgetPublicBase(widgetResource: ManifestResource): string | undefined {
+  const baseOrigin = widgetResource.meta.domain ?? widgetResource.meta.resourceDomains[0];
+  if (baseOrigin === undefined) {
+    return undefined;
+  }
 
-function toWidgetAssetUri(relativePath: string): string {
-  return `ui://widget/${relativePath.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "")}`;
+  try {
+    return new URL("/widget/", baseOrigin).toString();
+  } catch {
+    return undefined;
+  }
 }
 
-function resolveBuiltAssetPath(relativePath: string): URL {
-  return new URL(
-    `../../../dist/widget/${relativePath.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "")}`,
-    import.meta.url,
-  );
-}
-
-function collectBuiltAssetPaths(widgetHtml: string): string[] {
-  const paths = new Set<string>();
-
-  for (const match of widgetHtml.matchAll(/<script[^>]+src="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
-    paths.add(match[1]);
-  }
-  for (const match of widgetHtml.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
-    paths.add(match[1]);
-  }
-  for (const match of widgetHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="((?:\.\.\/)+[^"]+|\.\/[^"]+)"/gu)) {
-    paths.add(match[1]);
+function rewriteWidgetAssetUrls(widgetHtml: string, widgetResource: ManifestResource): string {
+  const widgetPublicBase = resolveWidgetPublicBase(widgetResource);
+  if (widgetPublicBase === undefined) {
+    return widgetHtml;
   }
 
-  return [...paths];
-}
-
-function buildAssetContent(relativePath: string): BuiltAsset {
-  const normalizedPath = relativePath.replace(/^\.\//u, "");
-  const text = readFileSync(resolveBuiltAssetPath(normalizedPath), "utf8");
-  if (normalizedPath.endsWith(".css")) {
-    return {
-      mimeType: "text/css",
-      text,
-      uri: toWidgetAssetUri(normalizedPath),
-    };
-  }
-  return {
-    mimeType: "application/javascript",
-    text,
-    uri: toWidgetAssetUri(normalizedPath),
-  };
+  return widgetHtml
+    .replaceAll(/(<script[^>]+src=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
+      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
+    })
+    .replaceAll(/(<link[^>]+href=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
+      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
+    });
 }
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
@@ -273,11 +252,9 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
-        let builtAssets: BuiltAsset[] = [];
 
         try {
-          widgetHtml = readFileSync(asset.distHtmlPath, "utf8");
-          builtAssets = collectBuiltAssetPaths(widgetHtml).map((relativePath) => buildAssetContent(relativePath));
+          widgetHtml = rewriteWidgetAssetUrls(readFileSync(asset.distHtmlPath, "utf8"), widgetResource);
         } catch {
           widgetHtml = readFileSync(asset.sourceHtmlPath, "utf8");
         }
@@ -299,7 +276,6 @@ function createMcpServer(): McpServer {
                 },
               },
             },
-            ...builtAssets,
           ],
         };
       },
