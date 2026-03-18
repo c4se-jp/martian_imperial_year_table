@@ -70,9 +70,7 @@ describe("/mcp", () => {
     expect(getCurrentImperialDateTimeTool?._meta?.ui).toEqual({
       resourceUri: "ui://widget/current-imperial-datetime.html",
     });
-    expect(getCurrentImperialDateTimeTool?._meta?.["openai/outputTemplate"]).toBe(
-      "ui://widget/current-imperial-datetime.html",
-    );
+    expect(getCurrentImperialDateTimeTool?._meta?.["openai/outputTemplate"]).toBeUndefined();
   });
 
   test("tools/call で現在の帝國火星曆日時を返す", async () => {

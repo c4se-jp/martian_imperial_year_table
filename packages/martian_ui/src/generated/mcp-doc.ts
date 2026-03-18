@@ -60,7 +60,7 @@ const mcpDoc = {
         },
       ],
       meta: {
-        outputTemplate: "ui://widget/datetime-conversion.html",
+        resourceUri: "ui://widget/datetime-conversion.html",
         invoking: "變換中です",
         invoked: "變換が完了しました",
       },
@@ -107,7 +107,7 @@ const mcpDoc = {
         },
       ],
       meta: {
-        outputTemplate: "ui://widget/current-imperial-datetime.html",
+        resourceUri: "ui://widget/current-imperial-datetime.html",
         invoking: "取得中です",
         invoked: "取得が完了しました",
       },
@@ -156,7 +156,7 @@ const mcpDoc = {
         },
       ],
       meta: {
-        outputTemplate: "ui://widget/datetime-conversion.html",
+        resourceUri: "ui://widget/datetime-conversion.html",
         invoking: "變換中です",
         invoked: "變換が完了しました",
       },

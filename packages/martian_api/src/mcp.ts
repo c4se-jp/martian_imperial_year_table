@@ -31,7 +31,7 @@ type ManifestTool = {
   readOnlyHint?: boolean;
   inputSchema: Record<string, ManifestField>;
   meta?: {
-    outputTemplate?: string;
+    resourceUri?: string;
     invoking?: string;
     invoked?: string;
   };
@@ -188,8 +188,7 @@ function buildInputSchema(shape: ManifestTool["inputSchema"]) {
 
 function buildToolMeta(tool: ManifestTool) {
   return {
-    ...(tool.meta?.outputTemplate ? { ui: { resourceUri: tool.meta.outputTemplate } } : {}),
-    ...(tool.meta?.outputTemplate ? { "openai/outputTemplate": tool.meta.outputTemplate } : {}),
+    ...(tool.meta?.resourceUri ? { ui: { resourceUri: tool.meta.resourceUri } } : {}),
     ...(tool.meta?.invoked ? { "openai/toolInvocation/invoked": tool.meta.invoked } : {}),
     ...(tool.meta?.invoking ? { "openai/toolInvocation/invoking": tool.meta.invoking } : {}),
   };

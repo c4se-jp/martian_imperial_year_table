@@ -28,10 +28,34 @@ echo
 MCP_URL="${BASE_URL}/mcp"
 
 echo "=== MCP: initialize ==="
+JSON=$(cat <<JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2025-06-18",
+    "capabilities": {
+      "extensions": {
+        "io.modelcontextprotocol/ui": {
+          "mimeTypes": [
+            "text/html;profile=mcp-app"
+          ]
+        }
+      }
+    },
+    "clientInfo": {
+      "name": "martian_api_test",
+      "version": "1.0.0"
+    }
+  }
+}
+JSON
+)
 curl -sS \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json, text/event-stream' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"martian_api_test","version":"1.0.0"}}}' \
+  --data "$JSON" \
   "${MCP_URL}"
 echo
 

@@ -114,9 +114,9 @@ export default function McpPage() {
                   <p>
                     <strong>mode:</strong> <code>{tool.mode}</code>
                   </p>
-                  {tool.meta.outputTemplate && (
+                  {tool.meta.resourceUri && (
                     <p>
-                      <strong>outputTemplate:</strong> <code>{tool.meta.outputTemplate}</code>
+                      <strong>resourceUri:</strong> <code>{tool.meta.resourceUri}</code>
                     </p>
                   )}
                   {tool.meta.invoking && (

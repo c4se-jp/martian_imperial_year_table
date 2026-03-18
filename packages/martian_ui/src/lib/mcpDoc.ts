@@ -15,7 +15,7 @@ export type McpToolDoc = {
   readOnlyHint: boolean;
   inputSchema: McpFieldDoc[];
   meta: {
-    outputTemplate?: string;
+    resourceUri?: string;
     invoking?: string;
     invoked?: string;
   };
