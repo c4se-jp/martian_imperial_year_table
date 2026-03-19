@@ -1,3 +1,4 @@
+import { GetSecretValueCommand, SecretsManagerClient } from "@aws-sdk/client-secrets-manager";
 import { SpanStatusCode, context, trace, type Attributes, type Span } from "@opentelemetry/api";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
@@ -17,6 +18,7 @@ type TelemetryConfig = {
 
 type TelemetryState = {
   enabled: boolean;
+  pendingStart?: Promise<void>;
   sdk?: NodeSDK;
   started: boolean;
   shutdownHandlersRegistered: boolean;
@@ -49,6 +51,53 @@ function getTelemetryConfig(): TelemetryConfig | undefined {
 
   return {
     apiKey,
+    deploymentEnvironment: trimEnvValue(process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT),
+    serviceVersion: trimEnvValue(process.env.MACKEREL_SERVICE_VERSION),
+  };
+}
+
+async function loadSecretString(secretId: string): Promise<string | undefined> {
+  const client = new SecretsManagerClient({});
+  const response = await client.send(new GetSecretValueCommand({ SecretId: secretId }));
+  const secretString = trimEnvValue(response.SecretString);
+  if (secretString === undefined) {
+    return undefined;
+  }
+
+  try {
+    const parsed = JSON.parse(secretString) as { MACKEREL_API_KEY?: unknown };
+    if (typeof parsed.MACKEREL_API_KEY === "string") {
+      return trimEnvValue(parsed.MACKEREL_API_KEY);
+    }
+  } catch {
+    return secretString;
+  }
+
+  return secretString;
+}
+
+async function getTelemetryConfigFromEnvironment(): Promise<TelemetryConfig | undefined> {
+  const directApiKey = trimEnvValue(process.env.MACKEREL_API_KEY);
+  if (directApiKey !== undefined) {
+    return {
+      apiKey: directApiKey,
+      deploymentEnvironment: trimEnvValue(process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT),
+      serviceVersion: trimEnvValue(process.env.MACKEREL_SERVICE_VERSION),
+    };
+  }
+
+  const secretId = trimEnvValue(process.env.MACKEREL_API_KEY_SECRET_ARN);
+  if (secretId === undefined) {
+    return undefined;
+  }
+
+  const secretApiKey = await loadSecretString(secretId).catch(() => undefined);
+  if (secretApiKey === undefined) {
+    return undefined;
+  }
+
+  return {
+    apiKey: secretApiKey,
     deploymentEnvironment: trimEnvValue(process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT),
     serviceVersion: trimEnvValue(process.env.MACKEREL_SERVICE_VERSION),
   };
@@ -98,42 +147,50 @@ function registerShutdownHandlers(sdk: NodeSDK) {
   state.shutdownHandlersRegistered = true;
 }
 
-export function startTelemetry() {
+export async function startTelemetry() {
   const state = getTelemetryState();
-  if (state.started) {
-    return;
-  }
-  state.started = true;
-
-  const config = getTelemetryConfig();
-  if (config === undefined) {
+  if (state.started || state.pendingStart !== undefined) {
+    await state.pendingStart;
     return;
   }
 
-  const sdk = new NodeSDK({
-    instrumentations: [
-      getNodeAutoInstrumentations({
-        "@opentelemetry/instrumentation-fs": {
-          enabled: false,
+  state.pendingStart = (async () => {
+    const config = await getTelemetryConfigFromEnvironment();
+    if (config === undefined) {
+      state.started = true;
+      return;
+    }
+
+    const sdk = new NodeSDK({
+      instrumentations: [
+        getNodeAutoInstrumentations({
+          "@opentelemetry/instrumentation-fs": {
+            enabled: false,
+          },
+        }),
+      ],
+      resource: resourceFromAttributes(buildAttributes(config)),
+      resourceDetectors: [processDetector, hostDetector],
+      traceExporter: new OTLPTraceExporter({
+        headers: {
+          Accept: "*/*",
+          "Mackerel-Api-Key": config.apiKey,
         },
+        timeoutMillis: 15_000,
+        url: MACKEREL_OTLP_TRACES_URL,
       }),
-    ],
-    resource: resourceFromAttributes(buildAttributes(config)),
-    resourceDetectors: [processDetector, hostDetector],
-    traceExporter: new OTLPTraceExporter({
-      headers: {
-        Accept: "*/*",
-        "Mackerel-Api-Key": config.apiKey,
-      },
-      timeoutMillis: 15_000,
-      url: MACKEREL_OTLP_TRACES_URL,
-    }),
-  });
-  sdk.start();
+    });
+    sdk.start();
 
-  state.enabled = true;
-  state.sdk = sdk;
-  registerShutdownHandlers(sdk);
+    state.enabled = true;
+    state.sdk = sdk;
+    state.started = true;
+    registerShutdownHandlers(sdk);
+  })();
+
+  await state.pendingStart.finally(() => {
+    state.pendingStart = undefined;
+  });
 }
 
 export async function flushTelemetry() {

@@ -3,7 +3,7 @@ import { startTelemetry } from "./telemetry.js";
 
 const port = Number(process.env.PORT ?? 3000);
 
-startTelemetry();
+await startTelemetry();
 
 const { app } = await import("./app.js");
 

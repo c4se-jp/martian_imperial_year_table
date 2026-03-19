@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { CfnOutput, Duration, Fn, RemovalPolicy, Stack, StackProps, Tags } from "aws-cdk-lib";
+import { CfnOutput, Duration, Fn, RemovalPolicy, SecretValue, Stack, StackProps, Tags } from "aws-cdk-lib";
 import * as acm from "aws-cdk-lib/aws-certificatemanager";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
@@ -11,6 +11,7 @@ import * as route53 from "aws-cdk-lib/aws-route53";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
+import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 
 export interface MartianSiteStackProps extends StackProps {
@@ -38,14 +39,25 @@ export class MartianSiteStack extends Stack {
     const certificate = acm.Certificate.fromCertificateArn(this, "SiteCertificate", props.certificateArn);
     const apiLambdaEnvironment: Record<string, string> = {};
 
-    if (process.env.MACKEREL_API_KEY !== undefined) {
-      apiLambdaEnvironment.MACKEREL_API_KEY = process.env.MACKEREL_API_KEY;
-    }
     if (props.mackerelDeploymentEnvironment !== undefined) {
       apiLambdaEnvironment.MACKEREL_DEPLOYMENT_ENVIRONMENT = props.mackerelDeploymentEnvironment;
     }
     if (props.mackerelServiceVersion !== undefined) {
       apiLambdaEnvironment.MACKEREL_SERVICE_VERSION = props.mackerelServiceVersion;
+    }
+
+    const mackerelApiKey = process.env.MACKEREL_API_KEY?.trim();
+    const mackerelApiKeySecret =
+      mackerelApiKey === undefined || mackerelApiKey === ""
+        ? undefined
+        : new secretsmanager.Secret(this, "MackerelApiKeySecret", {
+            description: "Mackerel API key for martian_api tracing export",
+            secretName: "/martian-imperial-year-table/martian_api/mackerel_api_key",
+            secretStringValue: SecretValue.unsafePlainText(mackerelApiKey),
+          });
+
+    if (mackerelApiKeySecret !== undefined) {
+      apiLambdaEnvironment.MACKEREL_API_KEY_SECRET_ARN = mackerelApiKeySecret.secretArn;
     }
 
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
@@ -82,6 +94,10 @@ export class MartianSiteStack extends Stack {
       runtime: lambda.Runtime.NODEJS_22_X,
       timeout: Duration.seconds(10),
     });
+
+    if (mackerelApiKeySecret !== undefined) {
+      mackerelApiKeySecret.grantRead(apiLambda);
+    }
 
     const httpApi = new apigwv2.HttpApi(this, "ImperialCalendarHttpApi", {
       createDefaultStage: true,
