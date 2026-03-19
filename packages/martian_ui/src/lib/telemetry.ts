@@ -5,8 +5,8 @@ import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { BatchSpanProcessor, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
 
-const MACKEREL_OTLP_TRACES_URL = "https://otlp-vaxila.mackerelio.com/v1/traces";
-const EXPORTER_URL_PATTERN = /^https:\/\/otlp-vaxila\.mackerelio\.com\/v1\/traces(?:[/?#]|$)/;
+const MACKEREL_OTLP_TRACES_URL = "https://otlp.mackerelio.com/v1/trace";
+const EXPORTER_URL_PATTERN = /^https:\/\/otlp\.mackerelio\.com\/v1\/traces(?:[/?#]|$)/;
 const TELEMETRY_STATE_KEY = "__martianUiTelemetryState";
 
 type BrowserTelemetryConfig = {
