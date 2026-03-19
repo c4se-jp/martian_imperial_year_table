@@ -15,7 +15,7 @@ AWS Lambda で動作する帝國火星曆 Web API の實裝ディレクトリで
 ## OpenTelemetry
 
 - `MACKEREL_API_KEY`
-  - CD 時に AWS Secrets Manager へ保存するための値です。Lambda には直接渡しません。
+  - local 開發時のみ直接設定できます。本番 deploy では通常使ひません。
 - `MACKEREL_API_KEY_SECRET_ARN`
   - Lambda が起動時に参照する Secrets Manager secret の ARN です。
 - `MACKEREL_DEPLOYMENT_ENVIRONMENT`

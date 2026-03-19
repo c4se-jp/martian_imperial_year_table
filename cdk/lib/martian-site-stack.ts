@@ -24,6 +24,9 @@ export interface MartianSiteStackProps extends StackProps {
   siteDomainName: string;
 }
 
+const MACKEREL_API_KEY_SECRET_NAME = "/martian-imperial-year-table/martian_api/mackerel_api_key";
+const MACKEREL_API_KEY_SECRET_PLACEHOLDER = "__SET_IN_AWS_SECRETS_MANAGER__";
+
 export class MartianSiteStack extends Stack {
   constructor(scope: Construct, id: string, props: MartianSiteStackProps) {
     super(scope, id, props);
@@ -46,19 +49,14 @@ export class MartianSiteStack extends Stack {
       apiLambdaEnvironment.MACKEREL_SERVICE_VERSION = props.mackerelServiceVersion;
     }
 
-    const mackerelApiKey = process.env.MACKEREL_API_KEY?.trim();
-    const mackerelApiKeySecret =
-      mackerelApiKey === undefined || mackerelApiKey === ""
-        ? undefined
-        : new secretsmanager.Secret(this, "MackerelApiKeySecret", {
-            description: "Mackerel API key for martian_api tracing export",
-            secretName: "/martian-imperial-year-table/martian_api/mackerel_api_key",
-            secretStringValue: SecretValue.unsafePlainText(mackerelApiKey),
-          });
+    const mackerelApiKeySecret = new secretsmanager.Secret(this, "MackerelApiKeySecret", {
+      description: "Mackerel API key for martian_api tracing export",
+      removalPolicy: RemovalPolicy.RETAIN,
+      secretName: MACKEREL_API_KEY_SECRET_NAME,
+      secretStringValue: SecretValue.unsafePlainText(MACKEREL_API_KEY_SECRET_PLACEHOLDER),
+    });
 
-    if (mackerelApiKeySecret !== undefined) {
-      apiLambdaEnvironment.MACKEREL_API_KEY_SECRET_ARN = mackerelApiKeySecret.secretArn;
-    }
+    apiLambdaEnvironment.MACKEREL_API_KEY_SECRET_ARN = mackerelApiKeySecret.secretArn;
 
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
       autoDeleteObjects: false,
@@ -95,9 +93,7 @@ export class MartianSiteStack extends Stack {
       timeout: Duration.seconds(10),
     });
 
-    if (mackerelApiKeySecret !== undefined) {
-      mackerelApiKeySecret.grantRead(apiLambda);
-    }
+    mackerelApiKeySecret.grantRead(apiLambda);
 
     const httpApi = new apigwv2.HttpApi(this, "ImperialCalendarHttpApi", {
       createDefaultStage: true,
@@ -208,6 +204,10 @@ function handler(event) {
 
     new CfnOutput(this, "McpUrl", {
       value: `https://${props.siteDomainName}/mcp`,
+    });
+
+    new CfnOutput(this, "MackerelApiKeySecretName", {
+      value: MACKEREL_API_KEY_SECRET_NAME,
     });
   }
 }

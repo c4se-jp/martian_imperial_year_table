@@ -9,6 +9,7 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_NAMESPACE, ATTR_SERVICE_VERSION } from 
 const MACKEREL_OTLP_TRACES_URL = "https://otlp-vaxila.mackerelio.com/v1/traces";
 const SERVICE_NAMESPACE = "martian_imperial_year_table";
 const SERVICE_NAME = "martian_api";
+const MACKEREL_API_KEY_SECRET_PLACEHOLDER = "__SET_IN_AWS_SECRETS_MANAGER__";
 
 type TelemetryConfig = {
   apiKey: string;
@@ -43,19 +44,6 @@ function getTelemetryState(): TelemetryState {
   return globalThis.__martianApiTelemetryState;
 }
 
-function getTelemetryConfig(): TelemetryConfig | undefined {
-  const apiKey = trimEnvValue(process.env.MACKEREL_API_KEY);
-  if (apiKey === undefined) {
-    return undefined;
-  }
-
-  return {
-    apiKey,
-    deploymentEnvironment: trimEnvValue(process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT),
-    serviceVersion: trimEnvValue(process.env.MACKEREL_SERVICE_VERSION),
-  };
-}
-
 async function loadSecretString(secretId: string): Promise<string | undefined> {
   const client = new SecretsManagerClient({});
   const response = await client.send(new GetSecretValueCommand({ SecretId: secretId }));
@@ -67,13 +55,14 @@ async function loadSecretString(secretId: string): Promise<string | undefined> {
   try {
     const parsed = JSON.parse(secretString) as { MACKEREL_API_KEY?: unknown };
     if (typeof parsed.MACKEREL_API_KEY === "string") {
-      return trimEnvValue(parsed.MACKEREL_API_KEY);
+      const apiKey = trimEnvValue(parsed.MACKEREL_API_KEY);
+      return apiKey === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : apiKey;
     }
   } catch {
-    return secretString;
+    return secretString === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : secretString;
   }
 
-  return secretString;
+  return secretString === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : secretString;
 }
 
 async function getTelemetryConfigFromEnvironment(): Promise<TelemetryConfig | undefined> {

@@ -30,7 +30,7 @@ npx cdk deploy
 - `siteAssetsPath` (context または `SITE_ASSETS_PATH`)
 - `siteDomainName` (context または `SITE_DOMAIN_NAME`)
 - `MACKEREL_API_KEY`
-  - 指定された場合、`/martian-imperial-year-table/martian_api/mackerel_api_key` として Secrets Manager に保存し、Lambda にはその ARN を渡します。
+  - deploy では不要です。CDK が `/martian-imperial-year-table/martian_api/mackerel_api_key` を作成し、値は AWS 側で別途設定します。
 
 例:
 
