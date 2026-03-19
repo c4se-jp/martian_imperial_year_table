@@ -80,7 +80,7 @@ export function setupBrowserTelemetry() {
     url: MACKEREL_OTLP_TRACES_URL,
     headers: {
       Accept: "application/json",
-      "Mackerel-Client-Token": config.clientToken,
+      "X-Mackerel-Client-Token": config.clientToken,
     },
   });
 
