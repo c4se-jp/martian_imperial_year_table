@@ -1,3 +1,4 @@
+import { SpanStatusCode, trace } from "@opentelemetry/api";
 import { Hono } from "hono";
 import {
   buildCurrentImperialDateTimeResponse,
@@ -9,12 +10,46 @@ import {
   validateTimezone,
 } from "./datetime-conversion.js";
 import { registerMcpRoute } from "./mcp.js";
+import { flushTelemetry, recordError, runWithSpan } from "./telemetry.js";
 
 type ErrorResponse = {
   message: string;
 };
 
 export const app = new Hono();
+
+app.use("*", async (c, next) => {
+  const tracer = trace.getTracer("martian_api");
+  const url = new URL(c.req.url);
+
+  return tracer.startActiveSpan(`${c.req.method} ${c.req.path}`, async (span) => {
+    span.setAttributes({
+      "http.request.method": c.req.method,
+      "http.route": c.req.path,
+      "server.address": url.hostname,
+      "url.full": c.req.url,
+      "url.path": c.req.path,
+      "url.query": url.search,
+    });
+
+    try {
+      await next();
+      span.setAttribute("http.response.status_code", c.res.status);
+      if (c.res.status >= 500) {
+        span.setStatus({ code: SpanStatusCode.ERROR });
+      } else {
+        span.setStatus({ code: SpanStatusCode.OK });
+      }
+    } catch (error) {
+      span.setAttribute("http.response.status_code", 500);
+      recordError(error, span);
+      throw error;
+    } finally {
+      span.end();
+      await flushTelemetry();
+    }
+  });
+});
 
 type ImperialToGregorianRequest = {
   imperialDateTimeFormatted: string;
@@ -32,26 +67,31 @@ app.post("/api/gregorian-datetime/from-imperial", async (c) => {
   if (typeof body.imperialDateTimeFormatted !== "string" || typeof body.gregorianTimezone !== "string") {
     return c.json<ErrorResponse>({ message: "Invalid request body" }, 400);
   }
+  const imperialDateTimeFormatted = body.imperialDateTimeFormatted;
+  const gregorianTimezone = body.gregorianTimezone;
 
-  const validationError = validateTimezone(body.gregorianTimezone);
+  const validationError = validateTimezone(gregorianTimezone);
   if (validationError) {
     return c.json<ErrorResponse>({ message: validationError }, 400);
   }
 
   try {
     return c.json<GregorianDateTimeConversionResponse>(
-      buildImperialToGregorianResponse(body.imperialDateTimeFormatted, body.gregorianTimezone),
+      await runWithSpan("buildImperialToGregorianResponse", { "app.operation": "imperial_to_gregorian" }, () =>
+        buildImperialToGregorianResponse(imperialDateTimeFormatted, gregorianTimezone),
+      ),
       200,
     );
   } catch (error) {
     if (error instanceof Error && error.message === "Invalid imperialDateTimeFormatted") {
       return c.json<ErrorResponse>({ message: error.message }, 400);
     }
+    recordError(error);
     return c.json<ErrorResponse>({ message: "Internal server error" }, 500);
   }
 });
 
-app.get("/api/imperial-datetime/current", (c) => {
+app.get("/api/imperial-datetime/current", async (c) => {
   const timezone = c.req.query("timezone") ?? "+00:00";
   const validationError = validateTimezone(timezone);
   if (validationError) {
@@ -59,8 +99,14 @@ app.get("/api/imperial-datetime/current", (c) => {
   }
 
   try {
-    return c.json<CurrentImperialDateTimeResponse>(buildCurrentImperialDateTimeResponse(new Date(), timezone), 200);
-  } catch {
+    return c.json<CurrentImperialDateTimeResponse>(
+      await runWithSpan("buildCurrentImperialDateTimeResponse", { "app.operation": "current_imperial_datetime" }, () =>
+        buildCurrentImperialDateTimeResponse(new Date(), timezone),
+      ),
+      200,
+    );
+  } catch (error) {
+    recordError(error);
     return c.json<ErrorResponse>({ message: "Internal server error" }, 500);
   }
 });
@@ -81,15 +127,19 @@ app.post("/api/imperial-datetime/from-gregorian", async (c) => {
   if (typeof body.gregorianDateTime !== "string" || typeof body.imperialTimezone !== "string") {
     return c.json<ErrorResponse>({ message: "Invalid request body" }, 400);
   }
+  const gregorianDateTime = body.gregorianDateTime;
+  const imperialTimezone = body.imperialTimezone;
 
-  const validationError = validateTimezone(body.imperialTimezone);
+  const validationError = validateTimezone(imperialTimezone);
   if (validationError) {
     return c.json<ErrorResponse>({ message: validationError }, 400);
   }
 
   try {
     return c.json<ImperialDateTimeConversionResponse>(
-      buildGregorianToImperialResponse(body.gregorianDateTime, body.imperialTimezone),
+      await runWithSpan("buildGregorianToImperialResponse", { "app.operation": "gregorian_to_imperial" }, () =>
+        buildGregorianToImperialResponse(gregorianDateTime, imperialTimezone),
+      ),
       200,
     );
   } catch (error) {
@@ -99,6 +149,7 @@ app.post("/api/imperial-datetime/from-gregorian", async (c) => {
     ) {
       return c.json<ErrorResponse>({ message: error.message }, 400);
     }
+    recordError(error);
     return c.json<ErrorResponse>({ message: "Internal server error" }, 500);
   }
 });

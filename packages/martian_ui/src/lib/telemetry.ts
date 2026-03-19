@@ -4,6 +4,7 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { BatchSpanProcessor, TraceIdRatioBasedSampler, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
+import { ATTR_SERVICE_NAME, ATTR_SERVICE_NAMESPACE, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 
 const MACKEREL_OTLP_TRACES_URL = "https://otlp-vaxila.mackerelio.com/v1/traces";
 const EXPORTER_URL_PATTERN = /^https:\/\/otlp-vaxila\.mackerelio\.com\/v1\/traces(?:[/?#]|$)/;
@@ -146,11 +147,11 @@ export function setupBrowserTelemetry() {
   });
 
   const resourceAttributes: Record<string, string> = {
-    "service.namespace": config.serviceNamespace,
-    "service.name": config.serviceName,
+    [ATTR_SERVICE_NAMESPACE]: config.serviceNamespace,
+    [ATTR_SERVICE_NAME]: config.serviceName,
   };
   if (config.serviceVersion !== undefined) {
-    resourceAttributes["service.version"] = config.serviceVersion;
+    resourceAttributes[ATTR_SERVICE_VERSION] = config.serviceVersion;
   }
   if (config.deploymentEnvironment !== undefined) {
     resourceAttributes["deployment.environment.name"] = config.deploymentEnvironment;

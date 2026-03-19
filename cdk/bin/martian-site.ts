@@ -24,11 +24,21 @@ const siteAssetsPath =
 const siteDomainName =
   app.node.tryGetContext("siteDomainName") ?? process.env.SITE_DOMAIN_NAME ?? "martian-imperial-year-table.c4se.jp";
 
+const mackerelDeploymentEnvironment =
+  app.node.tryGetContext("mackerelDeploymentEnvironment") ??
+  process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT ??
+  "production";
+
+const mackerelServiceVersion =
+  app.node.tryGetContext("mackerelServiceVersion") ?? process.env.MACKEREL_SERVICE_VERSION;
+
 new MartianSiteStack(app, "MartianImperialYearTableSiteStack", {
   siteDomainName,
   certificateArn,
   hostedZoneId,
   hostedZoneDomainName,
+  mackerelDeploymentEnvironment,
+  mackerelServiceVersion,
   siteAssetsPath,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,

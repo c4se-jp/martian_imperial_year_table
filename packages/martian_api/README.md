@@ -11,3 +11,12 @@ AWS Lambda で動作する帝國火星曆 Web API の實裝ディレクトリで
 
 - `src/index.ts`
   - Lambda handler (`handler`) を export します。
+
+## OpenTelemetry
+
+- `MACKEREL_API_KEY`
+  - 設定されてゐる場合のみ、Mackerel へ OTLP/HTTP で trace を送信します。
+- `MACKEREL_DEPLOYMENT_ENVIRONMENT`
+  - `production` などの deployment 環境名です。
+- `MACKEREL_SERVICE_VERSION`
+  - deploy した revision を渡します。GitHub Actions では `github.sha` を渡す想定です。

@@ -17,6 +17,8 @@ export interface MartianSiteStackProps extends StackProps {
   certificateArn: string;
   hostedZoneDomainName: string;
   hostedZoneId: string;
+  mackerelDeploymentEnvironment?: string;
+  mackerelServiceVersion?: string;
   siteAssetsPath?: string;
   siteDomainName: string;
 }
@@ -34,6 +36,17 @@ export class MartianSiteStack extends Stack {
     });
 
     const certificate = acm.Certificate.fromCertificateArn(this, "SiteCertificate", props.certificateArn);
+    const apiLambdaEnvironment: Record<string, string> = {};
+
+    if (process.env.MACKEREL_API_KEY !== undefined) {
+      apiLambdaEnvironment.MACKEREL_API_KEY = process.env.MACKEREL_API_KEY;
+    }
+    if (props.mackerelDeploymentEnvironment !== undefined) {
+      apiLambdaEnvironment.MACKEREL_DEPLOYMENT_ENVIRONMENT = props.mackerelDeploymentEnvironment;
+    }
+    if (props.mackerelServiceVersion !== undefined) {
+      apiLambdaEnvironment.MACKEREL_SERVICE_VERSION = props.mackerelServiceVersion;
+    }
 
     const siteBucket = new s3.Bucket(this, "SiteBucket", {
       autoDeleteObjects: false,
@@ -62,6 +75,7 @@ export class MartianSiteStack extends Stack {
       },
       depsLockFilePath: path.resolve(__dirname, "../../package-lock.json"),
       entry: path.resolve(__dirname, "../../packages/martian_api/src/index.ts"),
+      environment: apiLambdaEnvironment,
       handler: "handler",
       memorySize: 256,
       projectRoot: path.resolve(__dirname, "../.."),
