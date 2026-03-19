@@ -1,4 +1,4 @@
-import { SpanStatusCode, trace } from "@opentelemetry/api";
+import { SpanStatusCode, trace, type Span } from "@opentelemetry/api";
 import { getWebAutoInstrumentations } from "@opentelemetry/auto-instrumentations-web";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http/build/esm/platform/browser";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
@@ -19,6 +19,11 @@ type BrowserTelemetryConfig = {
 
 type TelemetryState = {
   enabled: boolean;
+  pendingRouteTransition?: {
+    navigationType: string;
+    path: string;
+    span: Span;
+  };
   provider?: WebTracerProvider;
   tracerName: string;
 };
@@ -56,6 +61,62 @@ function getPropagationTargets(): Array<RegExp | string> {
 
 function getTelemetryState(): TelemetryState | undefined {
   return window[TELEMETRY_STATE_KEY];
+}
+
+function buildPathname(url: string | URL | null | undefined): string {
+  if (url === undefined || url === null || url === "") {
+    return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  }
+
+  const resolvedUrl = new URL(String(url), window.location.href);
+  return `${resolvedUrl.pathname}${resolvedUrl.search}${resolvedUrl.hash}`;
+}
+
+function startRouteTransition(path: string, navigationType: string) {
+  const state = getTelemetryState();
+  if (state?.enabled !== true) {
+    return;
+  }
+
+  if (state.pendingRouteTransition !== undefined) {
+    state.pendingRouteTransition.span.setAttribute("route.transition.interrupted", true);
+    state.pendingRouteTransition.span.setStatus({ code: SpanStatusCode.ERROR });
+    state.pendingRouteTransition.span.end();
+  }
+
+  const tracer = trace.getTracer(state.tracerName);
+  const span = tracer.startSpan("route transition", {
+    attributes: {
+      "app.route": path,
+      "navigation.type": navigationType,
+      "url.path": path,
+    },
+  });
+
+  state.pendingRouteTransition = {
+    navigationType,
+    path,
+    span,
+  };
+}
+
+function installRouteTransitionHooks() {
+  const originalPushState = window.history.pushState.bind(window.history);
+  const originalReplaceState = window.history.replaceState.bind(window.history);
+
+  window.history.pushState = function pushState(data: unknown, unused: string, url?: string | URL | null): void {
+    startRouteTransition(buildPathname(url), "PUSH");
+    originalPushState(data, unused, url);
+  };
+
+  window.history.replaceState = function replaceState(data: unknown, unused: string, url?: string | URL | null): void {
+    startRouteTransition(buildPathname(url), "REPLACE");
+    originalReplaceState(data, unused, url);
+  };
+
+  window.addEventListener("popstate", () => {
+    startRouteTransition(buildPathname(window.location.href), "POP");
+  });
 }
 
 export function setupBrowserTelemetry() {
@@ -151,9 +212,11 @@ export function setupBrowserTelemetry() {
     provider,
     tracerName: config.serviceName,
   };
+
+  installRouteTransitionHooks();
 }
 
-export function trackRouteTransition(path: string, navigationType: string) {
+export function finishRouteTransition(path: string, navigationType: string) {
   if (typeof window === "undefined") {
     return;
   }
@@ -163,22 +226,20 @@ export function trackRouteTransition(path: string, navigationType: string) {
     return;
   }
 
-  const tracer = trace.getTracer(state.tracerName);
-  const span = tracer.startSpan("route transition", {
-    attributes: {
-      "app.route": path,
-      "code.function.name": "trackRouteTransition",
-      "navigation.type": navigationType,
-      "url.path": path,
-    },
-  });
+  const pendingRouteTransition = state.pendingRouteTransition;
+  if (pendingRouteTransition === undefined) {
+    return;
+  }
 
   try {
-    span.setStatus({ code: SpanStatusCode.OK });
+    pendingRouteTransition.span.setAttribute("app.route.committed", path);
+    pendingRouteTransition.span.setAttribute("navigation.type.committed", navigationType);
+    pendingRouteTransition.span.setStatus({ code: SpanStatusCode.OK });
   } catch (error) {
-    span.recordException(error instanceof Error ? error : new Error(String(error)));
-    span.setStatus({ code: SpanStatusCode.ERROR });
+    pendingRouteTransition.span.recordException(error instanceof Error ? error : new Error(String(error)));
+    pendingRouteTransition.span.setStatus({ code: SpanStatusCode.ERROR });
   } finally {
-    span.end();
+    pendingRouteTransition.span.end();
+    state.pendingRouteTransition = undefined;
   }
 }
