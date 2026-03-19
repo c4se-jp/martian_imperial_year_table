@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { BrowserRouter, Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/Home";
 import TransformPage from "./pages/Transform";
@@ -8,6 +8,24 @@ import CalendarPage from "./pages/Calendar";
 import { applyThemePreference, readThemePreference, THEME_STORAGE_KEY, type ThemePreference } from "./lib/theme";
 import ApiPage from "./pages/Api";
 import McpPage from "./pages/Mcp";
+import { trackRouteTransition } from "./lib/telemetry";
+
+function RouteChangeTracker() {
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const isFirstRenderRef = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      return;
+    }
+
+    trackRouteTransition(`${location.pathname}${location.search}${location.hash}`, navigationType);
+  }, [location.hash, location.pathname, location.search, navigationType]);
+
+  return null;
+}
 
 function AppShell({
   themePreference,
@@ -18,6 +36,7 @@ function AppShell({
 }) {
   return (
     <>
+      <RouteChangeTracker />
       <Navigation themePreference={themePreference} onThemePreferenceChange={onThemePreferenceChange} />
       <main>
         <Routes>

@@ -21,6 +21,12 @@
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.2.2",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-web": "^0.58.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.213.0",
+    "@opentelemetry/instrumentation": "^0.213.0",
+    "@opentelemetry/resources": "^2.6.0",
+    "@opentelemetry/sdk-trace-web": "^2.6.0",
     "@openai/apps-sdk-ui": "^0.2.1",
     "bulma": "^1.0.4",
     "marked": "^17.0.4",
