@@ -46,7 +46,7 @@ app.use("*", async (c, next) => {
       throw error;
     } finally {
       span.end();
-      await flushTelemetry();
+      void flushTelemetry();
     }
   });
 });
