@@ -1,8 +1,18 @@
-import { startTelemetry } from "./telemetry.js";
 import { handle } from "hono/aws-lambda";
+import { startTelemetry } from "./telemetry.js";
+import { app } from "./app.js";
 
-await startTelemetry();
+const honoHandler = handle(app);
+let telemetryStartPromise: Promise<void> | undefined;
 
-const { app } = await import("./app.js");
+function ensureTelemetryStarted(): Promise<void> {
+  telemetryStartPromise ??= startTelemetry();
+  return telemetryStartPromise;
+}
 
-export const handler = handle(app);
+export async function handler(
+  ...args: Parameters<typeof honoHandler>
+): Promise<Awaited<ReturnType<typeof honoHandler>>> {
+  await ensureTelemetryStarted();
+  return honoHandler(...args);
+}

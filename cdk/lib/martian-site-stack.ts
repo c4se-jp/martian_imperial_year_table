@@ -80,7 +80,7 @@ export class MartianSiteStack extends Stack {
             return [];
           },
         },
-        format: lambdaNodejs.OutputFormat.ESM,
+        format: lambdaNodejs.OutputFormat.CJS,
         target: "node22",
       },
       depsLockFilePath: path.resolve(__dirname, "../../package-lock.json"),
