@@ -2,7 +2,8 @@ import { StreamableHTTPTransport } from "@hono/mcp";
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { URL } from "node:url";
 import { z } from "zod";
 import mcpManifest from "./mcp-manifest.json" with { type: "json" };
@@ -60,8 +61,8 @@ type ToolResult = {
 };
 
 type WidgetAsset = {
-  distHtmlPath: URL;
-  sourceHtmlPath: URL;
+  distHtmlPathCandidates: string[];
+  sourceHtmlPathCandidates: string[];
 };
 
 const imperialDateTimeBodySchema = {
@@ -104,14 +105,31 @@ function buildOutputSchema(mode: ToolMode) {
   };
 }
 
+function buildCandidatePaths(relativePath: string): string[] {
+  return Array.from(
+    new Set([
+      path.resolve(process.cwd(), relativePath),
+      path.resolve(process.cwd(), "..", relativePath),
+      path.resolve(process.cwd(), "../..", relativePath),
+      path.resolve(process.cwd(), "packages/martian_api", relativePath),
+    ]),
+  );
+}
+
+function resolveExistingPath(candidates: string[]): string | undefined {
+  return candidates.find((candidate) => existsSync(candidate));
+}
+
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/datetime-conversion.html": {
-    distHtmlPath: new URL("../../../dist/widget/datetime-conversion-widget.html", import.meta.url),
-    sourceHtmlPath: new URL("../../martian_ui/src/widget/datetime-conversion-widget.html", import.meta.url),
+    distHtmlPathCandidates: buildCandidatePaths("dist/widget/datetime-conversion-widget.html"),
+    sourceHtmlPathCandidates: buildCandidatePaths("packages/martian_ui/src/widget/datetime-conversion-widget.html"),
   },
   "ui://widget/current-imperial-datetime.html": {
-    distHtmlPath: new URL("../../../dist/widget/current-imperial-datetime-widget.html", import.meta.url),
-    sourceHtmlPath: new URL("../../martian_ui/src/widget/current-imperial-datetime-widget.html", import.meta.url),
+    distHtmlPathCandidates: buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
+    sourceHtmlPathCandidates: buildCandidatePaths(
+      "packages/martian_ui/src/widget/current-imperial-datetime-widget.html",
+    ),
   },
 };
 
@@ -298,11 +316,19 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
+        const distHtmlPath = resolveExistingPath(asset.distHtmlPathCandidates);
+        const sourceHtmlPath = resolveExistingPath(asset.sourceHtmlPathCandidates);
 
         try {
-          widgetHtml = rewriteWidgetAssetUrls(readFileSync(asset.distHtmlPath, "utf8"), widgetResource);
+          if (distHtmlPath === undefined) {
+            throw new Error("dist widget html not found");
+          }
+          widgetHtml = rewriteWidgetAssetUrls(readFileSync(distHtmlPath, "utf8"), widgetResource);
         } catch {
-          widgetHtml = readFileSync(asset.sourceHtmlPath, "utf8");
+          if (sourceHtmlPath === undefined) {
+            throw new Error(`widget html not found for ${widgetResource.uri}`);
+          }
+          widgetHtml = readFileSync(sourceHtmlPath, "utf8");
         }
 
         return {
