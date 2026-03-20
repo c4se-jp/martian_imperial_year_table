@@ -58,11 +58,10 @@ async function loadSecretString(secretId: string): Promise<string | undefined> {
       const apiKey = trimEnvValue(parsed.MACKEREL_API_KEY);
       return apiKey === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : apiKey;
     }
+    return undefined;
   } catch {
     return secretString === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : secretString;
   }
-
-  return secretString === MACKEREL_API_KEY_SECRET_PLACEHOLDER ? undefined : secretString;
 }
 
 async function getTelemetryConfigFromEnvironment(): Promise<TelemetryConfig | undefined> {
