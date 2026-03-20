@@ -143,37 +143,45 @@ export async function startTelemetry() {
   }
 
   state.pendingStart = (async () => {
-    const config = await getTelemetryConfigFromEnvironment();
-    if (config === undefined) {
-      state.started = true;
-      return;
-    }
+    try {
+      const config = await getTelemetryConfigFromEnvironment();
+      if (config === undefined) {
+        state.enabled = false;
+        state.sdk = undefined;
+        state.started = true;
+        return;
+      }
 
-    const sdk = new NodeSDK({
-      instrumentations: [
-        getNodeAutoInstrumentations({
-          "@opentelemetry/instrumentation-fs": {
-            enabled: false,
+      const sdk = new NodeSDK({
+        instrumentations: [
+          getNodeAutoInstrumentations({
+            "@opentelemetry/instrumentation-fs": {
+              enabled: false,
+            },
+          }),
+        ],
+        resource: resourceFromAttributes(buildAttributes(config)),
+        resourceDetectors: [processDetector, hostDetector],
+        traceExporter: new OTLPTraceExporter({
+          headers: {
+            Accept: "*/*",
+            "Mackerel-Api-Key": config.apiKey,
           },
+          timeoutMillis: 15_000,
+          url: MACKEREL_OTLP_TRACES_URL,
         }),
-      ],
-      resource: resourceFromAttributes(buildAttributes(config)),
-      resourceDetectors: [processDetector, hostDetector],
-      traceExporter: new OTLPTraceExporter({
-        headers: {
-          Accept: "*/*",
-          "Mackerel-Api-Key": config.apiKey,
-        },
-        timeoutMillis: 15_000,
-        url: MACKEREL_OTLP_TRACES_URL,
-      }),
-    });
-    sdk.start();
+      });
+      sdk.start();
 
-    state.enabled = true;
-    state.sdk = sdk;
-    state.started = true;
-    registerShutdownHandlers(sdk);
+      state.enabled = true;
+      state.sdk = sdk;
+      state.started = true;
+      registerShutdownHandlers(sdk);
+    } catch {
+      state.enabled = false;
+      state.sdk = undefined;
+      state.started = true;
+    }
   })();
 
   await state.pendingStart.finally(() => {
