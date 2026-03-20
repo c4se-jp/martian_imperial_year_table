@@ -8,9 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run -ws build",
-    "lint": "npm run -ws lint",
-    "test": "npm run -ws test",
+    "build": "npm run -w imperial_calendar build && npm run -w calendar_svg build && npm run -w martian_api build && npm run -w martian_ui build && npm run -w martian_widget_ui build",
+    "lint": "npm run --workspaces lint",
+    "test": "npm run --workspaces test",
     "test:gha": "yamllint .github/workflows/ && actionlint && ghalint run && zizmor .",
     "format": "prettier --write \"packages/**/*.ts\" \"packages/**/*.tsx\""
   },

@@ -116,6 +116,10 @@ function buildCandidatePaths(relativePath: string): string[] {
   );
 }
 
+function buildSourceHtmlPathCandidates(...relativePaths: string[]): string[] {
+  return Array.from(new Set(relativePaths.flatMap((relativePath) => buildCandidatePaths(relativePath))));
+}
+
 function resolveExistingPath(candidates: string[]): string | undefined {
   return candidates.find((candidate) => existsSync(candidate));
 }
@@ -123,12 +127,14 @@ function resolveExistingPath(candidates: string[]): string | undefined {
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/datetime-conversion.html": {
     distHtmlPathCandidates: buildCandidatePaths("dist/widget/datetime-conversion-widget.html"),
-    sourceHtmlPathCandidates: buildCandidatePaths("packages/martian_ui/src/widget/datetime-conversion-widget.html"),
+    sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(
+      "packages/martian_widget_ui/src/widget/datetime-conversion-widget.html",
+    ),
   },
   "ui://widget/current-imperial-datetime.html": {
     distHtmlPathCandidates: buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
-    sourceHtmlPathCandidates: buildCandidatePaths(
-      "packages/martian_ui/src/widget/current-imperial-datetime-widget.html",
+    sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(
+      "packages/martian_widget_ui/src/widget/current-imperial-datetime-widget.html",
     ),
   },
 };

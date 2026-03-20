@@ -1,8 +1,8 @@
 import { useApp, useHostStyles } from "@modelcontextprotocol/ext-apps/react";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { useEffect, useRef, useState, type ComponentType } from "react";
-import ReactDOM from "react-dom/client";
+import { render, type ComponentType } from "preact";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { modeFromToolName, type ToolMode, type WidgetToolResult } from "./widgetTypes";
 
 type WidgetComponentProps = {
@@ -133,5 +133,5 @@ export function mountWidget(
     );
   }
 
-  ReactDOM.createRoot(root).render(<ChatGptApp />);
+  render(<ChatGptApp />, root);
 }

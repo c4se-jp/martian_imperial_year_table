@@ -10,7 +10,7 @@
 - AWS CLI 設定濟み (`aws configure`)
 - `cdk bootstrap` 濟み (對象アカウント/リージョン)
 - CloudFront 用 ACM 証明書を `us-east-1` で事前に作成しておく
-- 事前に `npm run build` でリポジトリ直下の `dist/` を生成しておく
+- 事前に `npm run build` でリポジトリ直下の `dist/` と `dist/widget/` を生成しておく
 
 ## 使ひ方
 
