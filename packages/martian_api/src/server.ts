@@ -1,7 +1,11 @@
 import { serve } from "@hono/node-server";
-import { app } from "./app.js";
+import { startTelemetry } from "./telemetry.js";
 
 const port = Number(process.env.PORT ?? 3000);
+
+await startTelemetry();
+
+const { app } = await import("./app.js");
 
 serve(
   {

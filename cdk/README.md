@@ -25,8 +25,12 @@ npx cdk deploy
 - `hostedZoneDomainName` (context または `HOSTED_ZONE_DOMAIN_NAME`)
 - `hostedZoneId` (context または `HOSTED_ZONE_ID`) ※必須
 - `certificateArn` (context または `CERTIFICATE_ARN`) ※必須 (`us-east-1` の ACM 証明書)
+- `mackerelDeploymentEnvironment` (context または `MACKEREL_DEPLOYMENT_ENVIRONMENT`)
+- `mackerelServiceVersion` (context または `MACKEREL_SERVICE_VERSION`)
 - `siteAssetsPath` (context または `SITE_ASSETS_PATH`)
 - `siteDomainName` (context または `SITE_DOMAIN_NAME`)
+- `MACKEREL_API_KEY`
+  - deploy では不要です。CDK が `/martian-imperial-year-table/martian_api/mackerel_api_key` を作成し、値は AWS 側で別途設定します。
 
 例:
 
@@ -35,6 +39,8 @@ npx cdk deploy \
   -c certificateArn=arn:aws:acm:us-east-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx \
   -c hostedZoneDomainName=c4se.jp \
   -c hostedZoneId=Z1234567890ABC \
+  -c mackerelDeploymentEnvironment=production \
+  -c mackerelServiceVersion=$(git rev-parse HEAD) \
   -c siteAssetsPath=../dist \
   -c siteDomainName=martian-imperial-year-table.c4se.jp
 ```

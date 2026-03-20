@@ -1,4 +1,8 @@
+import { startTelemetry } from "./telemetry.js";
 import { handle } from "hono/aws-lambda";
-import { app } from "./app.js";
+
+await startTelemetry();
+
+const { app } = await import("./app.js");
 
 export const handler = handle(app);
