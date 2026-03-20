@@ -189,16 +189,6 @@ export async function startTelemetry() {
   });
 }
 
-export async function flushTelemetry() {
-  const state = getTelemetryState();
-  if (!state.enabled || state.sdk === undefined) {
-    return;
-  }
-  const tracerProvider = (state.sdk as unknown as { _tracerProvider?: { forceFlush?: () => Promise<void> } })
-    ._tracerProvider;
-  await tracerProvider?.forceFlush?.().catch(() => {});
-}
-
 function normalizeException(error: unknown): Error {
   if (error instanceof Error) {
     return error;

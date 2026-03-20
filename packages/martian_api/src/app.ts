@@ -10,7 +10,7 @@ import {
   validateTimezone,
 } from "./datetime-conversion.js";
 import { registerMcpRoute } from "./mcp.js";
-import { flushTelemetry, recordError, runWithSpan } from "./telemetry.js";
+import { recordError, runWithSpan } from "./telemetry.js";
 
 type ErrorResponse = {
   message: string;
@@ -46,7 +46,6 @@ app.use("*", async (c, next) => {
       throw error;
     } finally {
       span.end();
-      void flushTelemetry();
     }
   });
 });
