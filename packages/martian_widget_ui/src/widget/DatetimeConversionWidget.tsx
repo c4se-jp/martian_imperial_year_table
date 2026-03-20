@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "preact/hooks";
 import "@openai/apps-sdk-ui/css";
 import Grdt2ImdtTab from "./tabs/Grdt2ImdtTab";
 import Imdt2GrdtTab from "./tabs/Imdt2GrdtTab";

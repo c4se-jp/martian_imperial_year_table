@@ -1,7 +1,6 @@
 import path from "node:path";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
 
 const widgetEntries = [
   {
@@ -24,12 +23,14 @@ const sharedWidgetAssets = {
 export default defineConfig({
   base: "./",
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-      imperial_calendar: path.resolve(__dirname, "../imperial_calendar/src/index.ts"),
-      calendar_svg: path.resolve(__dirname, "../calendar_svg/src/index.ts"),
-    },
-    dedupe: ["react", "react-dom"],
+    alias: [
+      { find: "react-dom/client", replacement: "preact/compat/client" },
+      { find: "react-dom/test-utils", replacement: "preact/test-utils" },
+      { find: "react-dom", replacement: "preact/compat" },
+      { find: "react/jsx-dev-runtime", replacement: "preact/jsx-dev-runtime" },
+      { find: "react/jsx-runtime", replacement: "preact/jsx-runtime" },
+      { find: "react", replacement: "preact/compat" },
+    ],
   },
   build: {
     outDir: "../../dist/widget",
@@ -52,7 +53,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    react(),
     {
       name: "copy-widget-html-to-dist-root",
       closeBundle() {

@@ -22,11 +22,12 @@ $ npm run -w martian_api start:dev
 Web UI
 
 $ npm run -w martian_ui start:dev
-$ npm run -w martian_ui storybook
+$ npm run -w martian_widget_ui storybook
 
 ## packages/
 
 - calendar_svg : 帝國火星曆の七曜表を描畫する library
 - imperial_calendar : グレゴリオ曆と帝國火星曆とを相互に變換する library
-- martian_api : AWS Lambda で動作する帝國火星曆 Web API
+- martian_api : AWS Lambda で動作する帝國火星曆 Web API。remote MCP server の實裝を含む
 - martian_ui : Web frontend
+- martian_widget_ui : MCP application の frontend

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/preact";
 import DatetimeConversionWidget from "./DatetimeConversionWidget";
 import type { WidgetToolResult } from "./widgetTypes";
 

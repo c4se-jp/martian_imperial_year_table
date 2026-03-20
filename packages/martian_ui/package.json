@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "prebuild": "npm run generate:docs",
-    "build": "npm run build:web && npm run build:widget",
+    "build": "npm run build:web",
     "build:web": "vite build --outDir ../../dist --emptyOutDir true",
-    "build:widget": "vite build --config vite.widget.config.ts",
     "generate:api-doc": "node ./scripts/generate-api-doc.mjs",
     "generate:docs": "npm run generate:api-doc && npm run generate:mcp-doc",
     "generate:mcp-doc": "node ./scripts/generate-mcp-doc.mjs",
@@ -15,8 +14,6 @@
     "preview": "vite preview",
     "prestart:dev": "npm run generate:docs",
     "start:dev": "vite",
-    "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build",
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {
@@ -28,7 +25,6 @@
     "@opentelemetry/resources": "^2.6.0",
     "@opentelemetry/semantic-conventions": "^1.40.0",
     "@opentelemetry/sdk-trace-web": "^2.6.0",
-    "@openai/apps-sdk-ui": "^0.2.1",
     "bulma": "^1.0.4",
     "marked": "^17.0.4",
     "react": "^19.2.4",
@@ -36,12 +32,9 @@
     "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
-    "@storybook/react": "^10.2.19",
-    "@storybook/react-vite": "^10.2.19",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
-    "storybook": "^10.2.19",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.1.0",

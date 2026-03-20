@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/preact";
 import CurrentImperialDatetimeWidget from "./CurrentImperialDatetimeWidget";
 import type { WidgetToolResult } from "./widgetTypes";
 

@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { Alert } from "@openai/apps-sdk-ui/components/Alert";
+import { useMemo } from "preact/hooks";
 import type { WidgetToolResult } from "./widgetTypes";
 
 type Props = {

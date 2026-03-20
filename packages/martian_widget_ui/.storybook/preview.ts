@@ -1,5 +1,4 @@
-import type { Preview } from "@storybook/react";
-import "bulma/css/bulma.min.css";
+import type { Preview } from "@storybook/preact";
 import "./preview.css";
 
 const preview: Preview = {
