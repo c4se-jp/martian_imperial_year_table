@@ -68,17 +68,19 @@ curl -sS \
 echo
 
 echo "=== MCP: resources/list ==="
-curl -sS -X POST http://localhost:3000/mcp \
+curl -sS \
   -H 'Accept: application/json, text/event-stream' \
   -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":3,"method":"resources/list","params":{}}'
+  --data '{"jsonrpc":"2.0","id":3,"method":"resources/list","params":{}}' \
+  "${MCP_URL}"
 echo
 
 echo "=== MCP: resources/read ==="
-curl -sS -X POST http://localhost:3000/mcp \
+curl -sS \
   -H 'Accept: application/json, text/event-stream' \
   -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"ui://widget/datetime-conversion.html"}}'
+  --data '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"ui://widget/datetime-conversion.html"}}' \
+  "${MCP_URL}"
 echo
 
 echo "=== MCP: tools/call convert_imperial_to_gregorian_datetime ==="
