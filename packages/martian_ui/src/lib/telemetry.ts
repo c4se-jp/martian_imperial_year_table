@@ -159,7 +159,7 @@ export function setupBrowserTelemetry() {
 
   const provider = new WebTracerProvider({
     resource: resourceFromAttributes(resourceAttributes),
-    sampler: new TraceIdRatioBasedSampler(0.1),
+    sampler: new TraceIdRatioBasedSampler(1.0),
     spanProcessors: [
       new BatchSpanProcessor(exporter, {
         exportTimeoutMillis: 15_000,
