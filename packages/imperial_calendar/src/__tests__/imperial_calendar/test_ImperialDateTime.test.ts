@@ -153,7 +153,7 @@ describe("ImperialDateTime", () => {
   });
 
   describe("holiday", () => {
-    it("該当する祝日", () => {
+    it("該當する祝日", () => {
       const holiday = new HolidayMars(1425, 1, 1);
       expect(
         buildImperial({ year: 1425, month: 1, day: 1, hour: 0, minute: 0, second: 0, timezone: "+00:00" }).holiday,

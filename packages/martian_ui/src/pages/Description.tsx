@@ -4,7 +4,7 @@ import descriptionMd from "../description.md?raw";
 
 export default function DescriptionPage() {
   useEffect(() => {
-    document.title = "解説 | 帝國火星曆";
+    document.title = "解說 | 帝國火星曆";
   }, []);
 
   const html = useMemo(() => marked.parse(descriptionMd), []);

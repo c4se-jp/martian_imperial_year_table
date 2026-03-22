@@ -40,7 +40,7 @@ class TestGregorianDateTime(unittest.TestCase):
                 )
 
     def test_is_holiday(self):
-        """祝日."""
+        """祝日."""
         self.assertTrue(GregorianDateTime(2020, 1, 1, 0, 0, 0, "Asia/Tokyo").is_holiday)
         self.assertFalse(
             GregorianDateTime(2020, 1, 2, 0, 0, 0, "Asia/Tokyo").is_holiday

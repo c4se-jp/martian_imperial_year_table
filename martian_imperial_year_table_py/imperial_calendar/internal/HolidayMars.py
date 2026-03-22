@@ -1,4 +1,4 @@
-"""火星帝國の祝日."""
+"""火星帝國の祝日."""
 
 from functools import total_ordering
 from imperial_calendar.ImperialYearMonth import ImperialYearMonth
@@ -28,22 +28,22 @@ THolidays = t.Dict[int, t.Dict[int, t.Dict[int, t.Union[Internal, t.List[Interna
 HOLIDAYS: THolidays = {
     1425: {
         1: {
-            1: Internal(name="四方節"),
+            1: Internal(name="四方節"),
             2: Internal(name="振替休日"),
             3: Internal(name="元始祭"),
-            15: Internal(name="元宵節"),
+            15: Internal(name="元宵節"),
             16: Internal(name="振替休日"),
         },
         3: {15: Internal(name="春季皇靈祭"), 16: Internal(name="振替休日")},
         5: {17: Internal(name="神武天皇祭")},
-        6: {4: Internal(name="紀元節")},
+        6: {4: Internal(name="紀元節")},
         10: {13: Internal(name="夏至祭")},
         12: {26: Internal(name="大祓前日"), 27: Internal(name="夏越大祓")},
         13: {1: Internal(name="裏元日"), 2: Internal(name="振替休日")},
         16: {25: Internal(name="秋季皇靈祭")},
-        17: {19: Internal(name="天長節")},
-        18: {2: Internal(name="地久節")},
-        20: {16: Internal(name="神嘗祭")},
+        17: {19: Internal(name="天長節")},
+        18: {2: Internal(name="地久節")},
+        20: {16: Internal(name="神嘗祭")},
         22: {1: Internal(name="新嘗祭"), 2: Internal(name="振替休日")},
         24: {
             26: Internal(name="大祓前々日"),
@@ -53,22 +53,22 @@ HOLIDAYS: THolidays = {
     },
     1426: {
         1: {
-            1: Internal(name="四方節"),
+            1: Internal(name="四方節"),
             2: Internal(name="振替休日"),
             3: Internal(name="元始祭"),
-            15: Internal(name="元宵節"),
+            15: Internal(name="元宵節"),
             16: Internal(name="振替休日"),
         },
         3: {14: Internal(name="春季皇靈祭"), 16: Internal(name="振替休日")},
         5: {17: Internal(name="神武天皇祭")},
-        6: {4: Internal(name="紀元節")},
+        6: {4: Internal(name="紀元節")},
         10: {13: Internal(name="夏至祭")},
         12: {26: Internal(name="大祓前日"), 27: Internal(name="夏越大祓")},
         13: {1: Internal(name="裏元日"), 2: Internal(name="振替休日")},
         16: {24: Internal(name="秋季皇靈祭")},
-        17: {19: Internal(name="天長節")},
-        18: {2: Internal(name="地久節")},
-        20: {16: Internal(name="神嘗祭")},
+        17: {19: Internal(name="天長節")},
+        18: {2: Internal(name="地久節")},
+        20: {16: Internal(name="神嘗祭")},
         22: {1: Internal(name="新嘗祭"), 2: Internal(name="振替休日")},
         24: {
             25: Internal(name="大祓前々日"),
@@ -78,22 +78,22 @@ HOLIDAYS: THolidays = {
     },
     1427: {
         1: {
-            1: Internal(name="四方節"),
+            1: Internal(name="四方節"),
             2: Internal(name="振替休日"),
             3: Internal(name="元始祭"),
-            15: Internal(name="元宵節"),
+            15: Internal(name="元宵節"),
             16: Internal(name="振替休日"),
         },
         3: {14: Internal(name="春季皇靈祭"), 16: Internal(name="振替休日")},
         5: {17: Internal(name="神武天皇祭")},
-        6: {4: Internal(name="紀元節")},
+        6: {4: Internal(name="紀元節")},
         10: {13: Internal(name="夏至祭")},
         12: {26: Internal(name="大祓前日"), 27: Internal(name="夏越大祓")},
         13: {1: Internal(name="裏元日"), 2: Internal(name="振替休日")},
         16: {24: Internal(name="秋季皇靈祭")},
-        17: {19: Internal(name="天長節")},
-        18: {2: Internal(name="地久節")},
-        20: {16: Internal(name="神嘗祭")},
+        17: {19: Internal(name="天長節")},
+        18: {2: Internal(name="地久節")},
+        20: {16: Internal(name="神嘗祭")},
         22: {1: Internal(name="新嘗祭"), 2: Internal(name="振替休日")},
         24: {
             26: Internal(name="大祓前々日"),
@@ -122,7 +122,7 @@ class Holidays(object):
 
 @total_ordering
 class HolidayMars(object):
-    """火星帝國の祝日."""
+    """火星帝國の祝日."""
 
     day: int
     internals: t.List[Internal]

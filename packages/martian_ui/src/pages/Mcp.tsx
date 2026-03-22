@@ -138,7 +138,7 @@ export default function McpPage() {
                       <tr>
                         <th>名前</th>
                         <th>型</th>
-                        <th>説明</th>
+                        <th>說明</th>
                         <th>制約</th>
                       </tr>
                     </thead>

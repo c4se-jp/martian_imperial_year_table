@@ -127,7 +127,7 @@ function SchemaBlock({ schema, title }: { schema: ApiSchemaDoc; title?: string }
                 <th>名前</th>
                 <th>型</th>
                 <th>必須</th>
-                <th>説明</th>
+                <th>說明</th>
               </tr>
             </thead>
             <tbody>
@@ -330,7 +330,7 @@ export default function ApiPage() {
                             <th>場所</th>
                             <th>必須</th>
                             <th>型</th>
-                            <th>説明</th>
+                            <th>說明</th>
                           </tr>
                         </thead>
                         <tbody>

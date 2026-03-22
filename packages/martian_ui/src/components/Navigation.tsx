@@ -77,7 +77,7 @@ export default function Navigation({
         <div className="navbar-menu">
           <div className="navbar-start">
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/description">
-              解説
+              解說
             </NavLink>
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/transform">
               變換

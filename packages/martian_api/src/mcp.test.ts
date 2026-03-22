@@ -35,7 +35,7 @@ async function parseSseJsonRpc(response: Response): Promise<JsonRpcResponse> {
 }
 
 describe("/mcp", () => {
-  test("tools/list で公開ツール一覧を返す", async () => {
+  test("tools/list で公開ツール一覽を返す", async () => {
     const response = await postMcp({
       jsonrpc: "2.0",
       id: 1,

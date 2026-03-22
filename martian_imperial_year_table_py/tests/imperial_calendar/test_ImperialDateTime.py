@@ -116,7 +116,7 @@ class TestImperialDateTime(unittest.TestCase):
                 )
 
     def test_holiday(self):
-        """該当する祝日."""
+        """該當する祝日."""
         self.assertEqual(
             HolidayMars(1425, 1, 1),
             ImperialDateTime(1425, 1, 1, 0, 0, 0, "+00:00").holiday,

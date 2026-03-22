@@ -7,7 +7,7 @@ describe("HolidayMars", () => {
   });
 
   describe("between", () => {
-    it("該当期間中の祝日一覧", () => {
+    it("該當期閒中の祝日一覽", () => {
       Holidays.setUpForTest({
         1425: {
           1: {
@@ -60,7 +60,7 @@ describe("HolidayMars", () => {
   });
 
   describe("isHoliday", () => {
-    it("その日が祝日であるか否か", () => {
+    it("その日が祝日であるか否か", () => {
       Holidays.setUpForTest({ 1425: { 1: { 1: new Internal("僞1") } } });
       expect(new HolidayMars(1425, 1, 1).isHoliday).toBe(true);
       expect(new HolidayMars(1425, 1, 2).isHoliday).toBe(false);
@@ -100,7 +100,7 @@ describe("HolidayMars", () => {
   });
 
   describe("names", () => {
-    it("祝日の名前", () => {
+    it("祝日の名前", () => {
       Holidays.setUpForTest({
         1425: { 1: { 1: [new Internal("僞1"), new Internal("僞2")] } },
       });

@@ -13,7 +13,7 @@ class TestHolidayMars(unittest.TestCase):
         Holidays.tearDownForTest()
 
     def test_between(self):
-        """該当期間中の祝日一覧."""
+        """該當期閒中の祝日一覽."""
         Holidays.setUpForTest(
             {
                 1425: {
@@ -73,7 +73,7 @@ class TestHolidayMars(unittest.TestCase):
             self.assertEqual(expected, HolidayMars.between(start, end))
 
     def test_is_holiday(self):
-        """その日が祝日であるか否か."""
+        """その日が祝日であるか否か."""
         Holidays.setUpForTest({1425: {1: {1: Internal(name="僞1")}}})
         self.assertTrue(HolidayMars(1425, 1, 1).is_holiday)
         self.assertFalse(HolidayMars(1425, 1, 2).is_holiday)
@@ -103,7 +103,7 @@ class TestHolidayMars(unittest.TestCase):
                 self.assertFalse(lhs < rhs)
 
     def test_names(self):
-        """祝日の呼び名."""
+        """祝日の呼び名."""
         Holidays.setUpForTest({1425: {3: {3: Internal(name="僞1")}}})
         self.assertEqual(["僞1"], HolidayMars(1425, 3, 3).names)
         Holidays.setUpForTest(
