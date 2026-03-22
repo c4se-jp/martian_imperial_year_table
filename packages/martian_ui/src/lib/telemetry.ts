@@ -1,6 +1,6 @@
 import { SpanStatusCode, trace, type Span } from "@opentelemetry/api";
 import { getWebAutoInstrumentations } from "@opentelemetry/auto-instrumentations-web";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { BatchSpanProcessor, TraceIdRatioBasedSampler, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
@@ -141,7 +141,7 @@ export function setupBrowserTelemetry() {
   const exporter = new OTLPTraceExporter({
     url: MACKEREL_OTLP_TRACES_URL,
     headers: {
-      Accept: "application/json",
+      Accept: "*/*",
       "X-Mackerel-Client-Token": config.clientToken,
     },
   });
