@@ -18,7 +18,14 @@ function RouteChangeTracker() {
   const path = `${location.pathname}${location.search}${location.hash}`;
 
   useEffect(() => {
-    trackPageView(path);
+    // 各 page component が useEffect で document.title を更新した後に page_view を送る。
+    const timeoutId = window.setTimeout(() => {
+      trackPageView(path);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [path]);
 
   useLayoutEffect(() => {
