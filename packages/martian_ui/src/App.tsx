@@ -8,12 +8,25 @@ import CalendarPage from "./pages/Calendar";
 import { applyThemePreference, readThemePreference, THEME_STORAGE_KEY, type ThemePreference } from "./lib/theme";
 import ApiPage from "./pages/Api";
 import McpPage from "./pages/Mcp";
+import { trackPageView } from "./lib/googleAnalytics";
 import { finishRouteTransition } from "./lib/telemetry";
 
 function RouteChangeTracker() {
   const location = useLocation();
   const navigationType = useNavigationType();
   const isFirstRenderRef = useRef(true);
+  const path = `${location.pathname}${location.search}${location.hash}`;
+
+  useEffect(() => {
+    // 各 page component が useEffect で document.title を更新した後に page_view を送る。
+    const timeoutId = window.setTimeout(() => {
+      trackPageView(path);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [path]);
 
   useLayoutEffect(() => {
     if (isFirstRenderRef.current) {
@@ -21,8 +34,8 @@ function RouteChangeTracker() {
       return;
     }
 
-    finishRouteTransition(`${location.pathname}${location.search}${location.hash}`, navigationType);
-  }, [location.hash, location.pathname, location.search, navigationType]);
+    finishRouteTransition(path, navigationType);
+  }, [navigationType, path]);
 
   return null;
 }
