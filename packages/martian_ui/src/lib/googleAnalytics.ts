@@ -37,10 +37,10 @@ function getGoogleAnalyticsState(): GoogleAnalyticsState | undefined {
 
 function initializeGoogleAnalytics(measurementId: string) {
   window[GOOGLE_ANALYTICS_DATA_LAYER_KEY] ??= [];
-
-  window.gtag = ((...args: [GoogleAnalyticsCommand, ...unknown[]]) => {
-    window[GOOGLE_ANALYTICS_DATA_LAYER_KEY]?.push(args);
-  }) as GoogleAnalyticsFunction;
+  window.gtag = function gtag(..._args: [GoogleAnalyticsCommand, ...unknown[]]) {
+    // Google 推奨 snippet と同じく arguments object を dataLayer に積む。
+    window[GOOGLE_ANALYTICS_DATA_LAYER_KEY]?.push(arguments);
+  } as GoogleAnalyticsFunction;
 
   window.gtag("js", new Date());
   window.gtag("config", measurementId, {
@@ -107,6 +107,7 @@ export function trackPageView(path: string = buildCurrentPath()) {
   state.lastTrackedPath = path;
 
   window.gtag("event", "page_view", {
+    send_to: state.measurementId,
     page_location: window.location.href,
     page_path: path,
     page_title: document.title,
