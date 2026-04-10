@@ -6,10 +6,10 @@ name: on pull_request
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
     permissions:
       contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
       - name: checkout
@@ -28,3 +28,21 @@ jobs:
 
       - name: testする
         run: npm test
+
+  lint-gha:
+    permissions:
+      checks: write
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: ne-sachirou/lint-gha-reviewdog@47315c74bcffa1c74c12a6e1f004bf6e1fd4147b # v0.0.1
+        with:
+          fail_on_error: true
+          github_token: ${{github.token}}
