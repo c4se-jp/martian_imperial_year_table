@@ -15,4 +15,5 @@ jobs:
       AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
       HOSTED_ZONE_ID: ${{ secrets.HOSTED_ZONE_ID }}
+      VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
       MACKEREL_CLIENT_TOKEN: ${{ secrets.MACKEREL_CLIENT_TOKEN }}
