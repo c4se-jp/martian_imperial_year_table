@@ -17,25 +17,25 @@
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "^1.2.2",
-    "@opentelemetry/api": "^1.9.0",
-    "@opentelemetry/auto-instrumentations-web": "^0.58.0",
-    "@opentelemetry/exporter-trace-otlp-proto": "^0.213.0",
-    "@opentelemetry/instrumentation": "^0.213.0",
-    "@opentelemetry/resources": "^2.6.0",
+    "@modelcontextprotocol/ext-apps": "^1.5.0",
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/auto-instrumentations-web": "^0.59.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.214.0",
+    "@opentelemetry/instrumentation": "^0.214.0",
+    "@opentelemetry/resources": "^2.6.1",
     "@opentelemetry/semantic-conventions": "^1.40.0",
-    "@opentelemetry/sdk-trace-web": "^2.6.0",
+    "@opentelemetry/sdk-trace-web": "^2.6.1",
     "bulma": "^1.0.4",
     "marked": "^17.0.5",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.1"
+    "react-router-dom": "^7.14.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "vite": "^7.3.2",
     "vitest": "^4.1.0",
     "yaml": "^2.8.3"
