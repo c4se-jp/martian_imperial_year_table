@@ -42,6 +42,15 @@ type DerivedFormState = {
   imsn: string;
 };
 
+type DateTimeField = Exclude<keyof GregorianFormState, "timezone">;
+
+type FormSectionProps<T extends GregorianFormState> = {
+  title: string;
+  form: T;
+  onChange: (field: keyof T, value: string) => void;
+  onCommit: (next: T) => void;
+};
+
 function buildGregorianForm(grdt: GregorianDateTime): GregorianFormState {
   return {
     year: grdt.year.toString(),
@@ -102,6 +111,76 @@ function formatIsoGregorian(grdt: GregorianDateTime): string {
 function formatIsoImperial(imdt: ImperialDateTime): string {
   const tz = imdt.timezone ?? "+00:00";
   return `${pad(imdt.year, 4)}-${pad(imdt.month, 2)}-${pad(imdt.day, 2)}T${pad(imdt.hour, 2)}:${pad(imdt.minute, 2)}:${pad(imdt.second, 2)}${tz}`;
+}
+
+const dateFields: readonly DateTimeField[] = ["year", "month", "day"];
+const timeFields: readonly DateTimeField[] = ["hour", "minute", "second"];
+
+const fieldLabels: Record<DateTimeField | "timezone", string> = {
+  year: "年",
+  month: "月",
+  day: "日",
+  hour: "時",
+  minute: "分",
+  second: "秒",
+  timezone: "タイムゾーン",
+};
+
+function renderField<T extends GregorianFormState>(
+  form: T,
+  field: keyof T,
+  onChange: (field: keyof T, value: string) => void,
+  onCommit: (next: T) => void,
+) {
+  return (
+    <label
+      className={`transform-form__field ${field === "year" ? "transform-form__field--year" : ""}`}
+      key={String(field)}
+    >
+      <span className="transform-form__field-label">{fieldLabels[field as DateTimeField | "timezone"]}</span>
+      <input
+        className="input"
+        type={field === "timezone" ? "text" : "number"}
+        inputMode={field === "timezone" ? "text" : "numeric"}
+        value={form[field]}
+        onChange={(event) => onChange(field, event.target.value)}
+        onBlur={(event) => {
+          const next = { ...form, [field]: event.target.value };
+          onCommit(next);
+        }}
+      />
+    </label>
+  );
+}
+
+function ConversionFormSections<T extends GregorianFormState>({
+  title,
+  form,
+  onChange,
+  onCommit,
+}: FormSectionProps<T>) {
+  return (
+    <div className="transform-form__sections">
+      <section className="transform-form__section">
+        <p className="transform-form__section-label">{title}</p>
+        <div className="transform-form__grid">
+          {dateFields.map((field) => renderField(form, field, onChange, onCommit))}
+        </div>
+      </section>
+      <section className="transform-form__section">
+        <p className="transform-form__section-label">時刻</p>
+        <div className="transform-form__grid">
+          {timeFields.map((field) => renderField(form, field, onChange, onCommit))}
+        </div>
+      </section>
+      <section className="transform-form__section">
+        <p className="transform-form__section-label">タイムゾーン</p>
+        <div className="transform-form__grid transform-form__grid--timezone">
+          {renderField(form, "timezone", onChange, onCommit)}
+        </div>
+      </section>
+    </div>
+  );
 }
 
 export default function TransformPage() {
@@ -282,114 +361,34 @@ export default function TransformPage() {
 
         <div className="columns">
           <div className="column">
-            <form className="box" onSubmit={handleGrdtSubmit}>
+            <form className="box transform-form" onSubmit={handleGrdtSubmit}>
               <h2 className="title is-5">グレゴリオ曆 (地球)</h2>
-              <div className="field is-grouped is-grouped-multiline">
-                {(["year", "month", "day", "hour", "minute", "second"] as const).map((field) => (
-                  <p className="control" key={field}>
-                    <input
-                      className="input"
-                      type="number"
-                      placeholder={
-                        field === "year"
-                          ? "年"
-                          : field === "month"
-                            ? "月"
-                            : field === "day"
-                              ? "日"
-                              : field === "hour"
-                                ? "時"
-                                : field === "minute"
-                                  ? "分"
-                                  : "秒"
-                      }
-                      value={grdtForm[field]}
-                      onChange={(event) =>
-                        setGrdtForm((prev) => ({
-                          ...prev,
-                          [field]: event.target.value,
-                        }))
-                      }
-                      onBlur={(event) => {
-                        const next = { ...grdtForm, [field]: event.target.value };
-                        setGrdtForm(next);
-                        convertGrdtForm(next);
-                      }}
-                    />
-                  </p>
-                ))}
-                <p className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="タイムゾーン"
-                    value={grdtForm.timezone}
-                    onChange={(event) => setGrdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
-                    onBlur={(event) => {
-                      const next = { ...grdtForm, timezone: event.target.value };
-                      setGrdtForm(next);
-                      convertGrdtForm(next);
-                    }}
-                  />
-                </p>
-              </div>
+              <ConversionFormSections
+                title="日附"
+                form={grdtForm}
+                onChange={(field, value) => setGrdtForm((prev) => ({ ...prev, [field]: value }))}
+                onCommit={(next) => {
+                  setGrdtForm(next);
+                  convertGrdtForm(next);
+                }}
+              />
               <p className="is-size-7">
                 <code>{formatIsoGregorian(state.grdt)}</code>
               </p>
             </form>
           </div>
           <div className="column">
-            <form className="box" onSubmit={handleImdtSubmit}>
+            <form className="box transform-form" onSubmit={handleImdtSubmit}>
               <h2 className="title is-5">帝國火星曆</h2>
-              <div className="field is-grouped is-grouped-multiline">
-                {(["year", "month", "day", "hour", "minute", "second"] as const).map((field) => (
-                  <p className="control" key={field}>
-                    <input
-                      className="input"
-                      type="number"
-                      placeholder={
-                        field === "year"
-                          ? "年"
-                          : field === "month"
-                            ? "月"
-                            : field === "day"
-                              ? "日"
-                              : field === "hour"
-                                ? "時"
-                                : field === "minute"
-                                  ? "分"
-                                  : "秒"
-                      }
-                      value={imdtForm[field]}
-                      onChange={(event) =>
-                        setImdtForm((prev) => ({
-                          ...prev,
-                          [field]: event.target.value,
-                        }))
-                      }
-                      onBlur={(event) => {
-                        const next = { ...imdtForm, [field]: event.target.value };
-                        setImdtForm(next);
-                        convertImdtForm(next);
-                      }}
-                    />
-                  </p>
-                ))}
-                <p className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="タイムゾーン"
-                    value={imdtForm.timezone}
-                    onChange={(event) => setImdtForm((prev) => ({ ...prev, timezone: event.target.value }))}
-                    onBlur={(event) => {
-                      const next = { ...imdtForm, timezone: event.target.value };
-                      setImdtForm(next);
-                      convertImdtForm(next);
-                    }}
-                  />
-                </p>
-              </div>
+              <ConversionFormSections
+                title="日附"
+                form={imdtForm}
+                onChange={(field, value) => setImdtForm((prev) => ({ ...prev, [field]: value }))}
+                onCommit={(next) => {
+                  setImdtForm(next);
+                  convertImdtForm(next);
+                }}
+              />
               <p className="is-size-7">
                 <code>{formatIsoImperial(state.imdt)}</code>
               </p>
