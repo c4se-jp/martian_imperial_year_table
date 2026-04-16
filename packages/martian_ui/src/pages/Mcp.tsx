@@ -36,6 +36,9 @@ export default function McpPage() {
               <aside className="menu">
                 <ul className="menu-list">
                   <li>
+                    <a href="#setup">設定方法</a>
+                  </li>
+                  <li>
                     <a href="#resources">Resources</a>
                   </li>
                   <li>
@@ -47,6 +50,16 @@ export default function McpPage() {
           </div>
 
           <div className="column is-8">
+            <section id="setup" className="box api-doc-endpoint">
+              <h2 className="title is-4">設定方法</h2>
+              <div className="content">
+                <p>MCP client には、次の URL を server の接續先として設定してください。</p>
+                <pre>
+                  <code>https://martian-imperial-year-table.c4se.jp/mcp/</code>
+                </pre>
+              </div>
+            </section>
+
             <section id="resources" className="box">
               <h2 className="title is-4">Resources</h2>
               <div className="api-doc-schema-list">
