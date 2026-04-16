@@ -21,7 +21,7 @@
     "@opentelemetry/resources": "^2.6.1",
     "@opentelemetry/sdk-node": "^0.214.0",
     "@opentelemetry/semantic-conventions": "^1.40.0",
-    "hono": "^4.12.12",
+    "hono": "^4.12.14",
     "imperial_calendar": "file:../imperial_calendar",
     "zod": "^4.3.6"
   },
