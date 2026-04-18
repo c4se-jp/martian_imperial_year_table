@@ -4,11 +4,6 @@ import { defineConfig } from "vite";
 
 const widgetEntries = [
   {
-    name: "datetime-conversion-widget",
-    html: path.resolve(__dirname, "src/widget/datetime-conversion-widget.html"),
-    js: "datetime-conversion-entry.tsx",
-  },
-  {
     name: "current-imperial-datetime-widget",
     html: path.resolve(__dirname, "src/widget/current-imperial-datetime-widget.html"),
     js: "current-imperial-datetime-entry.tsx",

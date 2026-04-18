@@ -125,12 +125,6 @@ function resolveExistingPath(candidates: string[]): string | undefined {
 }
 
 const widgetAssets: Record<string, WidgetAsset> = {
-  "ui://widget/datetime-conversion.html": {
-    distHtmlPathCandidates: buildCandidatePaths("dist/widget/datetime-conversion-widget.html"),
-    sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(
-      "packages/martian_widget_ui/src/widget/datetime-conversion-widget.html",
-    ),
-  },
   "ui://widget/current-imperial-datetime.html": {
     distHtmlPathCandidates: buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
     sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(

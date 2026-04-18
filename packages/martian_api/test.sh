@@ -79,7 +79,7 @@ echo "=== MCP: resources/read ==="
 curl -sS \
   -H 'Accept: application/json, text/event-stream' \
   -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"ui://widget/datetime-conversion.html"}}' \
+  --data '{"jsonrpc":"2.0","id":4,"method":"resources/read","params":{"uri":"ui://widget/current-imperial-datetime.html"}}' \
   "${MCP_URL}"
 echo
 
