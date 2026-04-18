@@ -4,6 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { URL } from "node:url";
 import { z } from "zod";
 import mcpManifest from "./mcp-manifest.json" with { type: "json" };
@@ -64,6 +65,8 @@ type WidgetAsset = {
   distHtmlPathCandidates: string[];
   sourceHtmlPathCandidates: string[];
 };
+
+const moduleDirPath = path.dirname(fileURLToPath(import.meta.url));
 
 const imperialDateTimeBodySchema = {
   year: z.number(),
@@ -128,7 +131,7 @@ const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/current-imperial-datetime.html": {
     distHtmlPathCandidates: Array.from(
       new Set([
-        path.resolve(__dirname, "widget/current-imperial-datetime-widget.html"),
+        path.resolve(moduleDirPath, "widget/current-imperial-datetime-widget.html"),
         ...buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
       ]),
     ),
