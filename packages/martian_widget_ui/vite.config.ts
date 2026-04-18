@@ -34,13 +34,13 @@ function inlineAsset(html: string, assetPath: string, tagBuilder: (content: stri
       new RegExp(
         `<script type="module"[^>]*src="(?:\\.\\/|\\.\\.\\/\\.\\.\\/)?${filename.replace(".", "\\.")}"></script>`,
       ),
-      tagBuilder(assetContent),
+      () => tagBuilder(assetContent),
     )
     .replace(
       new RegExp(
         `<link rel="stylesheet"[^>]*href="(?:\\.\\/|\\.\\.\\/\\.\\.\\/)?${filename.replace(".", "\\.")}"[^>]*>`,
       ),
-      tagBuilder(assetContent),
+      () => tagBuilder(assetContent),
     );
 }
 
