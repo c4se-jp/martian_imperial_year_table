@@ -1,4 +1,4 @@
-import CurrentImperialDatetimeWidget from "./CurrentImperialDatetimeWidget";
+import CurrentImperialDatetimeWidget from "./current-imperial-datetime/CurrentImperialDatetimeWidget";
 import { mountWidget } from "./widgetHost";
 
 const root = document.getElementById("root");

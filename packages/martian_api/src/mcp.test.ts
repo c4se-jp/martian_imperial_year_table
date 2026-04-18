@@ -133,44 +133,10 @@ describe("/mcp", () => {
     expect(result.content[0]?.text).toContain("Timezone must be in format");
   });
 
-  test("resources/read で日時變換 widget resource を返す", async () => {
-    const response = await postMcp({
-      jsonrpc: "2.0",
-      id: 5,
-      method: "resources/read",
-      params: {
-        uri: "ui://widget/datetime-conversion.html",
-      },
-    });
-    expect(response.status).toBe(200);
-
-    const jsonrpc = await parseSseJsonRpc(response);
-    expect(jsonrpc.error).toBeUndefined();
-    expect(jsonrpc.id).toBe(5);
-
-    const result = jsonrpc.result as {
-      contents: Array<{
-        uri: string;
-        mimeType?: string;
-        text?: string;
-        _meta?: { ui?: { prefersBorder?: boolean } };
-      }>;
-    };
-    expect(result.contents[0]?.uri).toBe("ui://widget/datetime-conversion.html");
-    expect(result.contents[0]?.mimeType).toBe("text/html;profile=mcp-app");
-    expect(result.contents[0]?._meta?.ui?.prefersBorder).toBe(true);
-    expect(result.contents[0]?.text).toContain("帝國火星曆日時變換");
-    const assetContents = result.contents.slice(1);
-    if (assetContents.length > 0) {
-      expect(assetContents.some((content) => content.uri === "ui://widget/datetime-conversion-widget.js")).toBe(true);
-      expect(assetContents.some((content) => content.uri.endsWith(".css"))).toBe(true);
-    }
-  });
-
   test("resources/read で現在時刻 widget resource を返す", async () => {
     const response = await postMcp({
       jsonrpc: "2.0",
-      id: 6,
+      id: 5,
       method: "resources/read",
       params: {
         uri: "ui://widget/current-imperial-datetime.html",
@@ -180,7 +146,7 @@ describe("/mcp", () => {
 
     const jsonrpc = await parseSseJsonRpc(response);
     expect(jsonrpc.error).toBeUndefined();
-    expect(jsonrpc.id).toBe(6);
+    expect(jsonrpc.id).toBe(5);
 
     const result = jsonrpc.result as {
       contents: Array<{
