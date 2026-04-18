@@ -2,7 +2,7 @@ import { StreamableHTTPTransport } from "@hono/mcp";
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
@@ -139,38 +139,6 @@ const widgetAssets: Record<string, WidgetAsset> = {
     ),
   },
 };
-
-function resolveAssetMimeType(filename: string): string | undefined {
-  if (filename.endsWith(".js")) {
-    return "text/javascript";
-  }
-  if (filename.endsWith(".css")) {
-    return "text/css";
-  }
-  return undefined;
-}
-
-function buildWidgetAssetContents(distHtmlPath: string) {
-  const widgetDirPath = path.dirname(distHtmlPath);
-  const assetNames = readdirSync(widgetDirPath)
-    .filter((filename) => filename !== path.basename(distHtmlPath))
-    .sort();
-
-  return assetNames
-    .map((filename) => {
-      const mimeType = resolveAssetMimeType(filename);
-      if (mimeType === undefined) {
-        return undefined;
-      }
-
-      return {
-        mimeType,
-        text: readFileSync(path.resolve(widgetDirPath, filename), "utf8"),
-        uri: `ui://widget/${filename}`,
-      };
-    })
-    .filter((content): content is { mimeType: string; text: string; uri: string } => content !== undefined);
-}
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
   const structuredContent: ToolResult = {
@@ -327,7 +295,6 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
-        let assetContents: Array<{ mimeType: string; text: string; uri: string }> = [];
         const distHtmlPath = resolveExistingPath(asset.distHtmlPathCandidates);
         const sourceHtmlPath = resolveExistingPath(asset.sourceHtmlPathCandidates);
 
@@ -336,7 +303,6 @@ function createMcpServer(): McpServer {
             throw new Error("dist widget html not found");
           }
           widgetHtml = readFileSync(distHtmlPath, "utf8");
-          assetContents = buildWidgetAssetContents(distHtmlPath);
         } catch {
           if (sourceHtmlPath === undefined) {
             throw new Error(`widget html not found for ${widgetResource.uri}`);
@@ -361,7 +327,6 @@ function createMcpServer(): McpServer {
                 },
               },
             },
-            ...assetContents,
           ],
         };
       },
