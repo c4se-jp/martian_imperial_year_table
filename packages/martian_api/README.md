@@ -22,3 +22,18 @@ AWS Lambda で動作する帝國火星曆 Web API の實裝ディレクトリで
   - `production` などの deployment 環境名です。
 - `MACKEREL_SERVICE_VERSION`
   - deploy した revision を渡します。GitHub Actions では `github.sha` を渡す想定です。
+
+## 動作確認
+
+手許で server を起動し動作を確認する :
+
+```sh
+npm run -w martian_api start:dev
+(cd packages/martian_api && ./test.sh)
+```
+
+deploy された本番の API server の動作を確認する :
+
+```sh
+(cd packages/martian_api && BASE_URL="https://martian-imperial-year-table.c4se.jp" ./test.sh)
+```

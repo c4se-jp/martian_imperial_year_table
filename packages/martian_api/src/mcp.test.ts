@@ -160,16 +160,8 @@ describe("/mcp", () => {
     expect(result.contents[0]?.mimeType).toBe("text/html;profile=mcp-app");
     expect(result.contents[0]?._meta?.ui?.prefersBorder).toBe(true);
     expect(result.contents[0]?.text).toContain("現在の帝國火星曆日時");
-    expect(result.contents[0]?.text).toMatch(
-      /(?:\.\/current-imperial-datetime-widget\.js|\.\/current-imperial-datetime-entry\.tsx)/u,
-    );
-    const assetContents = result.contents.slice(1);
-    if (assetContents.length > 0) {
-      expect(assetContents.some((content) => content.uri === "ui://widget/current-imperial-datetime-widget.js")).toBe(
-        true,
-      );
-      expect(assetContents.some((content) => content.uri.endsWith(".css"))).toBe(true);
-    }
+    expect(result.contents).toHaveLength(1);
+    expect(result.contents[0]?.text).toMatch(/(?:<script type="module">|current-imperial-datetime-entry\.tsx)/u);
   });
 
   test("Accept ヘッダーが不足してゐる場合は 406 を返す", async () => {
