@@ -11,6 +11,8 @@
 - `cdk bootstrap` 濟み (對象アカウント/リージョン)
 - CloudFront 用 ACM 証明書を `us-east-1` で事前に作成しておく
 - 事前に `npm run build` でリポジトリ直下の `dist/` と `dist/widget/` を生成しておく
+- `martian_api` の Lambda bundle は `dist/widget/` を同梱する
+- `dist/widget/` は S3/CloudFront へはアップロードしない
 
 ## 使ひ方
 

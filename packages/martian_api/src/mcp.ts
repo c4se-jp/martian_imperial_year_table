@@ -2,9 +2,9 @@ import { StreamableHTTPTransport } from "@hono/mcp";
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
-import { URL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import mcpManifest from "./mcp-manifest.json" with { type: "json" };
 import {
@@ -64,6 +64,8 @@ type WidgetAsset = {
   distHtmlPathCandidates: string[];
   sourceHtmlPathCandidates: string[];
 };
+
+const moduleDirPath = path.dirname(fileURLToPath(import.meta.url));
 
 const imperialDateTimeBodySchema = {
   year: z.number(),
@@ -126,39 +128,48 @@ function resolveExistingPath(candidates: string[]): string | undefined {
 
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/current-imperial-datetime.html": {
-    distHtmlPathCandidates: buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
+    distHtmlPathCandidates: Array.from(
+      new Set([
+        path.resolve(moduleDirPath, "widget/current-imperial-datetime-widget.html"),
+        ...buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
+      ]),
+    ),
     sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(
       "packages/martian_widget_ui/src/widget/current-imperial-datetime-widget.html",
     ),
   },
 };
 
-function resolveWidgetPublicBase(widgetResource: ManifestResource): string | undefined {
-  const baseOrigin = widgetResource.meta.domain ?? widgetResource.meta.resourceDomains[0];
-  if (baseOrigin === undefined) {
-    return undefined;
+function resolveAssetMimeType(filename: string): string | undefined {
+  if (filename.endsWith(".js")) {
+    return "text/javascript";
   }
-
-  try {
-    return new URL("/widget/", baseOrigin).toString();
-  } catch {
-    return undefined;
+  if (filename.endsWith(".css")) {
+    return "text/css";
   }
+  return undefined;
 }
 
-function rewriteWidgetAssetUrls(widgetHtml: string, widgetResource: ManifestResource): string {
-  const widgetPublicBase = resolveWidgetPublicBase(widgetResource);
-  if (widgetPublicBase === undefined) {
-    return widgetHtml;
-  }
+function buildWidgetAssetContents(distHtmlPath: string) {
+  const widgetDirPath = path.dirname(distHtmlPath);
+  const assetNames = readdirSync(widgetDirPath)
+    .filter((filename) => filename !== path.basename(distHtmlPath))
+    .sort();
 
-  return widgetHtml
-    .replaceAll(/(<script[^>]+src=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
-      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
+  return assetNames
+    .map((filename) => {
+      const mimeType = resolveAssetMimeType(filename);
+      if (mimeType === undefined) {
+        return undefined;
+      }
+
+      return {
+        mimeType,
+        text: readFileSync(path.resolve(widgetDirPath, filename), "utf8"),
+        uri: `ui://widget/${filename}`,
+      };
     })
-    .replaceAll(/(<link[^>]+href=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
-      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
-    });
+    .filter((content): content is { mimeType: string; text: string; uri: string } => content !== undefined);
 }
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
@@ -316,6 +327,7 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
+        let assetContents: Array<{ mimeType: string; text: string; uri: string }> = [];
         const distHtmlPath = resolveExistingPath(asset.distHtmlPathCandidates);
         const sourceHtmlPath = resolveExistingPath(asset.sourceHtmlPathCandidates);
 
@@ -323,7 +335,8 @@ function createMcpServer(): McpServer {
           if (distHtmlPath === undefined) {
             throw new Error("dist widget html not found");
           }
-          widgetHtml = rewriteWidgetAssetUrls(readFileSync(distHtmlPath, "utf8"), widgetResource);
+          widgetHtml = readFileSync(distHtmlPath, "utf8");
+          assetContents = buildWidgetAssetContents(distHtmlPath);
         } catch {
           if (sourceHtmlPath === undefined) {
             throw new Error(`widget html not found for ${widgetResource.uri}`);
@@ -348,6 +361,7 @@ function createMcpServer(): McpServer {
                 },
               },
             },
+            ...assetContents,
           ],
         };
       },
