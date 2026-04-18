@@ -5,7 +5,6 @@ import { Hono } from "hono";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { URL } from "node:url";
 import { z } from "zod";
 import mcpManifest from "./mcp-manifest.json" with { type: "json" };
 import {
@@ -140,19 +139,6 @@ const widgetAssets: Record<string, WidgetAsset> = {
     ),
   },
 };
-
-function resolveWidgetPublicBase(widgetResource: ManifestResource): string | undefined {
-  const baseOrigin = widgetResource.meta.domain ?? widgetResource.meta.resourceDomains[0];
-  if (baseOrigin === undefined) {
-    return undefined;
-  }
-
-  try {
-    return new URL("/widget/", baseOrigin).toString();
-  } catch {
-    return undefined;
-  }
-}
 
 function resolveAssetMimeType(filename: string): string | undefined {
   if (filename.endsWith(".js")) {
