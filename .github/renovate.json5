@@ -3,6 +3,10 @@
   extends: [":configMigration", "config:recommended"],
   ignorePaths: ["martian_imperial_year_table_py/**"],
   labels: ["dependencies"],
+  minimumReleaseAge: "3 days",
   schedule: "after 10am and before 7pm every weekday",
   timezone: "Asia/Tokyo",
+  vulnerabilityAlerts: {
+    labels: ["dependencies", "security"],
+  },
 }
