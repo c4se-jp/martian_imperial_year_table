@@ -65,7 +65,7 @@ type WidgetAsset = {
   sourceHtmlPathCandidates: string[];
 };
 
-const moduleDirPath = path.dirname(fileURLToPath(import.meta.url));
+const moduleDirPath = typeof __dirname === "string" ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
 const imperialDateTimeBodySchema = {
   year: z.number(),
