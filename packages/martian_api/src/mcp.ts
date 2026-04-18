@@ -2,7 +2,7 @@ import { StreamableHTTPTransport } from "@hono/mcp";
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Hono } from "hono";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { URL } from "node:url";
@@ -154,19 +154,36 @@ function resolveWidgetPublicBase(widgetResource: ManifestResource): string | und
   }
 }
 
-function rewriteWidgetAssetUrls(widgetHtml: string, widgetResource: ManifestResource): string {
-  const widgetPublicBase = resolveWidgetPublicBase(widgetResource);
-  if (widgetPublicBase === undefined) {
-    return widgetHtml;
+function resolveAssetMimeType(filename: string): string | undefined {
+  if (filename.endsWith(".js")) {
+    return "text/javascript";
   }
+  if (filename.endsWith(".css")) {
+    return "text/css";
+  }
+  return undefined;
+}
 
-  return widgetHtml
-    .replaceAll(/(<script[^>]+src=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
-      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
+function buildWidgetAssetContents(distHtmlPath: string) {
+  const widgetDirPath = path.dirname(distHtmlPath);
+  const assetNames = readdirSync(widgetDirPath)
+    .filter((filename) => filename !== path.basename(distHtmlPath))
+    .sort();
+
+  return assetNames
+    .map((filename) => {
+      const mimeType = resolveAssetMimeType(filename);
+      if (mimeType === undefined) {
+        return undefined;
+      }
+
+      return {
+        mimeType,
+        text: readFileSync(path.resolve(widgetDirPath, filename), "utf8"),
+        uri: `ui://widget/${filename}`,
+      };
     })
-    .replaceAll(/(<link[^>]+href=")(\.\/[^"]+)"/gu, (_match, prefix: string, relativePath: string) => {
-      return `${prefix}${new URL(relativePath.replace(/^\.\//u, ""), widgetPublicBase).toString()}"`;
-    });
+    .filter((content): content is { mimeType: string; text: string; uri: string } => content !== undefined);
 }
 
 function errorResult(message: string, mode: ToolMode, request: Record<string, unknown>) {
@@ -324,6 +341,7 @@ function createMcpServer(): McpServer {
       },
       () => {
         let widgetHtml = "";
+        let assetContents: Array<{ mimeType: string; text: string; uri: string }> = [];
         const distHtmlPath = resolveExistingPath(asset.distHtmlPathCandidates);
         const sourceHtmlPath = resolveExistingPath(asset.sourceHtmlPathCandidates);
 
@@ -331,7 +349,8 @@ function createMcpServer(): McpServer {
           if (distHtmlPath === undefined) {
             throw new Error("dist widget html not found");
           }
-          widgetHtml = rewriteWidgetAssetUrls(readFileSync(distHtmlPath, "utf8"), widgetResource);
+          widgetHtml = readFileSync(distHtmlPath, "utf8");
+          assetContents = buildWidgetAssetContents(distHtmlPath);
         } catch {
           if (sourceHtmlPath === undefined) {
             throw new Error(`widget html not found for ${widgetResource.uri}`);
@@ -356,6 +375,7 @@ function createMcpServer(): McpServer {
                 },
               },
             },
+            ...assetContents,
           ],
         };
       },
