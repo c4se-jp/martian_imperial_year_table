@@ -126,7 +126,12 @@ function resolveExistingPath(candidates: string[]): string | undefined {
 
 const widgetAssets: Record<string, WidgetAsset> = {
   "ui://widget/current-imperial-datetime.html": {
-    distHtmlPathCandidates: buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
+    distHtmlPathCandidates: Array.from(
+      new Set([
+        path.resolve(__dirname, "widget/current-imperial-datetime-widget.html"),
+        ...buildCandidatePaths("dist/widget/current-imperial-datetime-widget.html"),
+      ]),
+    ),
     sourceHtmlPathCandidates: buildSourceHtmlPathCandidates(
       "packages/martian_widget_ui/src/widget/current-imperial-datetime-widget.html",
     ),

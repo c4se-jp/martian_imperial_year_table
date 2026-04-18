@@ -70,8 +70,11 @@ export class MartianSiteStack extends Stack {
     const apiLambda = new lambdaNodejs.NodejsFunction(this, "ApiLambda", {
       bundling: {
         commandHooks: {
-          afterBundling(): string[] {
-            return [];
+          afterBundling(inputDir: string, outputDir: string): string[] {
+            return [
+              `mkdir -p "${outputDir}/widget"`,
+              `cp -R "${inputDir}/dist/widget/." "${outputDir}/widget/"`,
+            ];
           },
           beforeBundling(inputDir: string): string[] {
             return [`npm --prefix "${inputDir}" run -w imperial_calendar build`];
@@ -170,6 +173,7 @@ function handler(event) {
       destinationBucket: siteBucket,
       distribution,
       distributionPaths: ["/*"],
+      exclude: ["widget", "widget/*", "widget/**"],
       prune: true,
       sources: [s3deploy.Source.asset(siteAssetsPath)],
     });
