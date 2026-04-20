@@ -1,5 +1,6 @@
 import { SpanStatusCode, trace } from "@opentelemetry/api";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import {
   buildCurrentImperialDateTimeResponse,
   buildGregorianToImperialResponse,
@@ -17,6 +18,16 @@ type ErrorResponse = {
 };
 
 export const app = new Hono();
+
+app.use(
+  "/mcp",
+  cors({
+    origin: "*",
+    allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
+    allowHeaders: ["Accept", "Content-Type", "Last-Event-ID", "Mcp-Protocol-Version", "Mcp-Session-Id"],
+    exposeHeaders: ["Mcp-Protocol-Version", "Mcp-Session-Id"],
+  }),
+);
 
 app.use("*", async (c, next) => {
   const tracer = trace.getTracer("martian_api");
