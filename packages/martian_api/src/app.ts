@@ -22,7 +22,7 @@ export const app = new Hono();
 app.use(
   "/mcp",
   cors({
-    origin: "https://martian-imperial-year-table.c4se.jp",
+    origin: "*",
     allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
     allowHeaders: ["Accept", "Content-Type", "Last-Event-ID", "Mcp-Protocol-Version", "Mcp-Session-Id"],
     exposeHeaders: ["Mcp-Protocol-Version", "Mcp-Session-Id"],
