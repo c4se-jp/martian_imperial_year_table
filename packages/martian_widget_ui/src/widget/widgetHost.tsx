@@ -29,9 +29,10 @@ function createErrorResult(message: string, mode: ToolMode, request: Record<stri
 }
 
 let standaloneClientPromise: Promise<Client> | undefined;
+const MCP_ORIGIN = "https://martian-imperial-year-table.c4se.jp";
 
 function resolveStandaloneMcpUrl(): URL {
-  return new URL("/mcp", window.location.href);
+  return new URL("/mcp", MCP_ORIGIN);
 }
 
 async function getStandaloneClient(): Promise<Client> {

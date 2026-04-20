@@ -15,7 +15,9 @@
       "meta": {
         "widgetDescription": "現在の帝國火星曆日時を表示できます。",
         "widgetPrefersBorder": true,
-        "connectDomains": [],
+        "connectDomains": [
+          "https://martian-imperial-year-table.c4se.jp"
+        ],
         "resourceDomains": [
           "https://martian-imperial-year-table.c4se.jp"
         ]
