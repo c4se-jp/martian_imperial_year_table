@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import "@openai/apps-sdk-ui/css";
 import type { WidgetToolResult } from "../widgetTypes";
 import ImperialNowCard from "./ImperialNowCard";
 import {
