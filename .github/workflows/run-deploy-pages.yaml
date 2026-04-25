@@ -69,6 +69,39 @@ jobs:
       - name: CDKの依存するlibraryを入れる
         run: npm install --prefix cdk
 
+      - name: CloudFormation stackの更新完了を待つ
+        run: |
+          stack_name=MartianImperialYearTableSiteStack
+          deadline=$((SECONDS + 900))
+
+          while true; do
+            stack_status=$(aws cloudformation describe-stacks \
+              --stack-name "${stack_name}" \
+              --query "Stacks[0].StackStatus" \
+              --output text 2>/dev/null || true)
+
+            if [ -z "${stack_status}" ]; then
+              echo "Stack ${stack_name} does not exist yet."
+              break
+            fi
+
+            case "${stack_status}" in
+              *_IN_PROGRESS)
+                if [ "${SECONDS}" -ge "${deadline}" ]; then
+                  echo "Timed out waiting for ${stack_name} to finish ${stack_status}."
+                  exit 1
+                fi
+
+                echo "Stack ${stack_name} is ${stack_status}; waiting..."
+                sleep 30
+                ;;
+              *)
+                echo "Stack ${stack_name} is ${stack_status}; continuing."
+                break
+                ;;
+            esac
+          done
+
       - name: CDK deploy
         env:
           CERTIFICATE_ARN: ${{ secrets.CERTIFICATE_ARN }}
