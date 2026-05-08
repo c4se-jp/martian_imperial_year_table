@@ -10,7 +10,7 @@ const initialState = convertFromGregorian(getBrowserGregorian(), "+00:00");
 export default function CalendarPage() {
   const initialYm = toYearMonth(initialState.imdt);
   const [form, setForm] = useState({
-    timezone: initialState.grdt.timezone ?? "+00:00",
+    grdtTimezone: initialState.grdt.timezone ?? "+09:00",
     year: initialYm.year,
     month: initialYm.month,
   });
@@ -18,15 +18,15 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSvg = useCallback(async (year: number, month: number, tz: string) => {
+  const fetchSvg = useCallback(async (year: number, month: number, grdtTz: string) => {
     setLoading(true);
     setError(null);
     try {
-      const timezone = normalizeTimezone(tz);
+      const grdtTimezone = normalizeTimezone(grdtTz);
       const imdt = new ImperialDateTime(year, month, 1, 0, 0, 0, "+00:00");
-      const svg = await drawCalendarSvg(imdt, timezone);
+      const svg = await drawCalendarSvg(imdt, grdtTimezone);
       setSvgMarkup(svg);
-      setForm({ year, month, timezone });
+      setForm({ year, month, grdtTimezone });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -36,7 +36,7 @@ export default function CalendarPage() {
 
   useEffect(() => {
     document.title = "七曜表 | 帝國火星曆";
-    fetchSvg(form.year, form.month, form.timezone);
+    fetchSvg(form.year, form.month, form.grdtTimezone);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,17 +44,17 @@ export default function CalendarPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    fetchSvg(form.year, form.month, form.timezone);
+    fetchSvg(form.year, form.month, form.grdtTimezone);
   };
 
   const handlePrev = () => {
     const prev = currentYm.prevMonth();
-    fetchSvg(prev.year, prev.month, form.timezone);
+    fetchSvg(prev.year, prev.month, form.grdtTimezone);
   };
 
   const handleNext = () => {
     const next = currentYm.nextMonth();
-    fetchSvg(next.year, next.month, form.timezone);
+    fetchSvg(next.year, next.month, form.grdtTimezone);
   };
 
   const handleSetCurrent = () => {
@@ -73,42 +73,51 @@ export default function CalendarPage() {
       <div className="container">
         <form className="box" onSubmit={handleSubmit}>
           <h2 className="title is-5">帝國火星曆 七曜表</h2>
-          <div className="field is-grouped">
-            <p className="control">
-              <input
-                className="input"
-                type="number"
-                value={form.year}
-                onChange={(event) => setForm((prev) => ({ ...prev, year: Number(event.target.value) }))}
-                style={{ width: "8em" }}
-              />
-            </p>
-            <p className="control">
-              <input
-                className="input"
-                type="number"
-                min={1}
-                max={24}
-                value={form.month}
-                onChange={(event) => setForm((prev) => ({ ...prev, month: Number(event.target.value) }))}
-                style={{ width: "5em" }}
-              />
-            </p>
-            <p className="control">
-              <input
-                className="input"
-                type="text"
-                value={form.timezone}
-                onChange={(event) => setForm((prev) => ({ ...prev, timezone: event.target.value }))}
-                style={{ width: "7em" }}
-              />
-            </p>
-            <p className="control">
+          <div className="calendar-form">
+            <div className="field">
+              <label className="label">年</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="number"
+                  value={form.year}
+                  onChange={(event) => setForm((prev) => ({ ...prev, year: Number(event.target.value) }))}
+                  style={{ width: "8em" }}
+                />
+              </p>
+            </div>
+            <div className="field">
+              <label className="label">月</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="number"
+                  min={1}
+                  max={24}
+                  value={form.month}
+                  onChange={(event) => setForm((prev) => ({ ...prev, month: Number(event.target.value) }))}
+                  style={{ width: "5em" }}
+                />
+              </p>
+            </div>
+            <div className="field">
+              <label className="label">對照するグレゴリオ曆のタイムゾーン</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="text"
+                  value={form.grdtTimezone}
+                  onChange={(event) => setForm((prev) => ({ ...prev, grdtTimezone: event.target.value }))}
+                  style={{ width: "7em" }}
+                />
+              </p>
+            </div>
+            <p className="control calendar-form__action">
               <button className="button is-link" type="submit" disabled={loading}>
-                描画
+                描畫
               </button>
             </p>
-            <p className="control">
+            <p className="control calendar-form__action">
               <button className="button" type="button" onClick={handleSetCurrent} disabled={loading}>
                 現在の月
               </button>

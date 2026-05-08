@@ -14,7 +14,7 @@ describe("CalendarImage", () => {
     expect(dom.window.document.querySelectorAll("text").length).toBeGreaterThan(0);
   });
 
-  it("drawCalendarSvg ヘルパー経由でも描画できる", async () => {
+  it("drawCalendarSvg ヘルパー經由でも描畫できる", async () => {
     const imdt = new ImperialDateTime(1425, 2, 1, 0, 0, 0, "+00:00");
     const svg = await drawCalendarSvg(imdt, "+09:00");
     expect(svg.startsWith("<svg")).toBe(true);
