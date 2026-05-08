@@ -114,7 +114,7 @@ export default function CalendarPage() {
             </div>
             <p className="control calendar-form__action">
               <button className="button is-link" type="submit" disabled={loading}>
-                描画
+                描畫
               </button>
             </p>
             <p className="control calendar-form__action">
