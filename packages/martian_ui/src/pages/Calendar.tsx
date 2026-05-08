@@ -5,12 +5,12 @@ import { convertFromGregorian, toYearMonth } from "../lib/conversion";
 import { getBrowserGregorian } from "../lib/date";
 import { normalizeTimezone } from "../lib/time";
 
-const initialState = convertFromGregorian(getBrowserGregorian(), "+00:00");
+const initialState = convertFromGregorian(getBrowserGregorian(), "+09:00");
 
 export default function CalendarPage() {
   const initialYm = toYearMonth(initialState.imdt);
   const [form, setForm] = useState({
-    timezone: initialState.grdt.timezone ?? "+00:00",
+    grdtTimezone: initialState.grdt.timezone ?? "+09:00",
     year: initialYm.year,
     month: initialYm.month,
   });
@@ -18,15 +18,15 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSvg = useCallback(async (year: number, month: number, tz: string) => {
+  const fetchSvg = useCallback(async (year: number, month: number, grdtTz: string) => {
     setLoading(true);
     setError(null);
     try {
-      const timezone = normalizeTimezone(tz);
+      const grdtTimezone = normalizeTimezone(grdtTz);
       const imdt = new ImperialDateTime(year, month, 1, 0, 0, 0, "+00:00");
-      const svg = await drawCalendarSvg(imdt, timezone);
+      const svg = await drawCalendarSvg(imdt, grdtTimezone);
       setSvgMarkup(svg);
-      setForm({ year, month, timezone });
+      setForm({ year, month, grdtTimezone });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -36,7 +36,7 @@ export default function CalendarPage() {
 
   useEffect(() => {
     document.title = "七曜表 | 帝國火星曆";
-    fetchSvg(form.year, form.month, form.timezone);
+    fetchSvg(form.year, form.month, form.grdtTimezone);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,17 +44,17 @@ export default function CalendarPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    fetchSvg(form.year, form.month, form.timezone);
+    fetchSvg(form.year, form.month, form.grdtTimezone);
   };
 
   const handlePrev = () => {
     const prev = currentYm.prevMonth();
-    fetchSvg(prev.year, prev.month, form.timezone);
+    fetchSvg(prev.year, prev.month, form.grdtTimezone);
   };
 
   const handleNext = () => {
     const next = currentYm.nextMonth();
-    fetchSvg(next.year, next.month, form.timezone);
+    fetchSvg(next.year, next.month, form.grdtTimezone);
   };
 
   const handleSetCurrent = () => {
@@ -98,8 +98,8 @@ export default function CalendarPage() {
               <input
                 className="input"
                 type="text"
-                value={form.timezone}
-                onChange={(event) => setForm((prev) => ({ ...prev, timezone: event.target.value }))}
+                value={form.grdtTimezone}
+                onChange={(event) => setForm((prev) => ({ ...prev, grdtTimezone: event.target.value }))}
                 style={{ width: "7em" }}
               />
             </p>
