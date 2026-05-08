@@ -5,7 +5,7 @@ import { convertFromGregorian, toYearMonth } from "../lib/conversion";
 import { getBrowserGregorian } from "../lib/date";
 import { normalizeTimezone } from "../lib/time";
 
-const initialState = convertFromGregorian(getBrowserGregorian(), "+09:00");
+const initialState = convertFromGregorian(getBrowserGregorian(), "+00:00");
 
 export default function CalendarPage() {
   const initialYm = toYearMonth(initialState.imdt);
