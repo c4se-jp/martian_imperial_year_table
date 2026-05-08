@@ -73,42 +73,51 @@ export default function CalendarPage() {
       <div className="container">
         <form className="box" onSubmit={handleSubmit}>
           <h2 className="title is-5">帝國火星曆 七曜表</h2>
-          <div className="field is-grouped">
-            <p className="control">
-              <input
-                className="input"
-                type="number"
-                value={form.year}
-                onChange={(event) => setForm((prev) => ({ ...prev, year: Number(event.target.value) }))}
-                style={{ width: "8em" }}
-              />
-            </p>
-            <p className="control">
-              <input
-                className="input"
-                type="number"
-                min={1}
-                max={24}
-                value={form.month}
-                onChange={(event) => setForm((prev) => ({ ...prev, month: Number(event.target.value) }))}
-                style={{ width: "5em" }}
-              />
-            </p>
-            <p className="control">
-              <input
-                className="input"
-                type="text"
-                value={form.grdtTimezone}
-                onChange={(event) => setForm((prev) => ({ ...prev, grdtTimezone: event.target.value }))}
-                style={{ width: "7em" }}
-              />
-            </p>
-            <p className="control">
+          <div className="calendar-form">
+            <div className="field">
+              <label className="label">年</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="number"
+                  value={form.year}
+                  onChange={(event) => setForm((prev) => ({ ...prev, year: Number(event.target.value) }))}
+                  style={{ width: "8em" }}
+                />
+              </p>
+            </div>
+            <div className="field">
+              <label className="label">月</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="number"
+                  min={1}
+                  max={24}
+                  value={form.month}
+                  onChange={(event) => setForm((prev) => ({ ...prev, month: Number(event.target.value) }))}
+                  style={{ width: "5em" }}
+                />
+              </p>
+            </div>
+            <div className="field">
+              <label className="label">對照するグレゴリオ曆のタイムゾーン</label>
+              <p className="control">
+                <input
+                  className="input"
+                  type="text"
+                  value={form.grdtTimezone}
+                  onChange={(event) => setForm((prev) => ({ ...prev, grdtTimezone: event.target.value }))}
+                  style={{ width: "7em" }}
+                />
+              </p>
+            </div>
+            <p className="control calendar-form__action">
               <button className="button is-link" type="submit" disabled={loading}>
                 描画
               </button>
             </p>
-            <p className="control">
+            <p className="control calendar-form__action">
               <button className="button" type="button" onClick={handleSetCurrent} disabled={loading}>
                 現在の月
               </button>

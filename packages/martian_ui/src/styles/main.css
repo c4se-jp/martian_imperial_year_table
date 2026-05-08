@@ -65,6 +65,22 @@ body {
   max-width: 100%;
 }
 
+.calendar-form {
+  display: grid;
+  grid-template-columns: max-content max-content max-content max-content max-content;
+  gap: 1rem 1.5rem;
+  align-items: start;
+}
+
+.calendar-form .field,
+.calendar-form .control {
+  margin-bottom: 0;
+}
+
+.calendar-form__action {
+  padding-top: 2rem;
+}
+
 pre {
   white-space: pre-wrap;
   word-break: break-word;
@@ -227,5 +243,13 @@ pre {
   .transform-form__grid,
   .transform-form__grid--timezone {
     grid-template-columns: 1fr;
+  }
+
+  .calendar-form {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-form__action {
+    padding-top: 0;
   }
 }
