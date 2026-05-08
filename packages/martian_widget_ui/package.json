@@ -13,17 +13,17 @@
     "test": "vitest --run --passWithNoTests"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "^1.7.0",
+    "@modelcontextprotocol/ext-apps": "^1.7.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@openai/apps-sdk-ui": "^0.2.1",
     "preact": "^10.29.1"
   },
   "devDependencies": {
-    "@storybook/preact": "^10.3.5",
-    "@storybook/preact-vite": "^10.3.5",
+    "@storybook/preact": "^10.3.6",
+    "@storybook/preact-vite": "^10.3.6",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "storybook": "^10.3.5",
+    "storybook": "^10.3.6",
     "typescript": "^6.0.3",
     "vite": "^8.0.8",
     "vitest": "^4.1.5"
