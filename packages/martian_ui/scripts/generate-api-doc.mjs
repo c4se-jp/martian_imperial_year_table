@@ -220,9 +220,9 @@ async function main() {
             contentType: responseContent?.contentType,
             schema: responseContent ? normalizeSchema(responseContent.value?.schema ?? {}) : undefined,
             example: responseContent
-              ? responseContent.value?.example ??
+              ? (responseContent.value?.example ??
                 responseContent.value?.examples?.default?.value ??
-                buildSyntheticExample(responseContent.value?.schema ?? {}, namedSchemas)
+                buildSyntheticExample(responseContent.value?.schema ?? {}, namedSchemas))
               : undefined,
           };
         });

@@ -12,11 +12,11 @@
     "lint": "npm run --workspaces lint",
     "test": "npm run --workspaces test",
     "test:gha": "yamllint .github/workflows/ && actionlint && ghalint run && zizmor .",
-    "format": "prettier --write \"packages/**/*.ts\" \"packages/**/*.tsx\""
+    "format": "oxfmt packages/"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
-    "prettier": "^3.8.3",
+    "oxfmt": "^0.48.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.8",
     "vitest": "^4.1.5"
