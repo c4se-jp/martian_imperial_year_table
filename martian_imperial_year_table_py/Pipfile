@@ -17,7 +17,7 @@ mypy = "*"
 typing-extensions = "*"
 
 [requires]
-python_version = "3.13"
+python_version = "3.14"
 
 [pipenv]
 allow_prereleases = true
