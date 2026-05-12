@@ -27,8 +27,8 @@
     "@opentelemetry/sdk-trace-web": "^2.7.1",
     "bulma": "^1.0.4",
     "marked": "^18.0.3",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-router-dom": "^7.15.0"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "typescript": "^6.0.3",
-    "vite": "^8.0.8",
+    "vite": "^8.0.11",
     "vitest": "^4.1.5",
     "yaml": "^2.8.4"
   }
