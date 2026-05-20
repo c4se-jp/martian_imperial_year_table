@@ -355,7 +355,9 @@ function createMcpServer(): McpServer {
 export function registerMcpRoute(app: Hono): void {
   app.all("/mcp", async (c) => {
     const server = createMcpServer();
-    const transport = new StreamableHTTPTransport();
+    const transport = new StreamableHTTPTransport({
+      strictAcceptHeader: false,
+    });
     await server.connect(transport);
     return transport.handleRequest(c);
   });
