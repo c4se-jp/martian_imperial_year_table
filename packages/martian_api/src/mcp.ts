@@ -354,6 +354,26 @@ function createMcpServer(): McpServer {
 
 export function registerMcpRoute(app: Hono): void {
   app.all("/mcp", async (c) => {
+    const accept = c.req.header("accept") ?? "";
+    const acceptValues = accept
+      .split(",")
+      .map((value) => value.split(";")[0]?.trim().toLowerCase())
+      .filter((value): value is string => value !== undefined && value.length > 0);
+    const acceptsJson = acceptValues.includes("application/json");
+    const acceptsEventStream = acceptValues.includes("text/event-stream");
+    if (!(acceptsJson && acceptsEventStream)) {
+      return c.json(
+        {
+          jsonrpc: "2.0",
+          error: {
+            code: -32000,
+            message: "Not Acceptable: Client must accept both application/json and text/event-stream",
+          },
+          id: null,
+        },
+        406,
+      );
+    }
     const server = createMcpServer();
     const transport = new StreamableHTTPTransport();
     await server.connect(transport);
