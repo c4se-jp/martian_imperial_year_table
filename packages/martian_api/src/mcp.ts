@@ -1,6 +1,6 @@
+import { StreamableHTTPTransport } from "@hono/mcp";
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from "@modelcontextprotocol/ext-apps/server";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { Hono } from "hono";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -124,37 +124,6 @@ function buildSourceHtmlPathCandidates(...relativePaths: string[]): string[] {
 
 function resolveExistingPath(candidates: string[]): string | undefined {
   return candidates.find((candidate) => existsSync(candidate));
-}
-
-function normalizeMcpAcceptHeader(request: Request): Request {
-  if (request.method !== "POST") {
-    return request;
-  }
-
-  const accept = request.headers.get("accept");
-  if (accept === null) {
-    return request;
-  }
-
-  const acceptValues = accept
-    .split(",")
-    .map((value) => value.split(";")[0]?.trim().toLowerCase())
-    .filter((value): value is string => value !== undefined && value.length > 0);
-  const allowsAny = acceptValues.includes("*/*");
-  const acceptsJson = acceptValues.includes("application/json");
-  const acceptsEventStream = acceptValues.includes("text/event-stream");
-
-  if (acceptsJson && acceptsEventStream) {
-    return request;
-  }
-
-  if (!(allowsAny || acceptsJson || acceptsEventStream)) {
-    return request;
-  }
-
-  const headers = new Headers(request.headers);
-  headers.set("accept", "application/json, text/event-stream");
-  return new Request(request, { headers });
 }
 
 const widgetAssets: Record<string, WidgetAsset> = {
@@ -386,8 +355,10 @@ function createMcpServer(): McpServer {
 export function registerMcpRoute(app: Hono): void {
   app.all("/mcp", async (c) => {
     const server = createMcpServer();
-    const transport = new WebStandardStreamableHTTPServerTransport();
+    const transport = new StreamableHTTPTransport({
+      strictAcceptHeader: false,
+    });
     await server.connect(transport);
-    return transport.handleRequest(normalizeMcpAcceptHeader(c.req.raw));
+    return transport.handleRequest(c);
   });
 }
