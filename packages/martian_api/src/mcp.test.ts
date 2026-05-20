@@ -164,7 +164,7 @@ describe("/mcp", () => {
     expect(result.contents[0]?.text).toMatch(/(?:<script type="module">|current-imperial-datetime-entry\.tsx)/u);
   });
 
-  test("Accept ヘッダーが不足してゐる場合は 406 を返す", async () => {
+  test("Accept が application/json のみでも接續できる", async () => {
     const response = await postMcp(
       {
         jsonrpc: "2.0",
@@ -174,14 +174,27 @@ describe("/mcp", () => {
       },
       { Accept: "application/json" },
     );
-    expect(response.status).toBe(406);
-    await expect(response.json()).resolves.toEqual({
-      jsonrpc: "2.0",
-      error: {
-        code: -32000,
-        message: "Not Acceptable: Client must accept both application/json and text/event-stream",
+    expect(response.status).toBe(200);
+
+    const jsonrpc = await parseSseJsonRpc(response);
+    expect(jsonrpc.error).toBeUndefined();
+    expect(jsonrpc.id).toBe(4);
+  });
+
+  test("Accept が */* でも接續できる", async () => {
+    const response = await postMcp(
+      {
+        jsonrpc: "2.0",
+        id: 6,
+        method: "tools/list",
+        params: {},
       },
-      id: null,
-    });
+      { Accept: "*/*" },
+    );
+    expect(response.status).toBe(200);
+
+    const jsonrpc = await parseSseJsonRpc(response);
+    expect(jsonrpc.error).toBeUndefined();
+    expect(jsonrpc.id).toBe(6);
   });
 });
