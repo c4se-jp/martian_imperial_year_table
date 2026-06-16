@@ -22,7 +22,7 @@
     "@opentelemetry/auto-instrumentations-web": "^0.64.0",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.219.0",
     "@opentelemetry/instrumentation": "^0.219.0",
-    "@opentelemetry/resources": "^2.7.1",
+    "@opentelemetry/resources": "^2.8.0",
     "@opentelemetry/semantic-conventions": "^1.41.1",
     "@opentelemetry/sdk-trace-web": "^2.7.1",
     "bulma": "^1.0.4",
