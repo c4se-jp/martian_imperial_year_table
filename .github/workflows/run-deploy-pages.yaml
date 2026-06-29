@@ -67,7 +67,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: CDKの依存するlibraryを入れる
-        run: npm install --prefix cdk
+        run: npm ci --prefix cdk
 
       - name: CloudFormation stackの更新完了を待つ
         run: |
