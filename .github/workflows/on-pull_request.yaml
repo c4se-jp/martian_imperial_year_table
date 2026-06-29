@@ -42,7 +42,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: ne-sachirou/lint-gha-reviewdog@ef912fb73025b91707d65f304f6942ef066940c2 # v0.0.5
+      - uses: ne-sachirou/lint-gha-reviewdog@21e9e3be880468f3fceff09b97e02094eb000a43 # v0.0.6
         with:
           fail_on_error: true
           github_token: ${{github.token}}
