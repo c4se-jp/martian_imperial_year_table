@@ -84,6 +84,7 @@ export class MartianSiteStack extends Stack {
           },
         },
         define: {
+          // esbuild の CJS 出力では import.meta が空になり empty-import-meta を警吿されるため、參照をダミー値に置換する
           "import.meta.url": '""',
         },
         format: lambdaNodejs.OutputFormat.CJS,
