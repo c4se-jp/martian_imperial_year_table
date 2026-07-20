@@ -1625,7 +1625,7 @@ try {
               function o(l) {
                 let s = n(),
                   d = [l];
-                for (s[l].distance = 0; d.length; ) {
+                for (s[l].distance = 0; d.length;) {
                   let p = d.pop(),
                     m = Object.keys(r[p]);
                   for (let h = m.length, y = 0; y < h; y++) {
@@ -1645,7 +1645,7 @@ try {
                 let d = [s[l].parent, l],
                   p = r[s[l].parent][l],
                   m = s[l].parent;
-                for (; s[m].parent; ) (d.unshift(s[m].parent), (p = i(r[s[m].parent][m], p)), (m = s[m].parent));
+                for (; s[m].parent;) (d.unshift(s[m].parent), (p = i(r[s[m].parent][m], p)), (m = s[m].parent));
                 return ((p.conversion = d), p);
               }
               t.exports = function (l) {
@@ -2729,7 +2729,7 @@ try {
         if (r === Date) return e.getTime() === t.getTime();
         if (r === RegExp) return e.toString() === t.toString();
         if (r === Array) {
-          if ((n = e.length) === t.length) for (; n-- && Lt(e[n], t[n]); );
+          if ((n = e.length) === t.length) for (; n-- && Lt(e[n], t[n]););
           return n === -1;
         }
         if (r === Set) {
@@ -2745,11 +2745,11 @@ try {
         }
         if (r === ArrayBuffer) ((e = new Uint8Array(e)), (t = new Uint8Array(t)));
         else if (r === DataView) {
-          if ((n = e.byteLength) === t.byteLength) for (; n-- && e.getInt8(n) === t.getInt8(n); );
+          if ((n = e.byteLength) === t.byteLength) for (; n-- && e.getInt8(n) === t.getInt8(n););
           return n === -1;
         }
         if (ArrayBuffer.isView(e)) {
-          if ((n = e.byteLength) === t.byteLength) for (; n-- && e[n] === t[n]; );
+          if ((n = e.byteLength) === t.byteLength) for (; n-- && e[n] === t[n];);
           return n === -1;
         }
         if (!r || typeof e == "object") {
@@ -5828,7 +5828,7 @@ try {
             }
             A.sort();
             for (var P = 0; P < A.length - 1; P++) {
-              for (var k = P; k < A.length - 1 && A[k].charCodeAt(1) + 1 === A[k + 1].charCodeAt(1); ) k += 1;
+              for (var k = P; k < A.length - 1 && A[k].charCodeAt(1) + 1 === A[k + 1].charCodeAt(1);) k += 1;
               var B = 1 + k - P;
               B < 3 || A.splice(P, B, A[P] + "-" + A[k]);
             }
@@ -6126,7 +6126,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             M[$] = y([J, j, G]);
           }
           function h(x) {
-            for (var R = x.toString(16); R.length < 2; ) R = "0" + R;
+            for (var R = x.toString(16); R.length < 2;) R = "0" + R;
             return R;
           }
           function y(x) {
@@ -6134,7 +6134,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               F = i(x),
               M;
             try {
-              for (F.s(); !(M = F.n()).done; ) {
+              for (F.s(); !(M = F.n()).done;) {
                 var $ = M.value;
                 R.push(h($));
               }
@@ -6309,7 +6309,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               var Xt = i(qe),
                 Jr;
               try {
-                for (Xt.s(); !(Jr = Xt.n()).done; ) {
+                for (Xt.s(); !(Jr = Xt.n()).done;) {
                   var qr = Jr.value;
                   F("display", qr);
                 }
@@ -6348,7 +6348,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             var ke = [],
               ct = x,
               et = ct.length;
-            e: for (; et > 0; ) {
+            e: for (; et > 0;) {
               for (var wt = 0, _t = 0, Hr = ge.length; _t < Hr; wt = ++_t) {
                 var ko = ge[wt];
                 if ((xe(ko, wt), x.length !== et)) {
@@ -6810,7 +6810,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               s = 0;
             e: for (; s < i; s++) {
               let d = o.charCodeAt(s);
-              for (; d < 128; ) {
+              for (; d < 128;) {
                 if ((r[d] !== 1 && (l < s && (a += o.slice(l, s)), (l = s + 1), (a += t[d])), ++s === i)) break e;
                 d = o.charCodeAt(s);
               }
@@ -6954,7 +6954,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
               h = 0,
               y = s,
               E = t;
-            for (; s > -1 && s < d; ) {
+            for (; s > -1 && s < d;) {
               let b = a(l[s + 1], 4),
                 S = a(l[s + 2], 0),
                 g = b | S,
@@ -7440,7 +7440,7 @@ This is deprecated and won't work in Storybook 8 anymore.
               I = c[0],
               q = !1;
             if (I !== "'" && I !== '"') return null;
-            for (; f < c.length; ) {
+            for (; f < c.length;) {
               if ((f++, (_ = c[f]), !q && _ === I)) {
                 f++;
                 break;
@@ -7658,7 +7658,7 @@ This is deprecated and won't work in Storybook 8 anymore.
             }
             parseInfixIntermediateType(f, _) {
               let I = this.tryParslets(f, _);
-              for (; I !== null; ) ((f = I), (I = this.tryParslets(f, _)));
+              for (; I !== null;) ((f = I), (I = this.tryParslets(f, _)));
               return f;
             }
             tryParslets(f, _) {
@@ -7919,7 +7919,7 @@ This is deprecated and won't work in Storybook 8 anymore.
                 else {
                   let ve = "",
                     je = ["Identifier", "@", "/"];
-                  for (; je.some((vt) => _.consume(vt)); ) ((ve += K.text), (K = _.lexer.current));
+                  for (; je.some((vt) => _.consume(vt));) ((ve += K.text), (K = _.lexer.current));
                   q = { type: "JsdocTypeSpecialNamePath", value: ve, specialType: I, meta: { quote: void 0 } };
                 }
                 let oe = new x(c, _.lexer, _),
@@ -9923,7 +9923,7 @@ See https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-
       if (!d.done) {
         l += t.spacingOuter;
         let p = r + t.indent;
-        for (; !d.done; ) {
+        for (; !d.done;) {
           if (((l += p), s++ === t.maxWidth)) {
             l += "\u2026";
             break;
@@ -9943,7 +9943,7 @@ See https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-
       if (!s.done) {
         a += t.spacingOuter;
         let d = r + t.indent;
-        for (; !s.done; ) {
+        for (; !s.done;) {
           if (((a += d), l++ === t.maxWidth)) {
             a += "\u2026";
             break;
@@ -11382,7 +11382,7 @@ ${s}`,
       let n, o;
       if (t.has(e)) return t.get(e);
       if (Array.isArray(e)) {
-        for (o = Array.from({ length: (n = e.length) }), t.set(e, o); n--; ) o[n] = Ka(e[n], t, r);
+        for (o = Array.from({ length: (n = e.length) }), t.set(e, o); n--;) o[n] = Ka(e[n], t, r);
         return o;
       }
       if (Object.prototype.toString.call(e) === "[object Object]") {
@@ -11423,7 +11423,7 @@ ${s}`,
         n = Math.min(e.length, t.length),
         o = n,
         i = 0;
-      for (; r < o; )
+      for (; r < o;)
         (e.substring(i, o) === t.substring(i, o) ? ((r = o), (i = r)) : (n = o), (o = Math.floor((n - r) / 2 + r)));
       return o;
     }
@@ -11433,7 +11433,7 @@ ${s}`,
         n = Math.min(e.length, t.length),
         o = n,
         i = 0;
-      for (; r < o; )
+      for (; r < o;)
         (e.substring(e.length - o, e.length - i) === t.substring(t.length - o, t.length - i)
           ? ((r = o), (i = r))
           : (n = o),
@@ -11466,7 +11466,7 @@ ${s}`,
         l = 0,
         s = 0,
         d = 0;
-      for (; i < e.length; )
+      for (; i < e.length;)
         (e[i][0] === Ce
           ? ((r[n++] = i), (a = s), (l = d), (s = 0), (d = 0), (o = e[i][1]))
           : (e[i][0] === Be ? (s += e[i][1].length) : (d += e[i][1].length),
@@ -11485,7 +11485,7 @@ ${s}`,
               (o = null),
               (t = !0))),
           i++);
-      for (t && Dc(e), b0(e), i = 1; i < e.length; ) {
+      for (t && Dc(e), b0(e), i = 1; i < e.length;) {
         if (e[i - 1][0] === Ve && e[i][0] === Be) {
           let p = e[i - 1][1],
             m = e[i][1],
@@ -11516,7 +11516,7 @@ ${s}`,
       g0 = /^\r?\n\r?\n/;
     function b0(e) {
       let t = 1;
-      for (; t < e.length - 1; ) {
+      for (; t < e.length - 1;) {
         if (e[t - 1][0] === Ce && e[t + 1][0] === Ce) {
           let r = e[t - 1][1],
             n = e[t][1],
@@ -11530,7 +11530,7 @@ ${s}`,
             l = n,
             s = o,
             d = Kn(r, n) + Kn(n, o);
-          for (; n.charAt(0) === o.charAt(0); ) {
+          for (; n.charAt(0) === o.charAt(0);) {
             ((r += n.charAt(0)), (n = n.substring(1) + o.charAt(0)), (o = o.substring(1)));
             let p = Kn(r, n) + Kn(n, o);
             p >= d && ((d = p), (a = r), (l = n), (s = o));
@@ -11551,7 +11551,7 @@ ${s}`,
         o = "",
         i = "",
         a;
-      for (; t < e.length; )
+      for (; t < e.length;)
         switch (e[t][0]) {
           case Be:
             (n++, (i += e[t][1]), t++);
@@ -11591,7 +11591,7 @@ ${s}`,
         }
       e[e.length - 1][1] === "" && e.pop();
       let l = !1;
-      for (t = 1; t < e.length - 1; )
+      for (t = 1; t < e.length - 1;)
         (e[t - 1][0] === Ce &&
           e[t + 1][0] === Ce &&
           (e[t][1].substring(e[t][1].length - e[t - 1][1].length) === e[t - 1][1]
@@ -11633,12 +11633,12 @@ ${s}`,
         t = 0,
         r = (y, E, b, S, g) => {
           let T = 0;
-          for (; y < E && b < S && g(y, b); ) ((y += 1), (b += 1), (T += 1));
+          for (; y < E && b < S && g(y, b);) ((y += 1), (b += 1), (T += 1));
           return T;
         },
         n = (y, E, b, S, g) => {
           let T = 0;
-          for (; y <= E && b <= S && g(E, S); ) ((E -= 1), (S -= 1), (T += 1));
+          for (; y <= E && b <= S && g(E, S);) ((E -= 1), (S -= 1), (T += 1));
           return T;
         },
         o = (y, E, b, S, g, T, A) => {
@@ -11901,9 +11901,9 @@ ${s}`,
         a = !1,
         l = 0,
         s = 0;
-      for (; s !== r; ) {
+      for (; s !== r;) {
         let w = s;
-        for (; s !== r && e[s][0] === Ce; ) s += 1;
+        for (; s !== r && e[s][0] === Ce;) s += 1;
         if (w !== s)
           if (w === 0) s > n && ((i -= s - n), (a = !0));
           else if (s === r) {
@@ -11913,7 +11913,7 @@ ${s}`,
             let C = s - w;
             C > o && ((i -= C - o), (l += 1));
           }
-        for (; s !== r && e[s][0] !== Ce; ) s += 1;
+        for (; s !== r && e[s][0] !== Ce;) s += 1;
       }
       let d = l !== 0 || a;
       l !== 0 ? (i += l + 1) : a && (i += 1);
@@ -11937,9 +11937,9 @@ ${s}`,
           let C = m.length;
           (m.push(Lc(w, C === 0 || C === p, t)), (S += 1));
         };
-      for (s = 0; s !== r; ) {
+      for (s = 0; s !== r;) {
         let w = s;
-        for (; s !== r && e[s][0] === Ce; ) s += 1;
+        for (; s !== r && e[s][0] === Ce;) s += 1;
         if (w !== s)
           if (w === 0) {
             s > n && ((w = s - n), (y = w), (E = w), (b = y), (S = E));
@@ -11958,8 +11958,8 @@ ${s}`,
               for (let P = s - n; P !== s; P += 1) g(e[P][1]);
             } else for (let O = w; O !== s; O += 1) g(e[O][1]);
           }
-        for (; s !== r && e[s][0] === Ve; ) (T(e[s][1]), (s += 1));
-        for (; s !== r && e[s][0] === Be; ) (A(e[s][1]), (s += 1));
+        for (; s !== r && e[s][0] === Ve;) (T(e[s][1]), (s += 1));
+        for (; s !== r && e[s][0] === Be;) (A(e[s][1]), (s += 1));
       }
       return (
         d && (m[h] = Yu(y, b, E, S, t)),
@@ -12632,7 +12632,7 @@ ${y}`;
         let r = Object.create(null);
         t.set(e, r);
         let n = e;
-        for (; n && n !== eb; )
+        for (; n && n !== eb;)
           (Object.getOwnPropertyNames(n).forEach((o) => {
             if (!(o in r))
               try {
@@ -13100,7 +13100,7 @@ Inner error message: ${n?.message}`),
     }
     function lb(e, t) {
       let r = e;
-      for (; r != null; ) {
+      for (; r != null;) {
         let n = Object.getOwnPropertyDescriptor(r, t);
         if (n) return n;
         r = Object.getPrototypeOf(r);
@@ -15200,7 +15200,7 @@ Inner error message: ${n?.message}`),
     }
     function fn(e) {
       let t = e.length;
-      for (; t > 0 && e[t - 1] <= " "; ) t--;
+      for (; t > 0 && e[t - 1] <= " ";) t--;
       return e.slice(0, t);
     }
     function Eo(e, t) {
@@ -15343,7 +15343,7 @@ Inner error message: ${n?.message}`),
     function Ii(e, t, r) {
       let n = e,
         o = t.split(".");
-      for (; o.length && ((n = n[o[0]]), n !== void 0); ) o.shift();
+      for (; o.length && ((n = n[o[0]]), n !== void 0);) o.shift();
       return n || r;
     }
     function a2(e = "", t = {}) {
@@ -15388,7 +15388,7 @@ Inner error message: ${n?.message}`),
             { inline: T },
           ),
         );
-        for (; Kd(A[A.length - 1]) && !A[A.length - 1].trim(); ) A.pop();
+        for (; Kd(A[A.length - 1]) && !A[A.length - 1].trim();) A.pop();
         if (t.wrapper === null) return A;
         let w = t.wrapper || (T ? "span" : "div"),
           C;
@@ -15779,8 +15779,8 @@ Inner error message: ${n?.message}`),
           function A(w, C) {
             var O = [];
             if (((C.prevCapture = C.prevCapture || ""), w.trim()))
-              for (; w; )
-                for (var v = 0; v < T.length; ) {
+              for (; w;)
+                for (var v = 0; v < T.length;) {
                   var P = T[v],
                     k = g[P];
                   if (!k.t || X1(w, C, k.t)) {
@@ -20159,7 +20159,7 @@ Inner error message: ${n?.message}`),
       return n;
     }
     function Co() {
-      for (var e = 0, t, r = ""; e < arguments.length; ) (t = Wi(arguments[e++])) && (r && (r += " "), (r += t));
+      for (var e = 0, t, r = ""; e < arguments.length;) (t = Wi(arguments[e++])) && (r && (r += " "), (r += t));
       return r;
     }
     var dl = (e) => Array.isArray(e) || (ArrayBuffer.isView(e) && !(e instanceof DataView)),
@@ -20298,7 +20298,7 @@ Inner error message: ${n?.message}`),
       return n;
     }
     function DA() {
-      for (var e = 0, t, r = ""; e < arguments.length; ) (t = Ki(arguments[e++])) && (r && (r += " "), (r += t));
+      for (var e = 0, t, r = ""; e < arguments.length;) (t = Ki(arguments[e++])) && (r && (r += " "), (r += t));
       return r;
     }
     var NA = ["children"],
@@ -20328,7 +20328,7 @@ Inner error message: ${n?.message}`),
       return n;
     }
     function mn() {
-      for (var e = 0, t, r = ""; e < arguments.length; ) (t = Zi(arguments[e++])) && (r && (r += " "), (r += t));
+      for (var e = 0, t, r = ""; e < arguments.length;) (t = Zi(arguments[e++])) && (r && (r += " "), (r += t));
       return r;
     }
     var FA = u.createContext({ isChild: !1, depth: 0, hasHover: !0 }),
@@ -20377,7 +20377,7 @@ Inner error message: ${n?.message}`),
           },
           T = ($, J) => {
             let j = $;
-            for (; j && j.parentElement; ) {
+            for (; j && j.parentElement;) {
               if (j.getAttribute("role") === J) return j;
               j = j.parentElement;
             }

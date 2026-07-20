@@ -83,6 +83,9 @@ export class MartianSiteStack extends Stack {
             return [];
           },
         },
+        define: {
+          "import.meta.url": '""',
+        },
         format: lambdaNodejs.OutputFormat.CJS,
         target: "node22",
       },

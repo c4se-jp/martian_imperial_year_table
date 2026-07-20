@@ -252,24 +252,24 @@ var require_react_fast_compare = __commonJS({
         var length, i2, keys;
         if (Array.isArray(a2)) {
           if (((length = a2.length), length != b2.length)) return !1;
-          for (i2 = length; i2-- !== 0; ) if (!equal4(a2[i2], b2[i2])) return !1;
+          for (i2 = length; i2-- !== 0;) if (!equal4(a2[i2], b2[i2])) return !1;
           return !0;
         }
         var it;
         if (hasMap && a2 instanceof Map && b2 instanceof Map) {
           if (a2.size !== b2.size) return !1;
-          for (it = a2.entries(); !(i2 = it.next()).done; ) if (!b2.has(i2.value[0])) return !1;
-          for (it = a2.entries(); !(i2 = it.next()).done; ) if (!equal4(i2.value[1], b2.get(i2.value[0]))) return !1;
+          for (it = a2.entries(); !(i2 = it.next()).done;) if (!b2.has(i2.value[0])) return !1;
+          for (it = a2.entries(); !(i2 = it.next()).done;) if (!equal4(i2.value[1], b2.get(i2.value[0]))) return !1;
           return !0;
         }
         if (hasSet && a2 instanceof Set && b2 instanceof Set) {
           if (a2.size !== b2.size) return !1;
-          for (it = a2.entries(); !(i2 = it.next()).done; ) if (!b2.has(i2.value[0])) return !1;
+          for (it = a2.entries(); !(i2 = it.next()).done;) if (!b2.has(i2.value[0])) return !1;
           return !0;
         }
         if (hasArrayBuffer && ArrayBuffer.isView(a2) && ArrayBuffer.isView(b2)) {
           if (((length = a2.length), length != b2.length)) return !1;
-          for (i2 = length; i2-- !== 0; ) if (a2[i2] !== b2[i2]) return !1;
+          for (i2 = length; i2-- !== 0;) if (a2[i2] !== b2[i2]) return !1;
           return !0;
         }
         if (a2.constructor === RegExp) return a2.source === b2.source && a2.flags === b2.flags;
@@ -286,9 +286,9 @@ var require_react_fast_compare = __commonJS({
         )
           return a2.toString() === b2.toString();
         if (((keys = Object.keys(a2)), (length = keys.length), length !== Object.keys(b2).length)) return !1;
-        for (i2 = length; i2-- !== 0; ) if (!Object.prototype.hasOwnProperty.call(b2, keys[i2])) return !1;
+        for (i2 = length; i2-- !== 0;) if (!Object.prototype.hasOwnProperty.call(b2, keys[i2])) return !1;
         if (hasElementType && a2 instanceof Element) return !1;
-        for (i2 = length; i2-- !== 0; )
+        for (i2 = length; i2-- !== 0;)
           if (
             !((keys[i2] === "_owner" || keys[i2] === "__v" || keys[i2] === "__o") && a2.$$typeof) &&
             !equal4(a2[keys[i2]], b2[keys[i2]])
@@ -836,7 +836,7 @@ var require_scrollparent = __commonJS({
       }
       function scrollParent2(node) {
         if (node instanceof HTMLElement || node instanceof SVGElement) {
-          for (var current = node.parentNode; current.parentNode; ) {
+          for (var current = node.parentNode; current.parentNode;) {
             if (isScrolling(current)) return current;
             current = current.parentNode;
           }
@@ -1701,7 +1701,7 @@ Output:
             }
             S2 = -1;
             for (var A3 = [], O2 = 1, C2 = x2 + k2, j2 = 1 << (x2 <= 31 ? x2 - 1 : 30), P3 = 0; P3 < x2; P3 += 1) {
-              for (var I2 = 0, F2 = C2; I2 < F2; )
+              for (var I2 = 0, F2 = C2; I2 < F2;)
                 (n3(t3, { errors: P3, currentLocation: m2 + F2, expectedLocation: m2, distance: h2 }) <= b2
                   ? (I2 = F2)
                   : (C2 = F2),
@@ -5555,7 +5555,7 @@ function $7215afc6de606d6b$var$getScrollableElements(element) {
   let parent = element.parentNode,
     scrollableElements = [],
     rootScrollingElement = document.scrollingElement || document.documentElement;
-  for (; parent instanceof HTMLElement && parent !== rootScrollingElement; )
+  for (; parent instanceof HTMLElement && parent !== rootScrollingElement;)
     ((parent.offsetHeight < parent.scrollHeight || parent.offsetWidth < parent.scrollWidth) &&
       scrollableElements.push({
         element: parent,
@@ -5941,7 +5941,7 @@ var $a86207c5d7f7e1fb$var$LandmarkManager = class {
     }
     let start = 0,
       end = this.landmarks.length - 1;
-    for (; start <= end; ) {
+    for (; start <= end;) {
       let mid = Math.floor((start + end) / 2),
         comparedPosition = newLandmark.ref.current.compareDocumentPosition(this.landmarks[mid].ref.current);
       !!(comparedPosition & Node.DOCUMENT_POSITION_PRECEDING || comparedPosition & Node.DOCUMENT_POSITION_CONTAINS)
@@ -6700,7 +6700,7 @@ var useFullStoryName = () => {
     let combinedIndex = combineIndexes(index, refs || {}),
       fullStoryName = currentStory.renderLabel?.(currentStory, api) || currentStory.name,
       node = combinedIndex[currentStory.id];
-    for (; node && "parent" in node && node.parent && combinedIndex[node.parent] && fullStoryName.length < 24; )
+    for (; node && "parent" in node && node.parent && combinedIndex[node.parent] && fullStoryName.length < 24;)
       ((node = combinedIndex[node.parent]),
         (fullStoryName = `${node.renderLabel?.(node, api) || node.name}/${fullStoryName}`));
     return fullStoryName;
@@ -6950,7 +6950,7 @@ init_react();
 function findActiveLandmarkElement() {
   let currentElement = document.activeElement,
     landmarkElement = null;
-  for (; currentElement; ) {
+  for (; currentElement;) {
     if (currentElement instanceof HTMLElement && currentElement.hasAttribute("data-sb-landmark")) {
       landmarkElement = currentElement;
       break;
@@ -9349,7 +9349,7 @@ var qrcodegen;
         assert(bb.length % 8 == 0));
       for (let padByte = 236; bb.length < dataCapacityBits; padByte ^= 253) appendBits(padByte, 8, bb);
       let dataCodewords = [];
-      for (; dataCodewords.length * 8 < bb.length; ) dataCodewords.push(0);
+      for (; dataCodewords.length * 8 < bb.length;) dataCodewords.push(0);
       return (
         bb.forEach((b2, i2) => (dataCodewords[i2 >>> 3] |= b2 << (7 - (i2 & 7)))),
         new _QrCode2(version3, ecl, dataCodewords, mask)
@@ -9761,7 +9761,7 @@ var qrcodegen;
     static makeNumeric(digits) {
       if (!_QrSegment2.isNumeric(digits)) throw new RangeError("String contains non-numeric characters");
       let bb = [];
-      for (let i2 = 0; i2 < digits.length; ) {
+      for (let i2 = 0; i2 < digits.length;) {
         let n3 = Math.min(digits.length - i2, 3);
         (appendBits(parseInt(digits.substring(i2, i2 + n3), 10), n3 * 3 + 1, bb), (i2 += n3));
       }
@@ -10917,7 +10917,7 @@ var isFunction = isOfType("function"),
 function equalArray(left, right) {
   let { length } = left;
   if (length !== right.length) return !1;
-  for (let index = length; index-- !== 0; ) if (!equal(left[index], right[index])) return !1;
+  for (let index = length; index-- !== 0;) if (!equal(left[index], right[index])) return !1;
   return !0;
 }
 function equalArrayBuffer(left, right) {
@@ -10925,7 +10925,7 @@ function equalArrayBuffer(left, right) {
   let view1 = new DataView(left.buffer),
     view2 = new DataView(right.buffer),
     index = left.byteLength;
-  for (; index--; ) if (view1.getUint8(index) !== view2.getUint8(index)) return !1;
+  for (; index--;) if (view1.getUint8(index) !== view2.getUint8(index)) return !1;
   return !0;
 }
 function equalMap(left, right) {
@@ -10953,9 +10953,9 @@ function equal(left, right) {
     let leftKeys = Object.keys(left),
       rightKeys = Object.keys(right);
     if (leftKeys.length !== rightKeys.length) return !1;
-    for (let index = leftKeys.length; index-- !== 0; )
+    for (let index = leftKeys.length; index-- !== 0;)
       if (!Object.prototype.hasOwnProperty.call(right, leftKeys[index])) return !1;
-    for (let index = leftKeys.length; index-- !== 0; ) {
+    for (let index = leftKeys.length; index-- !== 0;) {
       let key = leftKeys[index];
       if (!(key === "_owner" && left.$$typeof) && !equal(left[key], right[key])) return !1;
     }
@@ -11580,7 +11580,7 @@ function isFixed(element) {
 }
 function getFixedPositionOffsetParent(element) {
   if (!element || !element.parentElement || isIE()) return document.documentElement;
-  for (var el = element.parentElement; el && getStyleComputedProperty(el, "transform") === "none"; )
+  for (var el = element.parentElement; el && getStyleComputedProperty(el, "transform") === "none";)
     el = el.parentElement;
   return el || document.documentElement;
 }
@@ -13040,12 +13040,12 @@ var __values = function (o3) {
 function equalArray2(left, right) {
   var length = left.length;
   if (length !== right.length) return !1;
-  for (var index = length; index-- !== 0; ) if (!equal2(left[index], right[index])) return !1;
+  for (var index = length; index-- !== 0;) if (!equal2(left[index], right[index])) return !1;
   return !0;
 }
 function equalArrayBuffer2(left, right) {
   if (left.byteLength !== right.byteLength) return !1;
-  for (var view1 = new DataView(left.buffer), view2 = new DataView(right.buffer), index = left.byteLength; index--; )
+  for (var view1 = new DataView(left.buffer), view2 = new DataView(right.buffer), index = left.byteLength; index--;)
     if (view1.getUint8(index) !== view2.getUint8(index)) return !1;
   return !0;
 }
@@ -13115,9 +13115,9 @@ function equal2(left, right) {
     var leftKeys = Object.keys(left),
       rightKeys = Object.keys(right);
     if (leftKeys.length !== rightKeys.length) return !1;
-    for (var index = leftKeys.length; index-- !== 0; )
+    for (var index = leftKeys.length; index-- !== 0;)
       if (!Object.prototype.hasOwnProperty.call(right, leftKeys[index])) return !1;
-    for (var index = leftKeys.length; index-- !== 0; ) {
+    for (var index = leftKeys.length; index-- !== 0;) {
       var key = leftKeys[index];
       if (!(key === "_owner" && left.$$typeof) && !equal2(left[key], right[key])) return !1;
     }
@@ -14916,7 +14916,7 @@ function isElementVisible(element) {
   var _a;
   if (!element) return !1;
   let parentElement = element;
-  for (; parentElement && parentElement !== document.body; ) {
+  for (; parentElement && parentElement !== document.body;) {
     if (parentElement instanceof HTMLElement) {
       let { display, visibility } = getComputedStyle(parentElement);
       if (display === "none" || visibility === "hidden") return !1;
@@ -15870,7 +15870,7 @@ var Spotlight_default = JoyrideSpotlight,
         }),
         __publicField(this, "isVisible", (element2) => {
           let parentElement = element2;
-          for (; parentElement; )
+          for (; parentElement;)
             if (parentElement instanceof HTMLElement) {
               if (parentElement === document.body) break;
               if (this.isHidden(parentElement)) return !1;
@@ -16667,7 +16667,7 @@ var HIGHLIGHT_KEYFRAMES_ID = "storybook-highlight-element-keyframes",
   findScrollableAncestors = (element) => {
     let scrollableAncestors = [window],
       parent = element.parentElement;
-    for (; parent; ) {
+    for (; parent;) {
       let style = window.getComputedStyle(parent);
       ((style.overflow === "auto" ||
         style.overflow === "scroll" ||
@@ -18946,7 +18946,7 @@ function memo2(getDeps, fn, opts) {
         resultEndTime = Math.round((Date.now() - resultTime) * 100) / 100,
         resultFpsPercentage = resultEndTime / 16,
         pad = (str, num) => {
-          for (str = String(str); str.length < num; ) str = " " + str;
+          for (str = String(str); str.length < num;) str = " " + str;
           return str;
         };
       console.info(
@@ -19521,7 +19521,7 @@ var elementScroll = (offset2, { adjustments = 0, behavior }, instance) => {
           else {
             let endByLane = Array(this.options.lanes).fill(null),
               endIndex = measurements.length - 1;
-            for (; endIndex >= 0 && endByLane.some((val) => val === null); ) {
+            for (; endIndex >= 0 && endByLane.some((val) => val === null);) {
               let item = measurements[endIndex];
               (endByLane[item.lane] === null && (endByLane[item.lane] = item.end), endIndex--);
             }
@@ -19539,7 +19539,7 @@ var elementScroll = (offset2, { adjustments = 0, behavior }, instance) => {
     }
   },
   findNearestBinarySearch = (low, high, getCurrentValue, value) => {
-    for (; low <= high; ) {
+    for (; low <= high;) {
       let middle = ((low + high) / 2) | 0,
         currentValue = getCurrentValue(middle);
       if (currentValue < value) low = middle + 1;
@@ -19558,15 +19558,15 @@ function calculateRange({ measurements, outerSize, scrollOffset, lanes }) {
     };
   let startIndex = findNearestBinarySearch(0, lastIndex, getOffset, scrollOffset),
     endIndex = startIndex;
-  if (lanes === 1) for (; endIndex < lastIndex && measurements[endIndex].end < scrollOffset + outerSize; ) endIndex++;
+  if (lanes === 1) for (; endIndex < lastIndex && measurements[endIndex].end < scrollOffset + outerSize;) endIndex++;
   else if (lanes > 1) {
     let endPerLane = Array(lanes).fill(0);
-    for (; endIndex < lastIndex && endPerLane.some((pos) => pos < scrollOffset + outerSize); ) {
+    for (; endIndex < lastIndex && endPerLane.some((pos) => pos < scrollOffset + outerSize);) {
       let item = measurements[endIndex];
       ((endPerLane[item.lane] = item.end), endIndex++);
     }
     let startPerLane = Array(lanes).fill(scrollOffset + outerSize);
-    for (; startIndex >= 0 && startPerLane.some((pos) => pos >= scrollOffset); ) {
+    for (; startIndex >= 0 && startPerLane.some((pos) => pos >= scrollOffset);) {
       let item = measurements[startIndex];
       ((startPerLane[item.lane] = item.start), startIndex--);
     }
@@ -23169,7 +23169,7 @@ var t = (t2) => typeof t2 == "object" && t2 != null && t2.nodeType === 1,
     let m2 = document.scrollingElement || document.documentElement,
       w2 = [],
       W2 = e2;
-    for (; t(W2) && p2(W2); ) {
+    for (; t(W2) && p2(W2);) {
       if (((W2 = l2(W2)), W2 === m2)) {
         w2.push(W2);
         break;
