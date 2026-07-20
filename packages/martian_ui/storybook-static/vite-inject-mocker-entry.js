@@ -776,7 +776,7 @@ function We() {
     (d = RegExp(s.source)),
     (D = function* (E, { jsx: M = !1 } = {}) {
       var b, $, O, p, h, J, f, P, j, T, C, S, N, _;
-      for ({ length: J } = E, p = 0, h = "", _ = [{ tag: "JS" }], b = [], C = 0, S = !1; p < J; ) {
+      for ({ length: J } = E, p = 0, h = "", _ = [{ tag: "JS" }], b = [], C = 0, S = !1; p < J;) {
         switch (((P = _[_.length - 1]), P.tag)) {
           case "JS":
           case "JSNonExpressionParen":
