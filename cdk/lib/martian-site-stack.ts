@@ -12,6 +12,7 @@ import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
+import * as synthetics from "aws-cdk-lib/aws-synthetics";
 import { Construct } from "constructs";
 
 export interface MartianSiteStackProps extends StackProps {
@@ -71,10 +72,7 @@ export class MartianSiteStack extends Stack {
       bundling: {
         commandHooks: {
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [
-              `mkdir -p "${outputDir}/widget"`,
-              `cp -R "${inputDir}/dist/widget/." "${outputDir}/widget/"`,
-            ];
+            return [`mkdir -p "${outputDir}/widget"`, `cp -R "${inputDir}/dist/widget/." "${outputDir}/widget/"`];
           },
           beforeBundling(inputDir: string): string[] {
             return [`npm --prefix "${inputDir}" run -w imperial_calendar build`];
@@ -216,6 +214,22 @@ function handler(event) {
 
     new CfnOutput(this, "MackerelApiKeySecretName", {
       value: MACKEREL_API_KEY_SECRET_NAME,
+    });
+
+    const transformCheckCanary = new synthetics.Canary(this, "ImdtTransformCheckCanary", {
+      canaryName: "imdt-transform-check",
+      runtime: synthetics.Runtime.SYNTHETICS_NODEJS_PUPPETEER_17_0,
+      schedule: synthetics.Schedule.rate(Duration.minutes(60)),
+      test: synthetics.Test.custom({
+        code: synthetics.Code.fromAsset(path.resolve(__dirname, "../canary/transform-check")),
+        handler: "transformCheck.handler",
+      }),
+      failureRetentionPeriod: Duration.days(7),
+      successRetentionPeriod: Duration.days(7),
+    });
+
+    new CfnOutput(this, "TransformCheckCanaryName", {
+      value: transformCheckCanary.canaryName,
     });
   }
 }

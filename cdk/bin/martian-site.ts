@@ -29,8 +29,7 @@ const mackerelDeploymentEnvironment =
   process.env.MACKEREL_DEPLOYMENT_ENVIRONMENT ??
   "production";
 
-const mackerelServiceVersion =
-  app.node.tryGetContext("mackerelServiceVersion") ?? process.env.MACKEREL_SERVICE_VERSION;
+const mackerelServiceVersion = app.node.tryGetContext("mackerelServiceVersion") ?? process.env.MACKEREL_SERVICE_VERSION;
 
 new MartianSiteStack(app, "MartianImperialYearTableSiteStack", {
   siteDomainName,

@@ -2,3 +2,9 @@
 cdk.out/
 dist/
 node_modules/
+
+# CloudWatch Synthetics Canary はコード資材を nodejs/node_modules/<handler>.js に置く規約のため、
+# その配下だけ node_modules/ の無視から外す。
+!canary/**/nodejs/
+!canary/**/nodejs/node_modules/
+!canary/**/nodejs/node_modules/*.js
