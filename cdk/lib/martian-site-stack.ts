@@ -5,6 +5,8 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
 import * as apigwv2Integrations from "aws-cdk-lib/aws-apigatewayv2-integrations";
+import * as cloudwatch from "aws-cdk-lib/aws-cloudwatch";
+import * as cloudwatchActions from "aws-cdk-lib/aws-cloudwatch-actions";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as lambdaNodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as route53 from "aws-cdk-lib/aws-route53";
@@ -12,9 +14,13 @@ import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
+import * as sns from "aws-cdk-lib/aws-sns";
+import * as snsSubscriptions from "aws-cdk-lib/aws-sns-subscriptions";
+import * as synthetics from "aws-cdk-lib/aws-synthetics";
 import { Construct } from "constructs";
 
 export interface MartianSiteStackProps extends StackProps {
+  canaryAlarmEmail?: string;
   certificateArn: string;
   hostedZoneDomainName: string;
   hostedZoneId: string;
@@ -71,10 +77,7 @@ export class MartianSiteStack extends Stack {
       bundling: {
         commandHooks: {
           afterBundling(inputDir: string, outputDir: string): string[] {
-            return [
-              `mkdir -p "${outputDir}/widget"`,
-              `cp -R "${inputDir}/dist/widget/." "${outputDir}/widget/"`,
-            ];
+            return [`mkdir -p "${outputDir}/widget"`, `cp -R "${inputDir}/dist/widget/." "${outputDir}/widget/"`];
           },
           beforeBundling(inputDir: string): string[] {
             return [`npm --prefix "${inputDir}" run -w imperial_calendar build`];
@@ -216,6 +219,56 @@ function handler(event) {
 
     new CfnOutput(this, "MackerelApiKeySecretName", {
       value: MACKEREL_API_KEY_SECRET_NAME,
+    });
+
+    // aws-cdk-lib 2.261.0 の Runtime には syn-nodejs-puppeteer-17.0 の靜的定數がまだ無いため、
+    // Runtime のコンストラクタで直接指定する。
+    const transformCheckCanaryRuntime = new synthetics.Runtime(
+      "syn-nodejs-puppeteer-17.0",
+      synthetics.RuntimeFamily.NODEJS,
+    );
+
+    const transformCheckCanary = new synthetics.Canary(this, "ImdtTransformCheckCanary", {
+      canaryName: "imdt-transform-check",
+      runtime: transformCheckCanaryRuntime,
+      schedule: synthetics.Schedule.rate(Duration.minutes(60)),
+      test: synthetics.Test.custom({
+        code: synthetics.Code.fromAsset(path.resolve(__dirname, "../canary/transform-check")),
+        handler: "transformCheck.handler",
+      }),
+      environmentVariables: {
+        SITE_DOMAIN_NAME: props.siteDomainName,
+      },
+      failureRetentionPeriod: Duration.days(7),
+      successRetentionPeriod: Duration.days(7),
+    });
+
+    new CfnOutput(this, "TransformCheckCanaryName", {
+      value: transformCheckCanary.canaryName,
+    });
+
+    const canaryAlarmTopic = new sns.Topic(this, "TransformCheckCanaryAlarmTopic", {
+      displayName: "martian-imperial-year-table transform-check canary alarm",
+    });
+
+    if (props.canaryAlarmEmail !== undefined) {
+      canaryAlarmTopic.addSubscription(new snsSubscriptions.EmailSubscription(props.canaryAlarmEmail));
+    }
+
+    const transformCheckCanaryFailedAlarm = new cloudwatch.Alarm(this, "TransformCheckCanaryFailedAlarm", {
+      alarmDescription: "transform-check canary が連續して失敗しました。",
+      metric: transformCheckCanary.metricFailed({ period: Duration.minutes(60) }),
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
+    });
+
+    transformCheckCanaryFailedAlarm.addAlarmAction(new cloudwatchActions.SnsAction(canaryAlarmTopic));
+    transformCheckCanaryFailedAlarm.addOkAction(new cloudwatchActions.SnsAction(canaryAlarmTopic));
+
+    new CfnOutput(this, "TransformCheckCanaryAlarmTopicArn", {
+      value: canaryAlarmTopic.topicArn,
     });
   }
 }
