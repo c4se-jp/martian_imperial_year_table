@@ -5,6 +5,8 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
 import * as apigwv2Integrations from "aws-cdk-lib/aws-apigatewayv2-integrations";
+import * as cloudwatch from "aws-cdk-lib/aws-cloudwatch";
+import * as cloudwatchActions from "aws-cdk-lib/aws-cloudwatch-actions";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as lambdaNodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as route53 from "aws-cdk-lib/aws-route53";
@@ -12,10 +14,13 @@ import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as secretsmanager from "aws-cdk-lib/aws-secretsmanager";
+import * as sns from "aws-cdk-lib/aws-sns";
+import * as snsSubscriptions from "aws-cdk-lib/aws-sns-subscriptions";
 import * as synthetics from "aws-cdk-lib/aws-synthetics";
 import { Construct } from "constructs";
 
 export interface MartianSiteStackProps extends StackProps {
+  canaryAlarmEmail?: string;
   certificateArn: string;
   hostedZoneDomainName: string;
   hostedZoneId: string;
@@ -230,6 +235,30 @@ function handler(event) {
 
     new CfnOutput(this, "TransformCheckCanaryName", {
       value: transformCheckCanary.canaryName,
+    });
+
+    const canaryAlarmTopic = new sns.Topic(this, "TransformCheckCanaryAlarmTopic", {
+      displayName: "martian-imperial-year-table transform-check canary alarm",
+    });
+
+    if (props.canaryAlarmEmail !== undefined) {
+      canaryAlarmTopic.addSubscription(new snsSubscriptions.EmailSubscription(props.canaryAlarmEmail));
+    }
+
+    const transformCheckCanaryFailedAlarm = new cloudwatch.Alarm(this, "TransformCheckCanaryFailedAlarm", {
+      alarmDescription: "transform-check canary が連續して失敗しました。",
+      metric: transformCheckCanary.metricFailed({ period: Duration.minutes(60) }),
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      treatMissingData: cloudwatch.TreatMissingData.BREACHING,
+    });
+
+    transformCheckCanaryFailedAlarm.addAlarmAction(new cloudwatchActions.SnsAction(canaryAlarmTopic));
+    transformCheckCanaryFailedAlarm.addOkAction(new cloudwatchActions.SnsAction(canaryAlarmTopic));
+
+    new CfnOutput(this, "TransformCheckCanaryAlarmTopicArn", {
+      value: canaryAlarmTopic.topicArn,
     });
   }
 }

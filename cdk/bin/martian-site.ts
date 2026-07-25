@@ -31,6 +31,9 @@ const mackerelDeploymentEnvironment =
 
 const mackerelServiceVersion = app.node.tryGetContext("mackerelServiceVersion") ?? process.env.MACKEREL_SERVICE_VERSION;
 
+const canaryAlarmEmail =
+  app.node.tryGetContext("canaryAlarmEmail") ?? process.env.CANARY_ALARM_EMAIL ?? "utakata.c4se+aws@gmail.com";
+
 new MartianSiteStack(app, "MartianImperialYearTableSiteStack", {
   siteDomainName,
   certificateArn,
@@ -39,6 +42,7 @@ new MartianSiteStack(app, "MartianImperialYearTableSiteStack", {
   mackerelDeploymentEnvironment,
   mackerelServiceVersion,
   siteAssetsPath,
+  canaryAlarmEmail,
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
