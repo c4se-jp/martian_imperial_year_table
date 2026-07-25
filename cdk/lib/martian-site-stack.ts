@@ -261,7 +261,7 @@ function handler(event) {
       threshold: 1,
       evaluationPeriods: 1,
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      treatMissingData: cloudwatch.TreatMissingData.BREACHING,
+      treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
     });
 
     transformCheckCanaryFailedAlarm.addAlarmAction(new cloudwatchActions.SnsAction(canaryAlarmTopic));
