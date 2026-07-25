@@ -221,14 +221,24 @@ function handler(event) {
       value: MACKEREL_API_KEY_SECRET_NAME,
     });
 
+    // aws-cdk-lib 2.261.0 の Runtime には syn-nodejs-puppeteer-17.0 の靜的定數がまだ無いため、
+    // Runtime のコンストラクタで直接指定する。
+    const transformCheckCanaryRuntime = new synthetics.Runtime(
+      "syn-nodejs-puppeteer-17.0",
+      synthetics.RuntimeFamily.NODEJS,
+    );
+
     const transformCheckCanary = new synthetics.Canary(this, "ImdtTransformCheckCanary", {
       canaryName: "imdt-transform-check",
-      runtime: synthetics.Runtime.SYNTHETICS_NODEJS_PUPPETEER_17_0,
+      runtime: transformCheckCanaryRuntime,
       schedule: synthetics.Schedule.rate(Duration.minutes(60)),
       test: synthetics.Test.custom({
         code: synthetics.Code.fromAsset(path.resolve(__dirname, "../canary/transform-check")),
         handler: "transformCheck.handler",
       }),
+      environmentVariables: {
+        SITE_DOMAIN_NAME: props.siteDomainName,
+      },
       failureRetentionPeriod: Duration.days(7),
       successRetentionPeriod: Duration.days(7),
     });
