@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["approve", "block"]
+    },
+    "summary": {
+      "type": "string",
+      "description": "日本語での判定理由の要約。pull requestコメントにそのまま揭載される。"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["severity", "description"]
+      }
+    }
+  },
+  "required": ["verdict", "summary", "findings"]
+}

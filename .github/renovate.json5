@@ -4,6 +4,14 @@
   ignorePaths: ["martian_imperial_year_table_py/**"],
   labels: ["dependencies"],
   minimumReleaseAge: "3 days",
+  packageRules: [
+    {
+      automerge: true,
+      automergeType: "pr",
+      labels: ["dependencies", "patch"],
+      matchUpdateTypes: ["patch"],
+    },
+  ],
   schedule: "after 10am and before 7pm every weekday",
   timezone: "Asia/Tokyo",
   vulnerabilityAlerts: {
