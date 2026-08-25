@@ -1,0 +1,63 @@
+---
+name: on pull_request (renovate patch AI review)
+
+"on":
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+jobs:
+  ai-review:
+    if: >-
+      github.event.pull_request.user.login == 'renovate[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'patch')
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Codexでsupply chain攻擊の觀點からreviewする
+        id: run_codex
+        uses: openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e # v1.12
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          output-file: codex-review.json
+          output-schema-file: .github/codex/supply-chain-review-schema.json
+          permission-profile: ":read-only"
+          prompt-file: .github/codex/supply-chain-review-prompt.md
+
+      - name: reviewの結果をpull requestにcommentする
+        if: always() && steps.run_codex.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          verdict=$(jq -r '.verdict' codex-review.json)
+          summary=$(jq -r '.summary' codex-review.json)
+          findings=$(jq -r '.findings[] | "- [\(.severity)] \(.description)"' codex-review.json)
+          {
+            echo "## Codex supply chain review: ${verdict}"
+            echo
+            echo "${summary}"
+            echo
+            if [ -n "${findings}" ]; then
+              echo "${findings}"
+            fi
+          } > comment.md
+          gh pr comment "${PR_NUMBER}" --body-file comment.md
+
+      - name: 判定する
+        run: |
+          verdict=$(jq -r '.verdict' codex-review.json)
+          if [ "${verdict}" != "approve" ]; then
+            echo "Codexが問題を指摘したため、このPRのauto-mergeをblockします。" >&2
+            exit 1
+          fi

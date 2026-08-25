@@ -4,6 +4,21 @@
   ignorePaths: ["martian_imperial_year_table_py/**"],
   labels: ["dependencies"],
   minimumReleaseAge: "3 days",
+  packageRules: [
+    {
+      automerge: true,
+      automergeType: "pr",
+      labels: ["dependencies", "patch"],
+      matchUpdateTypes: ["patch"],
+    },
+    {
+      // ai-reviewがOPENAI_API_KEYをこのactionに渡すため、レビュー前の未檢證なコードに祕密が渡らないやう自動mergeの對象から外す。
+      automerge: false,
+      labels: ["dependencies"],
+      matchDepNames: ["openai/codex-action"],
+      matchManagers: ["github-actions"],
+    },
+  ],
   schedule: "after 10am and before 7pm every weekday",
   timezone: "Asia/Tokyo",
   vulnerabilityAlerts: {
