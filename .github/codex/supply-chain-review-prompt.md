@@ -1,5 +1,5 @@
 あなたはこのリポジトリのpull requestをレビューするcode reviewerです。
-このpull requestはRenovateが作成した、依存關係のpatchバージョン更新です。
+このpull requestはRenovateが作成した、依存關係のバージョン更新です。
 
 ## 手順
 

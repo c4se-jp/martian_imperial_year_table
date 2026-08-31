@@ -23,7 +23,16 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Codexでsupply chain攻擊の觀點からreviewする
+      - name: 更新種別に應じたpromptを選ぶ
+        id: pr_type
+        run: |
+          if [[ "${{ contains(github.event.pull_request.labels.*.name, 'minor') }}" == "true" || "${{ contains(github.event.pull_request.labels.*.name, 'major') }}" == "true" ]]; then
+            echo "prompt-file=.github/codex/breaking-change-review-prompt.md" >> "$GITHUB_OUTPUT"
+          else
+            echo "prompt-file=.github/codex/supply-chain-review-prompt.md" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Codexでreviewする
         id: run_codex
         uses: openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e # v1.12
         with:
@@ -31,7 +40,7 @@ jobs:
           output-file: codex-review.json
           output-schema-file: .github/codex/supply-chain-review-schema.json
           permission-profile: ":read-only"
-          prompt-file: .github/codex/supply-chain-review-prompt.md
+          prompt-file: ${{ steps.pr_type.outputs.prompt-file }}
 
       - name: reviewの結果をpull requestにcommentする
         if: always() && steps.run_codex.outcome == 'success'
@@ -41,9 +50,9 @@ jobs:
         run: |
           verdict=$(jq -r '.verdict' codex-review.json)
           summary=$(jq -r '.summary' codex-review.json)
-          findings=$(jq -r '.findings[] | "- [\(.severity)] \(.description)"' codex-review.json)
+          findings=$(jq -r '.findings[] | "- [\(.severity)]" + (if .category then " (\(.category))" else "" end) + " \(.description)"' codex-review.json)
           {
-            echo "## Codex supply chain review: ${verdict}"
+            echo "## Codex review: ${verdict}"
             echo
             echo "${summary}"
             echo
@@ -57,6 +66,6 @@ jobs:
         run: |
           verdict=$(jq -r '.verdict' codex-review.json)
           if [ "${verdict}" != "approve" ]; then
-            echo "Codexが問題を指摘したため、このPRのauto-mergeをblockします。" >&2
+            echo "Codexが問題を指摘したため、このPRのstatus checkを失敗させます。" >&2
             exit 1
           fi

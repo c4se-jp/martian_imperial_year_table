@@ -20,6 +20,11 @@
             "type": "string",
             "enum": ["low", "medium", "high"]
           },
+          "category": {
+            "type": "string",
+            "enum": ["supply_chain", "breaking_change"],
+            "description": "patch更新のreviewでは省略可。minor/major更新のreviewでは指定すること。"
+          },
           "description": {
             "type": "string"
           }
