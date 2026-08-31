@@ -23,8 +23,8 @@
     },
     {
       // ai-reviewがOPENAI_API_KEYをこのactionに渡すため、レビュー前の未檢證なコードに祕密が渡らないやう自動mergeの對象から外す。
-      // labelsは指定しない: labelsは非mergeableで後勝ちのため、ここで指定すると
-      // 前段のminor/majorルールが付けた更新種別ラベルを消してしまふ。
+      // このラベルはworkflow側でCodex review自體を迂廻する印としても使ふ: このpull requestのままCodexを實行すると、review前の未檢證なこのaction自身にOPENAI_API_KEYを渡してしまふため。
+      addLabels: ["ai-review-exempt"],
       automerge: false,
       matchDepNames: ["openai/codex-action"],
       matchManagers: ["github-actions"],
@@ -33,6 +33,8 @@
   schedule: "after 10am and before 7pm every weekday",
   timezone: "Asia/Tokyo",
   vulnerabilityAlerts: {
-    labels: ["dependencies", "security"],
+    // security update自體は上のpatch向けenabled: falseルールの對象にもなるため、force (`vulnerabilityAlerts`をforceとしてpackageRulesへ適用する仕組み) で打ち勝てるやうenabled: trueを明示する。公式のonly-security-updates preset も同樣にこれを明示してゐる。
+    enabled: true,
+    addLabels: ["dependencies", "security"],
   },
 }
