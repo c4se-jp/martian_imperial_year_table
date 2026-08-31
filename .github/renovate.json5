@@ -23,8 +23,9 @@
     },
     {
       // ai-reviewがOPENAI_API_KEYをこのactionに渡すため、レビュー前の未檢證なコードに祕密が渡らないやう自動mergeの對象から外す。
+      // labelsは指定しない: labelsは非mergeableで後勝ちのため、ここで指定すると
+      // 前段のminor/majorルールが付けた更新種別ラベルを消してしまふ。
       automerge: false,
-      labels: ["dependencies"],
       matchDepNames: ["openai/codex-action"],
       matchManagers: ["github-actions"],
     },

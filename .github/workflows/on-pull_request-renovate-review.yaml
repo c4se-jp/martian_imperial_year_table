@@ -3,7 +3,10 @@ name: on pull_request (renovate AI review)
 
 "on":
   pull_request:
-    types: [opened, synchronize, reopened, labeled]
+    # openedは含めない: RenovateはPR作成後に別のAPI呼び出しでlabelを付與するため、
+    # opened時點ではまだminor/majorラベルが確定してゐない。labelが付與された際は
+    # labeledイベントが發火するので、更新種別を確定できるイベントのみを對象にする。
+    types: [synchronize, reopened, labeled]
 
 jobs:
   ai-review:
