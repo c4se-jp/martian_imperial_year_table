@@ -3,13 +3,23 @@
   extends: [":configMigration", "config:recommended"],
   ignorePaths: ["martian_imperial_year_table_py/**"],
   labels: ["dependencies"],
-  minimumReleaseAge: "3 days",
+  minimumReleaseAge: "5 days",
   packageRules: [
+    {
+      // patch ver.の通常updateはpull requestを作らない。security updateはvulnerabilityAlertsが別途pull requestを作る。
+      enabled: false,
+      matchUpdateTypes: ["patch"],
+    },
     {
       automerge: true,
       automergeType: "pr",
-      labels: ["dependencies", "patch"],
-      matchUpdateTypes: ["patch"],
+      labels: ["dependencies", "minor"],
+      matchUpdateTypes: ["minor"],
+    },
+    {
+      automerge: false,
+      labels: ["dependencies", "major"],
+      matchUpdateTypes: ["major"],
     },
     {
       // ai-reviewがOPENAI_API_KEYをこのactionに渡すため、レビュー前の未檢證なコードに祕密が渡らないやう自動mergeの對象から外す。
