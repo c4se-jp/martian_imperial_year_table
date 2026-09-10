@@ -45,7 +45,7 @@ jobs:
           output-schema-file: .github/codex/supply-chain-review-schema.json
           permission-profile: ":read-only"
           prompt-file: ${{ steps.pr_type.outputs.prompt-file }}
-          allow-bots: true
+          allow-bot-users: "renovate[bot]"
 
       - name: reviewの結果をpull requestにcommentする
         if: always() && steps.run_codex.outcome == 'success'
