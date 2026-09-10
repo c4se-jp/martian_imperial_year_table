@@ -21,15 +21,15 @@
             "enum": ["low", "medium", "high"]
           },
           "category": {
-            "type": "string",
-            "enum": ["supply_chain", "breaking_change"],
-            "description": "patch更新のreviewでは省略可。minor/major更新のreviewでは指定すること。"
+            "type": ["string", "null"],
+            "enum": ["supply_chain", "breaking_change", null],
+            "description": "patch更新のreviewではnullでよい。minor/major更新のreviewでは指定すること。"
           },
           "description": {
             "type": "string"
           }
         },
-        "required": ["severity", "description"]
+        "required": ["severity", "category", "description"]
       }
     }
   },
