@@ -10,7 +10,10 @@ name: on pull_request (renovate AI review)
 
 jobs:
   ai-review:
+    # ai-reviewの試驗は完了したため、設定を殘したまま一時的に無効化してゐる。
+    # 再開するときは、次の條件から `false &&` を除去する。
     if: >-
+      false &&
       github.event.pull_request.user.login == 'renovate[bot]' &&
       !contains(github.event.pull_request.labels.*.name, 'ai-review-exempt')
     permissions:
