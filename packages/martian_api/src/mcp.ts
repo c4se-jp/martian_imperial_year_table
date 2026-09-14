@@ -280,8 +280,6 @@ function createMcpServer(): McpServer {
       widgetResource.title,
       widgetResource.uri,
       {
-        description: widgetResource.description,
-        mimeType: widgetResource.mimeType ?? RESOURCE_MIME_TYPE,
         _meta: {
           ui: {
             csp: {
