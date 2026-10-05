@@ -91,7 +91,7 @@ export class MartianSiteStack extends Stack {
           "import.meta.url": '""',
         },
         format: lambdaNodejs.OutputFormat.CJS,
-        target: "node22",
+        target: "node24",
       },
       depsLockFilePath: path.resolve(__dirname, "../../package-lock.json"),
       entry: path.resolve(__dirname, "../../packages/martian_api/src/index.ts"),
@@ -99,7 +99,7 @@ export class MartianSiteStack extends Stack {
       handler: "handler",
       memorySize: 256,
       projectRoot: path.resolve(__dirname, "../.."),
-      runtime: lambda.Runtime.NODEJS_22_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       timeout: Duration.seconds(10),
     });
 
