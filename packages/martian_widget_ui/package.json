@@ -16,7 +16,7 @@
     "@modelcontextprotocol/ext-apps": "^2.0.0",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@openai/apps-sdk-ui": "^0.2.2",
-    "preact": "^10.29.7"
+    "preact": "^11.0.0"
   },
   "devDependencies": {
     "@storybook/preact": "^10.5.2",
