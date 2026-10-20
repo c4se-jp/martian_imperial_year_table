@@ -11,7 +11,10 @@ AWS Lambda で動作する帝國火星曆 Web API の實裝ディレクトリで
 
 `POST /graphql` に JSON の `query`、任意の `variables` と `operationName` を送ります。
 Web UI のローカル計算、REST API、MCP は從來通りです。
-スキーマの定義は `src/graphql.ts` にあり、標準の introspection でも取得できます。
+スキーマの正本は `graphql/schema.graphql` にあり、標準の introspection でも取得できます。
+公開ドキュメントは `/docs/graphql` です。API の build・開發起動・test 時に
+`generate:graphql-schema` がサーバー用 TypeScript を生成し、Lambda に埋め込みます。
+Web UI は同じ正本から `generate:graphql-doc` で型・引數・説明・初期値を生成します。
 GET、Mutation、Subscription、batch request は提供しません。
 
 ```sh

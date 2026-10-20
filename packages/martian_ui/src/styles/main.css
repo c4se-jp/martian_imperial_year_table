@@ -159,6 +159,10 @@ pre {
   scroll-margin-top: 1.5rem;
 }
 
+.graphql-doc-page {
+  overflow-wrap: anywhere;
+}
+
 .api-doc-response,
 .api-doc-schema-entry,
 .api-doc-nested {

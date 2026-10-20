@@ -1,0 +1,54 @@
+"""固定オフセット ±HH:MM。時は00〜23、分は00〜59。"""
+scalar TimeZoneOffset
+"""グレゴリオ曆日時。年は0100〜9999、秒以下は3桁まで、オフセット必須。"""
+scalar GregorianDateTimeString
+input JulianDayInput { day: Int!, second: Float! = 0 }
+"""共有ライブラリーに合はせ、秒は整數のみ。"""
+input ImperialSolNumberInput { day: Int!, second: Float! = 0 }
+"""帝國火星曆の秒以下は未對應。millisecond は0のみ。"""
+input ImperialDateTimeInput {
+  year: Int!, month: Int!, day: Int!, hour: Int! = 0, minute: Int! = 0,
+  second: Int! = 0, millisecond: Int! = 0, timezone: TimeZoneOffset! = "+00:00"
+}
+type Query {
+  """一回の實行中で固定したサーバー現在時刻。"""
+  now: CalendarInstant!
+  """タイムゾーン附きグレゴリオ曆日時から變換する。"""
+  fromGregorian(datetime: GregorianDateTimeString!): CalendarInstant
+  """構造化された帝國火星曆日時から變換する。"""
+  fromImperial(datetime: ImperialDateTimeInput!): CalendarInstant
+  """日部と秒部に分けたユリウス通日から變換する。second は0以上86400未滿。"""
+  fromJulianDay(value: JulianDayInput!): CalendarInstant
+  """地球時のユリウス日。單位は日、J2000は2451545.0。"""
+  fromTerrestrialTime(value: Float!): CalendarInstant
+  """Mars Sol Date（sol 單位）から變換する。"""
+  fromMarsSolDate(value: Float!): CalendarInstant
+  """日部と整數秒部に分けた帝國火星通日から變換する。"""
+  fromImperialSolNumber(value: ImperialSolNumberInput!): CalendarInstant
+}
+"""グレゴリオ曆UTCの年0100〜9999に對應する瞬間。"""
+type CalendarInstant {
+  gregorian(timezone: TimeZoneOffset! = "+00:00"): GregorianDateTime!
+  imperial(timezone: TimeZoneOffset! = "+00:00"): ImperialDateTime!
+  julianDay: JulianDay!
+  """地球時のユリウス日。單位は日。"""
+  terrestrialTime: Float!
+  """Mars Sol Date。單位は sol。"""
+  marsSolDate: Float!
+  imperialSolNumber: ImperialSolNumber!
+  """ΔT。單位は秒。"""
+  deltaTSeconds: Float!
+  """火星の太陽黃經。單位は度、0以上360未滿。"""
+  solarLongitudeDegrees: Float!
+}
+type GregorianDateTime {
+  year: Int!, month: Int!, day: Int!, hour: Int!, minute: Int!, second: Int!,
+  millisecond: Int!, timezone: TimeZoneOffset!, formatted: GregorianDateTimeString!
+}
+type ImperialDateTime {
+  year: Int!, month: Int!, day: Int!, hour: Int!, minute: Int!, second: Int!,
+  """秒以下は未對應のため常に0。"""
+  millisecond: Int!, timezone: TimeZoneOffset!, formatted: String!, holidayNames: [String!]!
+}
+type JulianDay { day: Int!, second: Float! }
+type ImperialSolNumber { day: Int!, second: Float! }

@@ -33,55 +33,9 @@ import {
 } from "imperial_calendar";
 import { validateTimezone } from "./datetime-conversion.js";
 import { recordError } from "./telemetry.js";
+import schemaSource from "./generated/graphql-schema.js";
 
-export const schema = buildSchema(`
-  """固定オフセット ±HH:MM。時は00〜23、分は00〜59。"""
-  scalar TimeZoneOffset
-  """グレゴリオ曆日時。年は0100〜9999、秒以下は3桁まで、オフセット必須。"""
-  scalar GregorianDateTimeString
-  input JulianDayInput { day: Int!, second: Float! = 0 }
-  """共有ライブラリーに合はせ、秒は整數のみ。"""
-  input ImperialSolNumberInput { day: Int!, second: Float! = 0 }
-  """帝國火星曆の秒以下は未對應。millisecond は0のみ。"""
-  input ImperialDateTimeInput {
-    year: Int!, month: Int!, day: Int!, hour: Int! = 0, minute: Int! = 0,
-    second: Int! = 0, millisecond: Int! = 0, timezone: TimeZoneOffset! = "+00:00"
-  }
-  type Query {
-    """一回の實行中で固定したサーバー現在時刻。"""
-    now: CalendarInstant!
-    fromGregorian(datetime: GregorianDateTimeString!): CalendarInstant
-    fromImperial(datetime: ImperialDateTimeInput!): CalendarInstant
-    fromJulianDay(value: JulianDayInput!): CalendarInstant
-    """地球時のユリウス日。單位は日、J2000は2451545.0。"""
-    fromTerrestrialTime(value: Float!): CalendarInstant
-    fromMarsSolDate(value: Float!): CalendarInstant
-    fromImperialSolNumber(value: ImperialSolNumberInput!): CalendarInstant
-  }
-  """グレゴリオ曆UTCの年0100〜9999に對應する瞬間。"""
-  type CalendarInstant {
-    gregorian(timezone: TimeZoneOffset! = "+00:00"): GregorianDateTime!
-    imperial(timezone: TimeZoneOffset! = "+00:00"): ImperialDateTime!
-    julianDay: JulianDay!
-    """地球時のユリウス日。單位は日。"""
-    terrestrialTime: Float!
-    marsSolDate: Float!
-    imperialSolNumber: ImperialSolNumber!
-    deltaTSeconds: Float!
-    solarLongitudeDegrees: Float!
-  }
-  type GregorianDateTime {
-    year: Int!, month: Int!, day: Int!, hour: Int!, minute: Int!, second: Int!,
-    millisecond: Int!, timezone: TimeZoneOffset!, formatted: GregorianDateTimeString!
-  }
-  type ImperialDateTime {
-    year: Int!, month: Int!, day: Int!, hour: Int!, minute: Int!, second: Int!,
-    """秒以下は未對應のため常に0。"""
-    millisecond: Int!, timezone: TimeZoneOffset!, formatted: String!, holidayNames: [String!]!
-  }
-  type JulianDay { day: Int!, second: Float! }
-  type ImperialSolNumber { day: Int!, second: Float! }
-`);
+export const schema = buildSchema(schemaSource);
 
 function invalid(message: string, argument?: string): never {
   throw new GraphQLError(message, { extensions: { code: "BAD_USER_INPUT", ...(argument ? { argument } : {}) } });
