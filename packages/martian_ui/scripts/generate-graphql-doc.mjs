@@ -3,6 +3,11 @@ import { buildSchema, isInputObjectType, isObjectType, isScalarType, print } fro
 
 const source = await readFile(new URL("../../martian_api/graphql/schema.graphql", import.meta.url), "utf8");
 const schema = buildSchema(source);
+const builtinDescriptions = {
+  Float: "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。",
+  String:
+    "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。",
+};
 const defaultValue = (field) => (field.astNode?.defaultValue ? print(field.astNode.defaultValue) : null);
 const fieldDoc = (field) => ({
   name: field.name,
@@ -17,7 +22,7 @@ const types = Object.values(schema.getTypeMap())
   .map((type) => ({
     name: type.name,
     kind: isInputObjectType(type) ? "input" : isObjectType(type) ? "type" : isScalarType(type) ? "scalar" : "other",
-    description: type.description ?? "",
+    description: builtinDescriptions[type.name] ?? type.description ?? "",
     fields: isInputObjectType(type) || isObjectType(type) ? Object.values(type.getFields()).map(fieldDoc) : [],
   }));
 const directory = new URL("../src/generated/", import.meta.url);

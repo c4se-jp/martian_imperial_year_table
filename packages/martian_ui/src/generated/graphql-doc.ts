@@ -91,7 +91,7 @@ export default {
     {
       "name": "Float",
       "kind": "scalar",
-      "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
+      "description": "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。",
       "fields": []
     },
     {
@@ -507,7 +507,7 @@ export default {
     {
       "name": "String",
       "kind": "scalar",
-      "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+      "description": "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。",
       "fields": []
     },
     {

@@ -23,7 +23,13 @@ describe("GraphQL ドキュメント", () => {
     );
     for (const type of doc.types) {
       const definition = schema.getType(type.name)!;
-      expect(type.description).toBe(definition.description ?? "");
+      expect(type.description).toBe(
+        type.name === "Float"
+          ? "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。"
+          : type.name === "String"
+            ? "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。"
+            : (definition.description ?? ""),
+      );
       if (!isObjectType(definition) && !isInputObjectType(definition)) continue;
       expect(type.fields.map((field) => field.name)).toEqual(Object.keys(definition.getFields()));
       for (const field of type.fields) {
