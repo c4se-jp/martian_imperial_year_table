@@ -11,6 +11,7 @@ import {
   validateTimezone,
 } from "./datetime-conversion.js";
 import { registerMcpRoute } from "./mcp.js";
+import { registerGraphqlRoute } from "./graphql.js";
 import { recordError, runWithSpan } from "./telemetry.js";
 
 type ErrorResponse = {
@@ -18,6 +19,8 @@ type ErrorResponse = {
 };
 
 export const app = new Hono();
+
+app.use("/graphql", cors({ origin: "*", allowMethods: ["POST", "OPTIONS"], allowHeaders: ["Content-Type"] }));
 
 app.use(
   "/mcp",
@@ -164,6 +167,7 @@ app.post("/api/imperial-datetime/from-gregorian", async (c) => {
   }
 });
 
+registerGraphqlRoute(app);
 registerMcpRoute(app);
 
 app.notFound((c) => c.json<ErrorResponse>({ message: "Not Found" }, 404));

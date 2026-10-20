@@ -156,6 +156,13 @@ function handler(event) {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       additionalBehaviors: {
+        graphql: {
+          origin: new origins.HttpOrigin(apiOriginDomainName),
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        },
         "api/*": {
           origin: new origins.HttpOrigin(apiOriginDomainName),
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
