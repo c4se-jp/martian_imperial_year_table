@@ -73,7 +73,7 @@ export default function GraphqlPage() {
       <div className="container api-doc-page graphql-doc-page">
         <div className="box">
           <h1 className="title">GraphQL API</h1>
-          <p className="subtitle is-6">同じ瞬間を、グレゴリオ曆・帝國火星曆・各時系で取得します。</p>
+          <p className="subtitle is-6">同じ瞬閒を、グレゴリオ曆・帝國火星曆・各時系で取得します。</p>
           <p>
             スキーマの正本: <code>packages/martian_api/graphql/schema.graphql</code>
           </p>
@@ -151,7 +151,7 @@ export default function GraphqlPage() {
             </section>
             <section id="type-Query" className="box api-doc-endpoint">
               <h2 className="title is-4">Query</h2>
-              <p className="mb-4">入力から瞬間を指定し、返却型の中で必要な値を選擇してください。</p>
+              <p className="mb-4">入力から瞬閒を指定し、返卻型の中で必要な値を選擇してください。</p>
               {queryType.fields.map((field) => (
                 <section key={field.name} id={`query-${field.name}`} className="box api-doc-schema-entry">
                   <h3 className="title is-5">
@@ -159,7 +159,7 @@ export default function GraphqlPage() {
                   </h3>
                   {field.description && <p className="mb-3">{field.description}</p>}
                   <p className="mb-3">
-                    返却型: <TypeReference type={field.type} />
+                    返卻型: <TypeReference type={field.type} />
                   </p>
                   {field.args.length ? <Fields fields={field.args} /> : <p>引數なし</p>}
                 </section>
@@ -206,7 +206,7 @@ export default function GraphqlPage() {
                     ユリウス通日・帝國火星通日の second は0以上86400未滿。地球時はユリウス日、Mars Sol Date は sol
                     單位です。
                   </li>
-                  <li>now は一回の實行中で固定し、應答はキャッシュしません。</li>
+                  <li>now は一囘の實行中で固定し、應答はキャッシュしません。</li>
                   <li>JSON body は16 KiB、文書は2048 token、fragment 展開後の選擇は256個、深さは12までです。</li>
                 </ul>
                 <p>
@@ -214,12 +214,12 @@ export default function GraphqlPage() {
                   <code>errors</code> を確認してください。
                 </p>
                 <p>
-                  入力不正の <code>BAD_USER_INPUT</code>、範圍外の <code>OUT_OF_RANGE</code>、内部障害の{" "}
+                  入力不正の <code>BAD_USER_INPUT</code>、範圍外の <code>OUT_OF_RANGE</code>、內部障害の{" "}
                   <code>INTERNAL_SERVER_ERROR</code> を <code>extensions.code</code> で區別します。構文・型檢證には
                   GraphQL 標準のエラーを使用します。
                 </p>
                 <p>
-                  nullable な變換結果の失敗は、その欄を null にして他の結果を返します。内部例外の詳細は公開しません。
+                  nullable な變換結果の失敗は、その欄を null にして他の結果を返します。內部例外の詳細は公開しません。
                 </p>
               </div>
             </section>

@@ -31,5 +31,5 @@ const directory = new URL("../src/generated/", import.meta.url);
 await mkdir(directory, { recursive: true });
 await writeFile(
   new URL("graphql-doc.ts", directory),
-  `// 自動生成。generate:graphql-doc を實行してください。\nimport type { GraphqlDoc } from "../lib/graphqlDoc";\nexport default ${JSON.stringify({ source, types }, null, 2)} satisfies GraphqlDoc;\n`,
+  `// 自動生成。generate:graphql-doc を實行してください。\nimport type { GraphqlDoc } from "../lib/graphqlDoc";\nexport default ${JSON.stringify({ source, types }, null, 2)} satisfies GraphqlDoc;\n`,
 );

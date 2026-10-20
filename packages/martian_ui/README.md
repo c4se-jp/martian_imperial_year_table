@@ -23,7 +23,7 @@
   - `/docs/graphql` に型・引數・初期値・説明・使用例と SDL 全文を表示します。閲覽時の API 通信は不要です。
 
 `build` と `start:dev` は `generate:docs` を明示的に實行します。
-リポジトリーの `ignore-scripts=true` でも生成を省略しないため、pre hook には依存しません。
+リポジトリーの `ignore-scripts=true` でも生成を省略しないため、pre hook には依存しません。
 
 ## OpenTelemetry
 

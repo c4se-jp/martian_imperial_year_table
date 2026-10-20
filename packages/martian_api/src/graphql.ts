@@ -251,7 +251,7 @@ export function registerGraphqlRoute(app: Hono) {
     const errors = result.errors?.map((error) => {
       if (error.originalError && !(error.originalError instanceof GraphQLError)) {
         recordError(error.originalError);
-        return new GraphQLError("内部エラーが發生しました。", {
+        return new GraphQLError("內部エラーが發生しました。", {
           path: error.path,
           extensions: { code: "INTERNAL_SERVER_ERROR" },
         });

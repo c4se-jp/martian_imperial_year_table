@@ -50,7 +50,7 @@ describe("GraphQL API", () => {
     expect(body.data.fromGregorian.imperial.formatted).toBe(expected.imperialDateTimeFormatted);
   });
 
-  it("各入力時系から同じ瞬間へ變換する", async () => {
+  it("各入力時系から同じ瞬閒へ變換する", async () => {
     const { body: initial } = await query(`{ fromGregorian(datetime: "2026-06-01T03:00:00Z") {
       julianDay { day second } terrestrialTime marsSolDate
       imperialSolNumber { day second }
@@ -77,7 +77,7 @@ describe("GraphQL API", () => {
     }
   });
 
-  it("現在時刻を一回の實行中で固定する", async () => {
+  it("現在時刻を一囘の實行中で固定する", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-01T03:00:00Z"));
     const { body } = await query("{ a: now { gregorian { formatted } } b: now { gregorian { formatted } } }");
