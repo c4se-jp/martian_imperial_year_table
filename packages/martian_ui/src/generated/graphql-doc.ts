@@ -6,7 +6,7 @@ export default {
     {
       "name": "Boolean",
       "kind": "scalar",
-      "description": "The `Boolean` scalar type represents `true` or `false`.",
+      "description": "Boolean スカラー型は、眞（true）又は僞（false）を表します。",
       "fields": []
     },
     {
@@ -355,7 +355,7 @@ export default {
     {
       "name": "Int",
       "kind": "scalar",
-      "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+      "description": "Int スカラー型は、小數部分を持たない符號附き整數を表します。表現できる値の範圍は -2^31 以上 2^31 - 1 以下です。",
       "fields": []
     },
     {

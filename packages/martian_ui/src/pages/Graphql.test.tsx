@@ -21,15 +21,16 @@ describe("GraphQL ドキュメント", () => {
         .filter((name) => !name.startsWith("__"))
         .sort(),
     );
+    const translations: Record<string, string> = {
+      Int: "Int スカラー型は、小數部分を持たない符號附き整數を表します。表現できる値の範圍は -2^31 以上 2^31 - 1 以下です。",
+      Boolean: "Boolean スカラー型は、眞（true）又は僞（false）を表します。",
+      Float: "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。",
+      String:
+        "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。",
+    };
     for (const type of doc.types) {
       const definition = schema.getType(type.name)!;
-      expect(type.description).toBe(
-        type.name === "Float"
-          ? "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。"
-          : type.name === "String"
-            ? "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。"
-            : (definition.description ?? ""),
-      );
+      expect(type.description).toBe(translations[type.name] ?? definition.description ?? "");
       if (!isObjectType(definition) && !isInputObjectType(definition)) continue;
       expect(type.fields.map((field) => field.name)).toEqual(Object.keys(definition.getFields()));
       for (const field of type.fields) {

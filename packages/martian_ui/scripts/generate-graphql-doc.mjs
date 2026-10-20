@@ -4,6 +4,8 @@ import { buildSchema, isInputObjectType, isObjectType, isScalarType, print } fro
 const source = await readFile(new URL("../../martian_api/graphql/schema.graphql", import.meta.url), "utf8");
 const schema = buildSchema(source);
 const builtinDescriptions = {
+  Int: "Int スカラー型は、小數部分を持たない符號附き整數を表します。表現できる値の範圍は -2^31 以上 2^31 - 1 以下です。",
+  Boolean: "Boolean スカラー型は、眞（true）又は僞（false）を表します。",
   Float: "Float スカラー型は、IEEE 754 で規定された符號附き倍精度浮動小數點數を表します。",
   String:
     "String スカラー型は、UTF-8 の文字列として表現されるテキストデータを表します。GraphQL では、主に人が讀める自由形式のテキストを表すために使はれます。",
