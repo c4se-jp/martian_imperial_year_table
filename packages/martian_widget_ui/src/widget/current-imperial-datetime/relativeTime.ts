@@ -25,7 +25,7 @@ export function formatRelativeTimestamp(targetIso: string | undefined, now = Dat
 
   const absoluteHours = Math.round(absoluteMinutes / 60);
   if (absoluteHours < 24) {
-    return diffSeconds >= 0 ? `${absoluteHours}時間前` : `${absoluteHours}時間後`;
+    return diffSeconds >= 0 ? `${absoluteHours}時閒前` : `${absoluteHours}時閒後`;
   }
 
   const absoluteDays = Math.round(absoluteHours / 24);

@@ -91,6 +91,9 @@ export default function Navigation({
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/mcp">
               MCP
             </NavLink>
+            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/graphql">
+              GraphQL
+            </NavLink>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">

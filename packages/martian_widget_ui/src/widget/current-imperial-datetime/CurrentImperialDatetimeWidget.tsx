@@ -380,7 +380,7 @@ export default function CurrentImperialDatetimeWidget({ callTool, initialResult,
               自動更新
             </label>
 
-            <span style={{ fontSize: "13px", color: "#64748b" }}>更新間隔 {state.refreshIntervalSec} 秒</span>
+            <span style={{ fontSize: "13px", color: "#64748b" }}>更新閒隔 {state.refreshIntervalSec} 秒</span>
           </div>
         </section>
       </div>

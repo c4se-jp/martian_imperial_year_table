@@ -18,6 +18,12 @@
   - `packages/martian_api/openapi/openapi.yaml` から `npm run generate:api-doc` で生成されます。
 - `src/generated/mcp-doc.ts`
   - `packages/martian_api/src/mcp-manifest.json` から `npm run generate:mcp-doc` で生成されます。
+- `src/generated/graphql-doc.ts`
+  - `packages/martian_api/graphql/schema.graphql` から `npm run generate:graphql-doc` で生成されます。
+  - `/docs/graphql` に型・引數・初期値・説明・使用例と SDL 全文を表示します。閲覽時の API 通信は不要です。
+
+`build` と `start:dev` は `generate:docs` を明示的に實行します。
+リポジトリーの `ignore-scripts=true` でも生成を省略しないため、pre hook には依存しません。
 
 ## OpenTelemetry
 

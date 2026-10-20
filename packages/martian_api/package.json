@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "generate:graphql-schema": "node scripts/generate-graphql-schema.mjs",
+    "build": "npm run generate:graphql-schema && tsc -p tsconfig.json",
     "lint": "echo \"No linting configured\"",
     "start": "node dist/server.js",
-    "start:dev": "tsx src/server.ts",
-    "test": "vitest run"
+    "start:dev": "npm run generate:graphql-schema && tsx src/server.ts",
+    "test": "npm run generate:graphql-schema && vitest run"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.1090.0",

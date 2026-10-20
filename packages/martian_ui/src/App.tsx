@@ -8,6 +8,7 @@ import CalendarPage from "./pages/Calendar";
 import { applyThemePreference, readThemePreference, THEME_STORAGE_KEY, type ThemePreference } from "./lib/theme";
 import ApiPage from "./pages/Api";
 import McpPage from "./pages/Mcp";
+import GraphqlPage from "./pages/Graphql";
 import { trackPageView } from "./lib/googleAnalytics";
 import { finishRouteTransition } from "./lib/telemetry";
 
@@ -59,6 +60,7 @@ function AppShell({
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/docs/api" element={<ApiPage />} />
           <Route path="/docs/mcp" element={<McpPage />} />
+          <Route path="/docs/graphql" element={<GraphqlPage />} />
         </Routes>
       </main>
     </>
