@@ -132,9 +132,6 @@ export default function GraphqlPage() {
                   <code>variables</code>・<code>operationName</code> を JSON で送ります。
                 </p>
                 <p>讀み取り專用です。GET、Mutation、Subscription、batch request は提供しません。</p>
-                <p>
-                  このドキュメントはビルド時のスキーマから生成してゐます。閲覽時に API へ問い合わせることはありません。
-                </p>
               </div>
             </section>
             <section id="examples" className="box api-doc-endpoint">
