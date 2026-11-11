@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "imperial_calendar": "file:../imperial_calendar",
-    "jsdom": "^30.0.0"
+    "jsdom": "^31.0.0"
   },
   "devDependencies": {
     "@types/jsdom": "^30.0.0"
