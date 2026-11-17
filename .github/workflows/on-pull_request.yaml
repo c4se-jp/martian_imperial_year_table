@@ -29,6 +29,15 @@ jobs:
       - name: testする
         run: npm test
 
+      - name: CDK test用にbuildする
+        run: npm run build
+
+      - name: CDKの依存するlibraryを入れる
+        run: npm ci --prefix cdk
+
+      - name: CDKをtestする
+        run: npm test --prefix cdk
+
   lint-gha:
     permissions:
       checks: write

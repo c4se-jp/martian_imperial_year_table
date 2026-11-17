@@ -5,7 +5,8 @@
     "build": "tsc",
     "deploy": "cdk deploy",
     "diff": "cdk diff",
-    "synth": "cdk synth"
+    "synth": "cdk synth",
+    "test": "npm run build && node --import tsx --test test/*.test.cjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
