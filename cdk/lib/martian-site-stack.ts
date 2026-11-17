@@ -140,6 +140,37 @@ function handler(event) {
 `),
     });
 
+    const contentSecurityPolicy = [
+      "default-src 'self'",
+      "script-src 'self' https://www.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
+      "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://otlp-vaxila.mackerelio.com",
+      "font-src 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-src 'none'",
+      "frame-ancestors 'none'",
+    ].join("; ");
+
+    const responseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, "SiteResponseHeadersPolicy", {
+      securityHeadersBehavior: {
+        contentTypeOptions: { override: true },
+        frameOptions: { frameOption: cloudfront.HeadersFrameOption.DENY, override: true },
+        referrerPolicy: {
+          referrerPolicy: cloudfront.HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+          override: true,
+        },
+        strictTransportSecurity: { accessControlMaxAge: Duration.days(365), override: true },
+      },
+      customHeadersBehavior: {
+        customHeaders: [
+          { header: "Content-Security-Policy-Report-Only", value: contentSecurityPolicy, override: true },
+        ],
+      },
+    });
+
     const distribution = new cloudfront.Distribution(this, "SiteDistribution", {
       certificate,
       comment: "martian_imperial_year_table static site",
@@ -153,6 +184,7 @@ function handler(event) {
             function: spaRewriteFunction,
           },
         ],
+        responseHeadersPolicy,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       additionalBehaviors: {
@@ -161,6 +193,7 @@ function handler(event) {
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          responseHeadersPolicy,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
         "api/*": {
@@ -168,6 +201,7 @@ function handler(event) {
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          responseHeadersPolicy,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
         mcp: {
@@ -175,6 +209,7 @@ function handler(event) {
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+          responseHeadersPolicy,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
       },
