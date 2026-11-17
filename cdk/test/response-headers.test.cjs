@@ -1,12 +1,15 @@
 const assert = require("node:assert/strict");
+const { execFileSync } = require("node:child_process");
+const fs = require("node:fs");
 const path = require("node:path");
 const { test } = require("node:test");
 const { App } = require("aws-cdk-lib");
 const { Template } = require("aws-cdk-lib/assertions");
 const { MartianSiteStack } = require("../lib/martian-site-stack.ts");
 
-test("全 behavior に同じセキュリティヘッダを適用する", () => {
-  const stack = new MartianSiteStack(new App(), "TestStack", {
+test("全 behavior のヘッダと Lambda bundle の起動を檢證する", () => {
+  const app = new App();
+  const stack = new MartianSiteStack(app, "TestStack", {
     certificateArn: "arn:aws:acm:us-east-1:123456789012:certificate/00000000-0000-0000-0000-000000000000",
     hostedZoneDomainName: "example.com",
     hostedZoneId: "Z1234567890",
@@ -52,4 +55,17 @@ test("全 behavior に同じセキュリティヘッダを適用する", () => {
   for (const behavior of distribution.CacheBehaviors) {
     assert.deepEqual(behavior.ResponseHeadersPolicyId, { Ref: policyId });
   }
+
+  const bundlePaths = fs.readdirSync(app.outdir)
+    .filter((name) => name.startsWith("asset."))
+    .map((name) => path.join(app.outdir, name, "index.js"))
+    .filter((name) => fs.existsSync(name));
+  assert.equal(bundlePaths.length, 1);
+  const env = { ...process.env, NODE_PATH: path.resolve(__dirname, "../../node_modules") };
+  delete env.MACKEREL_API_KEY;
+  delete env.MACKEREL_API_KEY_SECRET_ARN;
+  execFileSync(process.execPath, [path.join(__dirname, "lambda-smoke.cjs"), bundlePaths[0]], {
+    env,
+    stdio: "inherit",
+  });
 });
