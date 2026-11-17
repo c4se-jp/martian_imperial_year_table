@@ -32,6 +32,14 @@ CSP は初期段階では `Content-Security-Policy-Report-Only` です。報吿�
 
 CDK の設定檢證は、リポジトリ直下で `npm run build` した後、このディレクトリで `npm test` を實行します。
 
+## 合成監視
+
+`imdt-transform-check` は1時間ごとに變換畫面、七曜表、REST API、MCP、GraphQL を檢查します。固定日時の變換結果を照合し、七曜表では描畫、月送り、SVG ダウンロードを確認します。各檢查が失敗しても後續を試み、最後に失敗をまとめて報吿します。Canary 自體のタイムアウトやブラウザーの起動失敗などでは全檢查を完了できない場合があります。
+
+通知を受けたら CloudWatch の Synthetics canaries で `imdt-transform-check` の失敗した實行を開き、ステップ結果の `transform`、`calendar`、`restApi`、`mcp`、`graphql` を確認します。失敗したステップの理由とログに期待値・實際値またはエラーを記錄します。變換畫面はさらに `navigateToTransform`、`inputGregorianDate`、`verifyMartianDate` に分かれます。必要に應じて實行のスクリーンショットと CloudWatch Logs を確認してください。Canary 全體の失敗アラームは共通で、ステップごとの通知ではありません。
+
+`executeStep` はステップの成功率・所要時間メトリクスとレポートを出力します。ステップ名はメトリクスのディメンションにもなるため、名前を變へると時系列が分かれます。詳細は [AWS の Node.js Canary ライブラリ仕様](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Library_function_Nodejs.html)を參照してください。
+
 ## 変更可能なパラメータ
 
 - `hostedZoneDomainName` (context または `HOSTED_ZONE_DOMAIN_NAME`)
