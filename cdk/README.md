@@ -47,6 +47,12 @@ npx cdk deploy \
   -c siteDomainName=martian-imperial-year-table.c4se.jp
 ```
 
+## 依存關係の脆弱性
+
+2026-11-17 時點で `aws-cdk-lib@2.277.0` に同梱される `minimatch@10.2.6` は、[GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) の影響を受けます。惡意のある glob pattern による資源枯渴が問題で、CDK の synth・deploy 環境に影響する可能性があります。この專案で指定する asset 除外 pattern は固定値ですが、CDK 內部の全ての利用經路の安全性は確認できてゐません。
+
+`aws-cdk-lib` が同梱する依存なので、`overrides` ではなく [AWS CDK の更新](https://github.com/aws/aws-cdk/releases)を追跡し、更新後に `npm audit --omit=dev` と synth を再確認します。修正まで殘存リスクがあります。
+
 ## 含まれるリソース
 
 - 非公開 S3 バケット (靜的サイト配信元)
