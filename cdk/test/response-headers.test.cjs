@@ -18,6 +18,10 @@ test("全 behavior のヘッダと Lambda bundle の起動を檢證する", () =
   });
   const template = Template.fromStack(stack).toJSON();
   const resources = template.Resources;
+  const canaries = Object.values(resources).filter((resource) => resource.Type === "AWS::Synthetics::Canary");
+  assert.equal(canaries.length, 1);
+  assert.equal(canaries[0].Properties.Name, "imdt-transform-check");
+  assert.equal(canaries[0].Properties.RunConfig.TimeoutInSeconds, 300);
   const policies = Object.entries(resources).filter(([, resource]) => resource.Type === "AWS::CloudFront::ResponseHeadersPolicy");
   assert.equal(policies.length, 1);
   const [policyId, policy] = policies[0];

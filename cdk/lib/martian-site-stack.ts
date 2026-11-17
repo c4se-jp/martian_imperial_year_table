@@ -275,6 +275,7 @@ function handler(event) {
       canaryName: "imdt-transform-check",
       runtime: transformCheckCanaryRuntime,
       schedule: synthetics.Schedule.rate(Duration.minutes(60)),
+      timeout: Duration.minutes(5),
       test: synthetics.Test.custom({
         code: synthetics.Code.fromAsset(path.resolve(__dirname, "../canary/transform-check")),
         handler: "transformCheck.handler",
