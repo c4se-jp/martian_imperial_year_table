@@ -86,9 +86,10 @@ export class MartianSiteStack extends Stack {
             return [];
           },
         },
+        banner: "const __lambdaImportMetaUrl = require('node:url').pathToFileURL(__filename).href;",
         define: {
-          // esbuild の CJS 出力では import.meta が空になり empty-import-meta を警吿されるため、參照をダミー値に置換する
-          "import.meta.url": '""',
+          // CJS bundle 內の依存ライブラリにも有效な file URL を渡す
+          "import.meta.url": "__lambdaImportMetaUrl",
         },
         format: lambdaNodejs.OutputFormat.CJS,
         target: "node24",
