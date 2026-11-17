@@ -26,18 +26,7 @@ test("全 behavior のヘッダと Lambda bundle の起動を檢證する", () =
   assert.equal(policies.length, 1);
   const [policyId, policy] = policies[0];
   const config = policy.Properties.ResponseHeadersPolicyConfig;
-  assert.deepEqual(config.SecurityHeadersConfig, {
-    ContentTypeOptions: { Override: true },
-    FrameOptions: { FrameOption: "DENY", Override: true },
-    ReferrerPolicy: { ReferrerPolicy: "strict-origin-when-cross-origin", Override: true },
-    StrictTransportSecurity: { AccessControlMaxAgeSec: 31536000, Override: true },
-  });
-  assert.equal(config.CorsConfig, undefined);
-  const [header] = config.CustomHeadersConfig.Items;
-  assert.equal(config.CustomHeadersConfig.Items.length, 1);
-  assert.equal(header.Header, "Content-Security-Policy-Report-Only");
-  assert.equal(header.Override, true);
-  assert.equal(header.Value, [
+  const expectedCsp = [
     "default-src 'self'",
     "script-src 'self' https://www.googletagmanager.com",
     "style-src 'self' 'unsafe-inline'",
@@ -49,7 +38,16 @@ test("全 behavior のヘッダと Lambda bundle の起動を檢證する", () =
     "form-action 'self'",
     "frame-src 'none'",
     "frame-ancestors 'none'",
-  ].join("; "));
+  ].join("; ");
+  assert.deepEqual(config.SecurityHeadersConfig, {
+    ContentSecurityPolicy: { ContentSecurityPolicy: expectedCsp, Override: true },
+    ContentTypeOptions: { Override: true },
+    FrameOptions: { FrameOption: "DENY", Override: true },
+    ReferrerPolicy: { ReferrerPolicy: "strict-origin-when-cross-origin", Override: true },
+    StrictTransportSecurity: { AccessControlMaxAgeSec: 31536000, Override: true },
+  });
+  assert.equal(config.CorsConfig, undefined);
+  assert.equal(config.CustomHeadersConfig, undefined);
 
   const distributions = Object.values(resources).filter((resource) => resource.Type === "AWS::CloudFront::Distribution");
   assert.equal(distributions.length, 1);

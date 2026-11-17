@@ -26,9 +26,9 @@ npx cdk deploy
 
 CloudFront の全 behavior に HSTS (`max-age=31536000`)、`nosniff`、`Referrer-Policy`、`X-Frame-Options: DENY` を付與します。HSTS はサブドメインや preload を含めません。iframe 埋め込みは禁止されます。CORS は API 側の設定を維持します。
 
-CSP は初期段階では `Content-Security-Policy-Report-Only` です。報吿先は設定してゐないため、ブラウザーの開發者ツールで違反を確認してください。GA は廣吿機能なし、Mackerel は browser trace の送信先を想定します。インラインスタイルは現在許可しますが、インラインスクリプトや `unsafe-eval` は許可しません。
+CSP は `Content-Security-Policy` で強制します。報吿先は設定してゐないため、ブラウザーの開發者ツールで違反を確認してください。GA は廣吿機能なし、Mackerel は browser trace の送信先を想定します。インラインスタイルは現在許可しますが、インラインスクリプトや `unsafe-eval` は許可しません。
 
-強制への切り替へ前に、GA と Mackerel の環境變數を設定した build を含めて、全畫面、主な操作、ダウンロード、直接 URL、テーマ復元、GA と Mackerel の通信をブラウザーで確認します。API と MCP の CORS・エラー・OPTIONS、および MCP 対應ホストでの widget も確認します。違反を解消してから同じ値を `Content-Security-Policy` に切り替へ、Report-Only を除去してください。問題時は CSP の強制を外す變更を deploy します。HSTS はブラウザーに保存され、deploy の差し戻しでは卽時に解除されません。
+CSP 變更後は、GA と Mackerel の環境變數を設定した build を含めて、全畫面、主な操作、ダウンロード、直接 URL、テーマ復元、GA と Mackerel の通信をブラウザーで確認します。API と MCP の CORS・エラー・OPTIONS、および MCP 對應ホストでの widget も確認します。問題時は同じ値を `Content-Security-Policy-Report-Only` に戻す變更を deploy し、違反を調査してください。HSTS はブラウザーに保存され、deploy の差し戻しでは卽時に解除されません。
 
 CDK の設定檢證は、リポジトリ直下で `npm run build` した後、このディレクトリで `npm test` を實行します。
 

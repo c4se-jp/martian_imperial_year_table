@@ -157,6 +157,7 @@ function handler(event) {
 
     const responseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(this, "SiteResponseHeadersPolicy", {
       securityHeadersBehavior: {
+        contentSecurityPolicy: { contentSecurityPolicy, override: true },
         contentTypeOptions: { override: true },
         frameOptions: { frameOption: cloudfront.HeadersFrameOption.DENY, override: true },
         referrerPolicy: {
@@ -164,11 +165,6 @@ function handler(event) {
           override: true,
         },
         strictTransportSecurity: { accessControlMaxAge: Duration.days(365), override: true },
-      },
-      customHeadersBehavior: {
-        customHeaders: [
-          { header: "Content-Security-Policy-Report-Only", value: contentSecurityPolicy, override: true },
-        ],
       },
     });
 
