@@ -1,4 +1,5 @@
-import { NavLink, Link } from "react-router-dom";
+import { useRef, useState } from "react";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import type { ThemePreference } from "../lib/theme";
 
 function SunIcon() {
@@ -57,6 +58,12 @@ export default function Navigation({
   onThemePreferenceChange: (preference: ThemePreference) => void;
 }) {
   const imageBaseUrl = `${import.meta.env.BASE_URL}img/`;
+  const [docsOpen, setDocsOpen] = useState(false);
+  const docsButtonRef = useRef<HTMLButtonElement>(null);
+  const { pathname } = useLocation();
+  const docsActive = ["/docs/api", "/docs/mcp", "/docs/graphql"].some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
 
   return (
     <nav className="navbar is-spaced" role="navigation" aria-label="main navigation">
@@ -85,15 +92,52 @@ export default function Navigation({
             <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/calendar">
               七曜表
             </NavLink>
-            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/api">
-              API
-            </NavLink>
-            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/mcp">
-              MCP
-            </NavLink>
-            <NavLink className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`} to="/docs/graphql">
-              GraphQL
-            </NavLink>
+            <div
+              className={`navbar-item has-dropdown ${docsOpen ? "is-active" : ""}`}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setDocsOpen(false);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape" && docsOpen) {
+                  setDocsOpen(false);
+                  docsButtonRef.current?.focus();
+                }
+              }}
+            >
+              <button
+                ref={docsButtonRef}
+                type="button"
+                className={`navbar-link docs-toggle ${docsActive ? "docs-toggle--active" : ""}`}
+                aria-expanded={docsOpen}
+                aria-controls="docs-navigation"
+                onClick={() => setDocsOpen(!docsOpen)}
+              >
+                開發者向け
+              </button>
+              <div id="docs-navigation" className="navbar-dropdown" hidden={!docsOpen}>
+                <NavLink
+                  className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`}
+                  to="/docs/api"
+                  onClick={() => setDocsOpen(false)}
+                >
+                  REST API
+                </NavLink>
+                <NavLink
+                  className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`}
+                  to="/docs/mcp"
+                  onClick={() => setDocsOpen(false)}
+                >
+                  MCP
+                </NavLink>
+                <NavLink
+                  className={({ isActive }) => `navbar-item ${isActive ? "is-active" : ""}`}
+                  to="/docs/graphql"
+                  onClick={() => setDocsOpen(false)}
+                >
+                  GraphQL
+                </NavLink>
+              </div>
+            </div>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">

@@ -43,6 +43,31 @@ body {
   min-height: 100vh;
 }
 
+.docs-toggle {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.docs-toggle--active {
+  font-weight: bold;
+}
+
+.navbar-dropdown[hidden] {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .navbar-menu {
+    display: block;
+  }
+
+  .docs-toggle {
+    width: 100%;
+    text-align: left;
+  }
+}
+
 /*
 .navbar {
   border-bottom: 1px solid #e0e0e0;
