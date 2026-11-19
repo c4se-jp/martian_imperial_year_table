@@ -17,17 +17,18 @@ permissions:
 jobs:
   pullfrog:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       id-token: write
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
           persist-credentials: false
       - name: Run agent
-        uses: pullfrog/pullfrog@v0
+        uses: pullfrog/pullfrog@9eb4e93d38160a21b0e85b759ab8ea9fecaf5e58 # v0.1.138
         with:
           prompt: ${{ inputs.prompt }}
         env:
@@ -46,14 +47,14 @@ jobs:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
-          
+          # for Amazon Bedrock (https://docs.pullfrog.com/bedrock)
           # for Amazon Bedrock (https://docs.pullfrog.com/bedrock)
           # AWS_BEARER_TOKEN_BEDROCK: ${{ secrets.AWS_BEARER_TOKEN_BEDROCK }}
           # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           # AWS_REGION: us-east-1
           # BEDROCK_MODEL_ID: <bedrock-model-id>
-          
+          # VERTEX_SERVICE_ACCOUNT_JSON: >-
           # for Google Vertex AI (https://docs.pullfrog.com/vertex)
           # VERTEX_SERVICE_ACCOUNT_JSON: >-
           #   ${{ secrets.VERTEX_SERVICE_ACCOUNT_JSON }}
