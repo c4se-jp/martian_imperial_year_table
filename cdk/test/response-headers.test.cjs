@@ -18,6 +18,18 @@ test("全 behavior のヘッダと Lambda bundle の起動を檢證する", () =
   });
   const template = Template.fromStack(stack).toJSON();
   const resources = template.Resources;
+  const stages = Object.values(resources).filter((resource) => resource.Type === "AWS::ApiGatewayV2::Stage");
+  assert.equal(stages.length, 1);
+  assert.equal(stages[0].Properties.StageName, "$default");
+  assert.deepEqual(stages[0].Properties.DefaultRouteSettings, {
+    ThrottlingBurstLimit: 20,
+    ThrottlingRateLimit: 10,
+  });
+  const apiFunctions = Object.entries(resources).filter(
+    ([id, resource]) => id.startsWith("ApiLambda") && resource.Type === "AWS::Lambda::Function",
+  );
+  assert.equal(apiFunctions.length, 1);
+  assert.equal(apiFunctions[0][1].Properties.ReservedConcurrentExecutions, 10);
   const canaries = Object.values(resources).filter((resource) => resource.Type === "AWS::Synthetics::Canary");
   assert.equal(canaries.length, 1);
   assert.equal(canaries[0].Properties.Name, "imdt-transform-check");

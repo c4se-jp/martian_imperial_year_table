@@ -32,6 +32,12 @@ CSP 變更後は、GA と Mackerel の環境變數を設定した build を含�
 
 CDK の設定檢證は、リポジトリ直下で `npm run build` した後、このディレクトリで `npm test` を實行します。
 
+## API の流量制限
+
+HTTP API の `$default` stage では、全利用者に共通の目標として每秒 10 リクエスト、burst 20 リクエストを設定します。`/api/*`、`/graphql`、`/mcp` と API Gateway への直接アクセスが對象です。超過時は `429` が返ることがあります。制限はベストエフォートであり、嚴密な上限ではありません。
+
+API Lambda の予約同時實行數は 10 です。上限到達時には API Gateway から 5xx が返る場合があります。これらの設定は Lambda への負荷を抑へますが、利用者別の制限や AWS 請求額の上限ではありません。API Gateway の `4XX`・`5XX`、Lambda の `Throttles`・`ConcurrentExecutions`・`Duration`、請求額を監視し、通常利用に支障がある場合は設定を見直してください。
+
 ## 合成監視
 
 `imdt-transform-check` は1時間ごとに變換畫面、七曜表、REST API、MCP、GraphQL を檢查します。固定日時の變換結果を照合し、七曜表では描畫、月送り、SVG ダウンロードを確認します。各檢查が失敗しても後續を試み、最後に失敗をまとめて報吿します。Canary 自體のタイムアウトやブラウザーの起動失敗などでは全檢查を完了できない場合があります。
