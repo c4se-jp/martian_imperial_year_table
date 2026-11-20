@@ -100,6 +100,7 @@ export class MartianSiteStack extends Stack {
       handler: "handler",
       memorySize: 256,
       projectRoot: path.resolve(__dirname, "../.."),
+      reservedConcurrentExecutions: 10,
       runtime: lambda.Runtime.NODEJS_24_X,
       timeout: Duration.seconds(10),
     });
@@ -110,6 +111,12 @@ export class MartianSiteStack extends Stack {
       createDefaultStage: true,
       defaultIntegration: new apigwv2Integrations.HttpLambdaIntegration("DefaultLambdaIntegration", apiLambda),
     });
+
+    const defaultStage = httpApi.defaultStage!.node.defaultChild as apigwv2.CfnStage;
+    defaultStage.defaultRouteSettings = {
+      throttlingBurstLimit: 20,
+      throttlingRateLimit: 10,
+    };
 
     const apiOriginDomainName = Fn.select(2, Fn.split("/", httpApi.apiEndpoint));
 
